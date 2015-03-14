@@ -10,8 +10,33 @@
 	<script src="./js/classes/units/infantry.js" type="text/javascript"></script>
 	<script src="./js/classes/units/msl_tank.js" type="text/javascript"></script>
 	<script src="./js/classes/ogres/mk3.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	function assert(thisthing, thatthing, message) {
+    	if (thisthing != thatthing) {
+	        throw message + ": " + thisthing + " should equal " + thatthing;
+	    }
+	}
+
+	var game = new Game();
+
+	//Distance Tests
+	assert(Util.getDistance({i:3, j:19},{i:8, j:20}), 5, "dist test one");
+	assert(Util.getDistance({i:1, j:1},{i:9, j:5}), 8, "dist test two");
+	assert(Util.getDistance({i:6, j:3},{i:6, j:10}), 7, "dist test three");
+	assert(Util.getDistance({i:13, j:21},{i:7, j:14}), 10, "dist test four");
+	//Wall Tests
+	assert(game.map.isWall({i:1, j:2},{i:2, j:3}), true, "wall test 1");
+	assert(game.map.isWall({i:2, j:3},{i:1, j:3}), true, "wall test 2");
+	assert(game.map.isWall({i:1, j:2},{i:1, j:3}), false, "wall test 3");
+	assert(game.map.isWall({i:1, j:3},{i:1, j:2}), false, "wall test 4");
+	//Crater Tests
+	assert(game.map.isCrater({i:3, j:3}), true, "crater test 1");
+	assert(game.map.isCrater({i:1, j:7}), true, "crater test 2");
+	assert(game.map.isCrater({i:8, j:10}), false, "crater test 3");
+	</script>
 </head>
 <body>
 	<canvas id="canvas"></canvas>
 </body>
 </html>
+
