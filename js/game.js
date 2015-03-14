@@ -12,6 +12,13 @@
 		//todo add more
 	];
 
+	var directions = [
+		[ {i: +1, j: +1}, {i: +1, j:  0}, {i:  0, j: -1},
+		{i: -1, j:  0}, {i: -1, j: +1}, {i:  0, j: +1} ],
+		[ {i: +1, j:  0}, {i: +1, j: -1}, {i:  0, j: -1},
+		{i: -1, j: -1}, {i: -1, j:  0}, {i:  0, j: +1} ]
+	];
+
 	var GameMap = function(options) {
 		//Units
 		this.units = [];
@@ -73,6 +80,53 @@
 		getTileUniqueId : function(tile) {
 			var pad = function(number) {return number < 9 ? "0" + number : number.toString()};
 			return pad(tile.i) + pad(tile.j);
+		},
+		getNeighbors : function(hex){
+			var neighbors = [];
+			for (var index = 0; index < 5; index++) {
+				var parity = hex.i & 1;
+				var dir = directions[parity][direction];
+				neigobors.push({
+					i : hex.i + dir.i,
+					j: hex.j + dir.j
+				});
+    		}
+    		return neighbors;
+    	}
+	};
+
+	exports.AStar = {
+		open : [],
+		closed : [],
+
+		//work on translating this from python to js
+		function performSearch(origin, destination){
+			var frontier, cameFrom, costSoFar, newCost;
+
+			frontier = new PriorityQueue({
+				comparator: function(a, b) { return b.cost - a.cost; }
+			});
+			origin.cost = 0;
+			frontier.queue(origin);
+			cameFrom = {};
+			costSoFar = {};
+			cameFrom[start] = null;
+			costSoFar[start] = 0;
+
+			while(frontier.length > 0) {
+				current = frontier.dequeue();
+
+				if current.i == destination.i && current.j == destination.j:
+					break
+
+				for (var next in Util.getNeighbors(current)):
+					newCost = costSoFar[current] + graph.cost(current, next)
+					if next not in costSoFar or newCost < costSoFar[next]:
+						costSoFar[next] = newCost
+						priority = newCost + heuristic(goal, next)
+						frontier.put(next, priority)
+						cameFrom[next] = current
+			}
 		}
 	};
 
