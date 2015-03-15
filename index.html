@@ -40,7 +40,10 @@
 	assert(game.map.getNeighbors({i: 2, j: 3}, true).length, 5, "neighbors test 2");
 	assert(game.map.getNeighbors({i: 7, j: 5}, true).length, 6, "neighbors test 3");
 	//A star Tests
-	console.log(game.map.performSearch({i:2, j: 2}, {i: 4, j: 5}, false));
+	assert(game.map.performSearch({i:2, j: 2}, {i: 4, j: 5}, false).length, 5, "A* Test 1");
+	assert(game.map.performSearch({i:2, j: 2}, {i: 4, j: 5}, true).length, 4, "A* Test 2");
+	assert(game.map.performSearch({i:1, j: 1}, {i: 5, j: 4}, true).length, 5, "A* Test 3");
+
 	</script>
 </head>
 <body>

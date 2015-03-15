@@ -87,7 +87,7 @@
 
 				if (current.i == destination.i && current.j == destination.j) {
 					path = [];
-					node = current;
+					node = cameFrom[Util.getTileUniqueId(current)];
 					while(node) {
 						path.push(node);
 						node = cameFrom[Util.getTileUniqueId(node)];
@@ -95,7 +95,7 @@
 					return path;
 				}
 
-				nextNeighbors = this.getNeighbors(current);
+				nextNeighbors = this.getNeighbors(current, canClimbWalls);
 				for (n in nextNeighbors){
 					next = nextNeighbors[n];
 					newCost = costSoFar[Util.getTileUniqueId(current)] + 1;
