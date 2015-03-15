@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>OGRE</title>
-	<script src="./js/lib/priority-queue.min.js"></script>
+	<sCript src="./js/lib/priority-queue.min.js"></script>
 	<script src="./js/game.js" type="text/javascript"></script>
 	<script src="./js/renderer.js" type="text/javascript"></script>
 	<script src="./js/classes/unit.js" type="text/javascript"></script>
@@ -21,26 +21,26 @@
 	var game = new Game();
 
 	//Distance Tests
-	// assert(Util.getDistance({i:3, j:19},{i:8, j:20}), 5, "dist test one");
-	// assert(Util.getDistance({i:1, j:1},{i:9, j:5}), 8, "dist test two");
-	// assert(Util.getDistance({i:6, j:3},{i:6, j:10}), 7, "dist test three");
-	// assert(Util.getDistance({i:13, j:21},{i:7, j:14}), 10, "dist test four");
+	assert(Util.getDistance({i:3, j:19},{i:8, j:20}), 5, "dist test one");
+	assert(Util.getDistance({i:1, j:1},{i:9, j:5}), 8, "dist test two");
+	assert(Util.getDistance({i:6, j:3},{i:6, j:10}), 7, "dist test three");
+	assert(Util.getDistance({i:13, j:21},{i:7, j:14}), 10, "dist test four");
 	//Wall Tests
-	// assert(game.map.isWall({i:1, j:2},{i:2, j:3}), true, "wall test 1");
-	// assert(game.map.isWall({i:2, j:3},{i:1, j:3}), true, "wall test 2");
-	// assert(game.map.isWall({i:1, j:2},{i:1, j:3}), false, "wall test 3");
-	// assert(game.map.isWall({i:1, j:3},{i:1, j:2}), false, "wall test 4");
+	assert(game.map.isWall({i:1, j:2},{i:2, j:3}), true, "wall test 1");
+	assert(game.map.isWall({i:2, j:3},{i:1, j:3}), true, "wall test 2");
+	assert(game.map.isWall({i:1, j:2},{i:1, j:3}), false, "wall test 3");
+	assert(game.map.isWall({i:1, j:3},{i:1, j:2}), false, "wall test 4");
 	//Crater Tests
-	// assert(game.map.isCrater({i:3, j:3}), true, "crater test 1");
-	// assert(game.map.isCrater({i:1, j:7}), true, "crater test 2");
-	// assert(game.map.isCrater({i:8, j:10}), false, "crater test 3");
+	assert(game.map.isCrater({i:3, j:3}), true, "crater test 1");
+	assert(game.map.isCrater({i:1, j:7}), true, "crater test 2");
+	assert(game.map.isCrater({i:8, j:10}), false, "crater test 3");
 	//getNeighbors Tests
-	console.log(game.map.getNeighbors({i: 2, j: 3}, false));
-	// assert(game.map.getNeighbors({i: 2, j: 3}, false).length, 3, "neighbors test 1");
-	// assert(game.map.getNeighbors({i: 2, j: 3}, true).length, 5, "neighbors test 2");
-	// assert(game.map.getNeighbors({i: 7, j: 5}, true).length, 6, "neighbors test 3");
+
+	assert(game.map.getNeighbors({i: 2, j: 3}, false).length, 3, "neighbors test 1");
+	assert(game.map.getNeighbors({i: 2, j: 3}, true).length, 5, "neighbors test 2");
+	assert(game.map.getNeighbors({i: 7, j: 5}, true).length, 6, "neighbors test 3");
 	//A star Tests
-	//console.log(game.map.performSearch({i:1, j: 1}, {i: 2, j: 2}, true));
+	console.log(game.map.performSearch({i:2, j: 2}, {i: 4, j: 5}, false));
 	</script>
 </head>
 <body>

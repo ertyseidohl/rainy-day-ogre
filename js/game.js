@@ -2,7 +2,10 @@
 
 	var walls = [
 		"01020203",
-		"01030203"
+		"01030203",
+		"04040405",
+		"04040504",
+		"03040405"
 		//todo add more
 	];
 
@@ -15,8 +18,8 @@
 	var directions = [
 		[ {i: +1, j: +1}, {i: +1, j:  0}, {i:  0, j: -1},
 		{i: -1, j:  0}, {i: -1, j: +1}, {i:  0, j: +1} ],
-		[ {i: +1, j:  0}, {i: +1, j: -1}, {i:  0, j: -1},
-		{i: -1, j: -1}, {i: -1, j:  0}, {i:  0, j: +1} ]
+		[ {i: 0, j:  +1}, {i: +1, j: 0}, {i:  +1, j: -1},
+		{i: 0, j: -1}, {i: -1, j: -1}, {i:  -1, j: 0} ]
 	];
 
 	var GameMap = function(options) {
@@ -25,13 +28,13 @@
 
 		//Walls
 		this.walls = {};
-		for (w in walls) {
+		for (var w in walls) {
 			this.walls[walls[w]] = true;
 		}
 
 		//Craters
 		this.craters = {};
-		for (c in craters) {
+		for (var c in craters) {
 			this.craters[craters[c]] = true;
 		}
 
@@ -39,14 +42,14 @@
 		this.isWall = function(tileA, tileB) {
 			return Util.getTileUniqueId(tileA) + Util.getTileUniqueId(tileB) in this.walls ||
 				Util.getTileUniqueId(tileB) + Util.getTileUniqueId(tileA) in this.walls;
-		},
+		};
 		this.isCrater = function(tile) {
 			return Util.getTileUniqueId(tile) in this.craters;
-		},
+		};
 		this.getNeighbors = function(tile, canClimbWalls) {
 			var neighbors = [];
 			for (var index = 0; index < 6; index++) {
-				var parity = !tile.j & 1; //THIS IS BROKENNNN
+				var parity = (tile.i & 1) ? 0 : 1;
 				var dir = directions[parity][index];
 				var newNeighbor = {
 					i : tile.i + dir.i,
@@ -56,14 +59,13 @@
 					newNeighbor.j > 0 &&
 					(canClimbWalls || !map.isWall(tile, newNeighbor)) &&
 					!map.isCrater(newNeighbor)) {
-					console.log(newNeighbor);
 					neighbors.push(newNeighbor);
 				}
 
-    		}
-    		return neighbors;
-    	},
-    	this.performSearch = function(origin, destination, canClimbWalls){
+			}
+			return neighbors;
+		};
+		this.performSearch = function(origin, destination, canClimbWalls){
 			var frontier, cameFrom, costSoFar, newCost, current, path, node, nextNeighbors, n, next;
 
 			frontier = new PriorityQueue({
@@ -87,12 +89,11 @@
 					path = [];
 					node = current;
 					while(node) {
-						path.push(node)
+						path.push(node);
 						node = cameFrom[Util.getTileUniqueId(node)];
 					}
 					return path;
 				}
-
 
 				nextNeighbors = this.getNeighbors(current);
 				for (n in nextNeighbors){
@@ -103,11 +104,10 @@
 						next.cost = newCost + Util.getDistance(destination, next);
 						frontier.queue(next);
 						cameFrom[Util.getTileUniqueId(next)] = current;
-						console.log(cameFrom);
 					}
 				}
 			}
-		}
+		};
 	};
 
 	var map = new GameMap();
@@ -117,7 +117,7 @@
 			var coords = {
 				x : tile.i,
 				z : tile.j - (tile.i + (tile.i&1)) / 2
-			}
+			};
 			coords.y = -coords.x - coords.z;
 			return coords;
 		},
@@ -140,10 +140,10 @@
 		getDistance : function(start, dest) {
 			var startCube = this.axialToCube(start);
 			var destCube = this.axialToCube(dest);
-			return cubeDist = Math.max(Math.abs(startCube.x - destCube.x), Math.abs(startCube.y - destCube.y), Math.abs(startCube.z - destCube.z));
+			return Math.max(Math.abs(startCube.x - destCube.x), Math.abs(startCube.y - destCube.y), Math.abs(startCube.z - destCube.z));
 		},
 		getTileUniqueId : function(tile) {
-			var pad = function(number) {return number < 9 ? "0" + number : number.toString()};
+			var pad = function(number) {return number < 9 ? "0" + number : number.toString(); };
 			return pad(tile.i) + pad(tile.j);
 		}
 	};
