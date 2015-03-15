@@ -42,6 +42,71 @@
 		},
 		this.isCrater = function(tile) {
 			return Util.getTileUniqueId(tile) in this.craters;
+		},
+		this.getNeighbors = function(tile, canClimbWalls) {
+			var neighbors = [];
+			for (var index = 0; index < 6; index++) {
+				var parity = !tile.j & 1; //THIS IS BROKENNNN
+				var dir = directions[parity][index];
+				var newNeighbor = {
+					i : tile.i + dir.i,
+					j: tile.j + dir.j
+				};
+				if (newNeighbor.i > 0 &&
+					newNeighbor.j > 0 &&
+					(canClimbWalls || !map.isWall(tile, newNeighbor)) &&
+					!map.isCrater(newNeighbor)) {
+					console.log(newNeighbor);
+					neighbors.push(newNeighbor);
+				}
+
+    		}
+    		return neighbors;
+    	},
+    	this.performSearch = function(origin, destination, canClimbWalls){
+			var frontier, cameFrom, costSoFar, newCost, current, path, node, nextNeighbors, n, next;
+
+			frontier = new PriorityQueue({
+				comparator: function(a, b) { return a.cost - b.cost; }
+			});
+
+			origin.cost = 0;
+			frontier.queue(origin);
+			cameFrom = {};
+			costSoFar = {};
+			cameFrom[Util.getTileUniqueId(origin)] = null;
+			costSoFar[Util.getTileUniqueId(origin)] = 0;
+
+			while(frontier.length > 0) {
+				if (frontier.length > 100) {
+					return false;
+				}
+				current = frontier.dequeue();
+
+				if (current.i == destination.i && current.j == destination.j) {
+					path = [];
+					node = current;
+					while(node) {
+						path.push(node)
+						node = cameFrom[Util.getTileUniqueId(node)];
+					}
+					return path;
+				}
+
+
+				nextNeighbors = this.getNeighbors(current);
+				for (n in nextNeighbors){
+					next = nextNeighbors[n];
+					newCost = costSoFar[Util.getTileUniqueId(current)] + 1;
+					if (!(Util.getTileUniqueId(next) in costSoFar) || newCost < costSoFar[Util.getTileUniqueId(next)]){
+						costSoFar[Util.getTileUniqueId(next)] = newCost;
+						next.cost = newCost + Util.getDistance(destination, next);
+						frontier.queue(next);
+						cameFrom[Util.getTileUniqueId(next)] = current;
+						console.log(cameFrom);
+					}
+				}
+			}
 		}
 	};
 
@@ -80,53 +145,6 @@
 		getTileUniqueId : function(tile) {
 			var pad = function(number) {return number < 9 ? "0" + number : number.toString()};
 			return pad(tile.i) + pad(tile.j);
-		},
-		getNeighbors : function(hex){
-			var neighbors = [];
-			for (var index = 0; index < 5; index++) {
-				var parity = hex.i & 1;
-				var dir = directions[parity][direction];
-				neigobors.push({
-					i : hex.i + dir.i,
-					j: hex.j + dir.j
-				});
-    		}
-    		return neighbors;
-    	}
-	};
-
-	exports.AStar = {
-		open : [],
-		closed : [],
-
-		//work on translating this from python to js
-		function performSearch(origin, destination){
-			var frontier, cameFrom, costSoFar, newCost;
-
-			frontier = new PriorityQueue({
-				comparator: function(a, b) { return b.cost - a.cost; }
-			});
-			origin.cost = 0;
-			frontier.queue(origin);
-			cameFrom = {};
-			costSoFar = {};
-			cameFrom[start] = null;
-			costSoFar[start] = 0;
-
-			while(frontier.length > 0) {
-				current = frontier.dequeue();
-
-				if current.i == destination.i && current.j == destination.j:
-					break
-
-				for (var next in Util.getNeighbors(current)):
-					newCost = costSoFar[current] + graph.cost(current, next)
-					if next not in costSoFar or newCost < costSoFar[next]:
-						costSoFar[next] = newCost
-						priority = newCost + heuristic(goal, next)
-						frontier.put(next, priority)
-						cameFrom[next] = current
-			}
 		}
 	};
 
