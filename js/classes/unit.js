@@ -14,16 +14,15 @@
 		["NE", "D", "D", "X", "X", "X"],
 		["D", "D", "X", "X", "X", "X"],
 		["D", "X", "X", "X", "X", "X"],
+        ["X", "X", "X", "X", "X", "X"]
 	];
 
 	/* Applies damage to a unit,
 	 * cb is ux callback function
 	 */
-	var doDamage = function(unit, attack, cb){
-
+	var doDamage = function(unit, ratio, cb){
 		roll = Math.floor((Math.random() * 6));
-
-		switch(damageTable[attack][roll]) {
+		switch(damageTable[ratio][roll]) {
 			case "NE":
 				unit.noEffect();
 				cb("NE");
@@ -120,22 +119,27 @@
     exports.PUnit.prototype.moveToTile = function(tile) {
         if (this.isValidMoveTarget(tile)){
             this.tile = tile;
+            this.hasMoved = true;
             return true;
         }
         return false;
     };
 
-    exports.PUnit.prototype.takeDamage = function(attackerlist, cb ) {
-
-        attack = attackerlist.reduce(function(accum, elem, index, array) {
+    //Get the ratio from an array of attacking units against this unit
+    exports.PUnit.prototype.getDamageRatio = function(attackerlist) { 
+        attackSum = attackerlist.reduce(function(accum, elem, index, array) {
             return accum + elem.getAttack();
-        });
-
+        }, 0);
         def = this.getDefense();
+        ratio = Math.floor(attackSum / this.getDefense());
+        if (ratio > 5) {ratio = 5;}
+        return ratio; 
+    };
 
-        attack = Math.floor(attack / defense);
-        if (attack > 5) { attack = 5;}
-        doDamage(this, attack, cb);
+    //do damage to unit
+    exports.PUnit.prototype.takeDamage = function(attackerlist, cb ) {
+        ratio = this.getDamageRatio(attackerlist);
+        return doDamage(this, ratio, cb);
     };
 
 

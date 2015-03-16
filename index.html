@@ -43,6 +43,29 @@
 		assert(game.map.performSearch({i:2, j: 2}, {i: 4, j: 5}, true).length, 4, "A* Test 2");
 		assert(game.map.performSearch({i:1, j: 1}, {i: 5, j: 4}, true).length, 5, "A* Test 3");
 
+        //unit tests, movement
+        mt = new MissileTank({i:3, j:5}); 
+        assert(mt.moveToTile({i:5, j:5}), true, "moved unit test 1");
+        assert(mt.getTile().i, {i:5, j:5}.i, "moved unit test 2.i");
+        assert(mt.getTile().j, {i:5, j:5}.j, "moved unit test 2.j");
+        assert(mt.hasMoved, true, "moved unit test 3");
+        //can't move twice in a turn
+        assert(mt.moveToTile({i:7, j:5}), false, "moved unit test 4");
+        assert(mt.getTile().i, 5, "moved unit test 5");
+
+        //unit tests, attack
+        //build attacker (in range)
+        mt2 = new MissileTank({i:5, j:6});
+        //damage ratios
+        assert(mt.getDamageRatio([]), 0, "damage ratio test 1");
+        assert(mt.getDamageRatio([mt2]), 1, "damage ratio test 2");
+        assert(mt.getDamageRatio([mt2, mt2]), 3, "damage ratio test 3");
+        //kill
+        mt.takeDamage([mt2, mt2, mt2, mt2], 
+                function(str){
+                    assert(str == "X", true, "attack callback test")
+                });  
+
 		console.log("all tests passed");
 	})();
 	</script>
