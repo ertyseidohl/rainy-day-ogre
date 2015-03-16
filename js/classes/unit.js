@@ -55,7 +55,7 @@
         this.hasAttacked = false;
     };
 
-	exports.PUnit.prototype.turnReset = function() {
+	exports.PUnit.prototype.nextTurnReset = function() {
 		this.hasMoved = false;
 		this.hasAttacked = false;
 	};
@@ -103,6 +103,9 @@
 		}
 	};
 
+    exports.PUnit.prototype.canAttack = function(unit){
+        return !this.hasAttacked && this.isValidAttackTarget(unit);
+    };
 	exports.PUnit.prototype.isValidAttackTarget = function(unitOrTile) {
         var tile = null;
         try{
