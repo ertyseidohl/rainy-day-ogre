@@ -4,8 +4,11 @@
 
 
     exports.MissileTank = function() {
-
+        exports.PUnit.call(this); //call superconstructor
     };
+
+    exports.MissileTank.prototype = Object.create(exports.PUnit.prototype);
+    exports.MissileTank.constructor = exports.MissleTank;
 
     exports.MissileTank.prototype.getAttack = function(){
         return 3;

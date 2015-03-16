@@ -41,91 +41,82 @@
 		return true;
 	};
 
-	exports.CreateUnit = function(clas) {
-		obj = new clas();
-		obj.prototype = P_Unit;
-		obj.prototype.init();
-		return obj;
+    exports.PUnit = function() {
+		this.tile = {i : -1, j : -1};
+		this.dead = false;
+		this.isDisabled = false;
+		this.turnReset();
 	};
 
-	exports.P_Unit = {
+	exports.PUnit.prototype.turnReset = function() {
+		this.hasMoved = false;
+		this.hasAttacked = false;
+	};
 
-		init : function(){
-			this.tile = {i : -1, j : -1};
-			this.dead = false;
-			this.isDisabled = false;
-			this.turnReset();
-		},
+	exports.PUnit.prototype.noEffect = function() {};
+	exports.PUnit.prototype.disable = function() {};
+	exports.PUnit.prototype.kill = function() {};
+    
+    //pretty sure these can simply be getters
+    exports.PUnit.prototype.getAttack = function() { return 0; };
+    exports.PUnit.prototype.getDefense = function() { return 0; };
+	exports.PUnit.prototype.getRange = function() { return 0; };
+	exports.PUnit.prototype.getPreMovement = function() { return 0; };
+	exports.PUnit.prototype.getPostMovement = function() { return 0; };
 
-		turnReset : function() {
-			this.hasMoved = false;
-			this.hasAttacked = false;
-		},
+	exports.PUnit.prototype.getTile = function() { return {i : -1, j : -1};};
 
-		noEffect : function() { },
-		disable : function() { },
-		kill : function() { },
+	exports.PUnit.prototype.isValidPreMoveTarget = function(tile) {
+		return Util.getDistance(this.getTile(), tile) <= this.getPreMovement();
+	};
 
-		getAttack : function() { return 0; },
-		getDefense : function() { return 0; },
-		getRange : function() { return 0; },
-		getPreMovement : function() { return 0; },
-		getPostMovement : function() { return 0; },
+	exports.PUnit.prototype.isValidPostMoveTarget = function(tile) {
+		return Util.getDistance(this.getTile(), tile) <= this.getPostMovement();
+	};
 
-		getTile : function() { return {i : -1, j : -1};},
-
-		isValidPreMoveTarget : function(tile) {
-			return Util.getDistance(this.getTile(), tile) <= this.getPreMovement();
-		},
-
-		isValidPostMoveTarget : function(tile) {
-			return Util.getDistance(this.getTile(), tile) <= this.getPostMovement();
-		},
-
-		isValidMoveTarget : function(tile) {
-			if (this.hasMoved) {
-				return this.isValidPostMoveTarget();
-			} else {
-				return this.isValidPreMoveTarget();
-			}
-		},
-
-		isValidAttackTarget : function(unitOrTile) {
-
-			var tile = null;
-			try{
-				tile = unitOrTile.getTile();
-			} catch (e)
-			{
-				if (e instanceof TypeError) {
-					tile = unitOrTile;
-				}
-			}
-			return Util.getDistance(this.getTile(), tile) <= this.getRange();
-		},
-
-		moveToTile : function(tile) {
-			if (this.isValidMoveTarget(tile)){
-				setTile(tile);
-				return true;
-			}
-			return false;
-		},
-
-		setTile : function(tile) { return false;},
-
-		takeDamage : function( attackerlist, cb ) {
-
-			attack = attackerlist.reduce(function(accum, elem, index, array) {
-				return accum + elem.getAttack();
-			});
-
-			def = this.getDefense();
-
-			attack = Math.floor(attack / defense);
-			if (attack > 5) { attack = 5;}
-			doDamage(this, attack, cb);
+	exports.PUnit.prototype.isValidMoveTarget = function(tile) {
+		if (this.hasMoved) {
+            return this.isValidPostMoveTarget();
+		} else {
+			return this.isValidPreMoveTarget();
 		}
 	};
+
+	exports.PUnit.prototype.isValidAttackTarget = function(unitOrTile) {
+        var tile = null;
+        try{
+            tile = unitOrTile.getTile();
+        } catch (e)
+        {
+            if (e instanceof TypeError) {
+                tile = unitOrTile;
+            }
+        }
+        return Util.getDistance(this.getTile(), tile) <= this.getRange();
+    };
+
+    exports.PUnit.prototype.moveToTile = function(tile) {
+        if (this.isValidMoveTarget(tile)){
+            setTile(tile);
+            return true;
+        }
+        return false;
+    };
+
+    exports.PUnit.prototype.setTile = function(tile) { return false;};
+
+    exports.PUnit.prototype.takeDamage = function(attackerlist, cb ) {
+
+        attack = attackerlist.reduce(function(accum, elem, index, array) {
+            return accum + elem.getAttack();
+        });
+
+        def = this.getDefense();
+
+        attack = Math.floor(attack / defense);
+        if (attack > 5) { attack = 5;}
+        doDamage(this, attack, cb);
+    };
+
 
 })(window);
