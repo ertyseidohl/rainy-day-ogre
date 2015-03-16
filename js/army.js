@@ -1,5 +1,4 @@
-
-
+//first "API" functions for army control
 ;(function(exports) {
 
     var turn = 0;
@@ -12,10 +11,18 @@
     };
 
     Army.prototype.startTurn = function(){
+        
+        //turns should not be started by an API client...
+        //this guard ensures that an army's can start their turn 
+        //iff the global state says it's their turn
+        if (this != whoseTurn()) {
+            return false;
+        }
         //reset units
         this.units.forEach(function(elem, ind, array){
             elem.nextTurnReset();
         }); 
+        return true;
     };
 
     Army.prototype.endTurn = function(){};
@@ -29,7 +36,6 @@
         return {"units" : this.units.length};  
     };
 
-
     //API actions
     exports.endTurn = function() {
 
@@ -38,9 +44,10 @@
 
         armies[turn].endTurn();
         turn += 1;
-        if (turn > armies.length) {
+        if (turn >= armies.length) {
             turn = 0;
         }
+        
         armies[turn].startTurn();
     
     };
