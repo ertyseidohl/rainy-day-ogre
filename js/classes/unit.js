@@ -49,7 +49,7 @@
         this.premove = options.premove || 0;
         this.postmove = options.postmove || 0;
 
-		this.tile = {i : -1, j : -1};
+		this.tile = options.tile || {i : -1, j : -1};
 		this.dead = false;
 		this.isDisabled = false;
 	    this.hasMoved = false;
@@ -89,7 +89,7 @@
     };
 
 	exports.PUnit.prototype.isValidPreMoveTarget = function(tile) {
-		return Util.getDistance(this.getTile(), tile) <= this.getPreMovement();
+        return Util.getDistance(this.getTile(), tile) <= this.getPreMovement();
 	};
 
 	exports.PUnit.prototype.isValidPostMoveTarget = function(tile) {
@@ -98,9 +98,9 @@
 
 	exports.PUnit.prototype.isValidMoveTarget = function(tile) {
 		if (this.hasMoved) {
-            return this.isValidPostMoveTarget();
+            return this.isValidPostMoveTarget(tile);
 		} else {
-			return this.isValidPreMoveTarget();
+			return this.isValidPreMoveTarget(tile);
 		}
 	};
 
@@ -119,13 +119,11 @@
 
     exports.PUnit.prototype.moveToTile = function(tile) {
         if (this.isValidMoveTarget(tile)){
-            setTile(tile);
+            this.tile = tile;
             return true;
         }
         return false;
     };
-
-    exports.PUnit.prototype.setTile = function(tile) { return false;};
 
     exports.PUnit.prototype.takeDamage = function(attackerlist, cb ) {
 
