@@ -41,12 +41,20 @@
 		return true;
 	};
 
-    exports.PUnit = function() {
+    exports.PUnit = function(options) {
+        if (options == null) { options = {};}
+        this.attack = options.attack || 0;
+        this.range = options.range || 0;
+        this.defense = options.defense || 0;
+        this.premove = options.premove || 0;
+        this.postmove = options.postmove || 0;
+
 		this.tile = {i : -1, j : -1};
 		this.dead = false;
 		this.isDisabled = false;
-		this.turnReset();
-	};
+	    this.hasMoved = false;
+        this.hasAttacked = false;
+    };
 
 	exports.PUnit.prototype.turnReset = function() {
 		this.hasMoved = false;
@@ -57,14 +65,28 @@
 	exports.PUnit.prototype.disable = function() {};
 	exports.PUnit.prototype.kill = function() {};
     
-    //pretty sure these can simply be getters
-    exports.PUnit.prototype.getAttack = function() { return 0; };
-    exports.PUnit.prototype.getDefense = function() { return 0; };
-	exports.PUnit.prototype.getRange = function() { return 0; };
-	exports.PUnit.prototype.getPreMovement = function() { return 0; };
-	exports.PUnit.prototype.getPostMovement = function() { return 0; };
+    exports.PUnit.prototype.getAttack = function() {
+        return this.attack; 
+    };
 
-	exports.PUnit.prototype.getTile = function() { return {i : -1, j : -1};};
+    exports.PUnit.prototype.getDefense = function() {
+        return this.defense; 
+    };
+	
+    exports.PUnit.prototype.getRange = function() { 
+        return this.range; 
+    };
+
+	exports.PUnit.prototype.getPreMovement = function() { 
+        return this.premove; 
+    };
+	exports.PUnit.prototype.getPostMovement = function() { 
+        return this.postmove; 
+    };
+
+	exports.PUnit.prototype.getTile = function() { 
+        return this.tile;
+    };
 
 	exports.PUnit.prototype.isValidPreMoveTarget = function(tile) {
 		return Util.getDistance(this.getTile(), tile) <= this.getPreMovement();
