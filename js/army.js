@@ -33,7 +33,8 @@
     //API actions
     exports.endTurn = function() {
 
-        
+        //ensure this state machine is reset
+        attackCleanup();
 
         armies[turn].endTurn();
         turn += 1;
@@ -44,17 +45,26 @@
     
     };
     
+    /*
+     * function whoseTurn returns the Army of the current turn
+     *
+     * note:
+     *    this could be scoped to private, but we need to decide
+     *    how we want to pass out references to our armies
+     */
     exports.whoseTurn = function() {
         return armies[turn];
     };
 
 
-    //Attack logic: build an attack force
+    //Attack logic: 
+    //   choose a target (can't be whose turn)
+    //   build an attack force
     //   check to see ratio against targets
     //   commit to a target or cancel
     attackForce = [];
     attackTarget = null;
-    exports.attackCleanup = function() {
+    var attackCleanup = function() {
         attackForce = [];
         attackTarget = null;
     };
@@ -63,6 +73,9 @@
     exports.attackSetTarget = function(unit) {
         if (whoseTurn().units.indexOf(unit) >= 0) {
             return false;
+        }
+        if (attackForce.length > 0) {
+            attackCleanup();
         }
         attackTarget = unit;
         return true;

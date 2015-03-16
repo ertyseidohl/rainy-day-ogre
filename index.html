@@ -57,6 +57,7 @@
         //unit tests, attack
         //build attacker (in range)
         mt2 = new MissileTank({i:5, j:6});
+        mt3 = new MissileTank({i:5, j:4});
         //damage ratios
         assert(mt.getDamageRatio([]), 0, "damage ratio test 1");
         assert(mt.getDamageRatio([mt2]), 1, "damage ratio test 2");
@@ -76,6 +77,8 @@
         a2.addUnit(mt2);
         assert(a2.getStats().units, 1, "army building stats 1");
         a1.addUnit(mt);
+        a2.addUnit(mt3);
+        assert(a2.getStats().units, 2, "army building stats 2");
 
         //turn structure
         assert(whoseTurn(), a1, "turn test 1");
@@ -101,6 +104,14 @@
         assert(attackSetTarget(mt), true, "attack test 10");
         //can't attack with a unit that has already attacked
         assert(attackWith(mt2), false, "attack test 11");
+        assert(attackGetAttackers().length, 0, "attack test 12");
+        
+        assert(attackWith(mt3), true, "attack test 13");
+        assert(attackWith(mt2), false, "attack test 13.5");
+        assert(attackGetAttackers().length, 1, "attack test 15");
+        attackCancel();
+        assert(attackGetAttackers().length, 0, "attack test 15");
+        assert(mt3.hasAttacked, false, "attack test 16");      
     
     })();
 	</script>
