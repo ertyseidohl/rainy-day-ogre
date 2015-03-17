@@ -77,14 +77,24 @@
     };
 
     //start an attack by setting the target
-    exports.attackSetTarget = function(unit) {
+    exports.attackSetTarget = function(unit, part) {
         if (whoseTurn().units.indexOf(unit) >= 0) {
             return false;
         }
-        if (attackForce.length > 0) {
-            attackCleanup();
+        
+        attackCleanup();
+ 
+        sel = unit.selectForAttack()
+        if (sel.length > 1) {
+            if (part == null) {
+                return sel;
+            } else if  (sel.indexOf(part) < 0) {
+                return sel;
+            }
+            attackTarget = part;
+        } else {
+            attackTarget = unit;
         }
-        attackTarget = unit;
         return true;
     }
 

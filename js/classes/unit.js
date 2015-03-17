@@ -62,9 +62,16 @@
 		this.hasAttacked = false;
 	};
 
+    /*
+     * Attack Results
+     */
 	exports.PUnit.prototype.noEffect = function() {};
 	
-    //returns false to indicate the unit did not die
+    /* disable()
+     * accepts: 
+     * returns: boolean 
+     * returns false to indicate the unit did not die
+     */
     exports.PUnit.prototype.disable = function() {
         return false;
     };
@@ -96,6 +103,13 @@
 	exports.PUnit.prototype.getTile = function() { 
         return this.tile;
     };
+
+    /*
+     * Generalized unit selection (enables multipart units to work)
+     */
+    exports.PUnit.prototype.selectForAttack = function() {
+        return [this];
+    }
 
 	exports.PUnit.prototype.isValidPreMoveTarget = function(tile) {
         return Util.getDistance(this.getTile(), tile) <= this.getPreMovement();

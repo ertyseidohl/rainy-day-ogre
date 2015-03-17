@@ -7,6 +7,10 @@
 	<script src="./js/game.js" type="text/javascript"></script>
 	<script src="./js/renderer.js" type="text/javascript"></script>
 	<script src="./js/classes/unit.js" type="text/javascript"></script>
+	<script src="./js/classes/multipart.js" type="text/javascript"></script>
+	<script src="./js/classes/unitpart.js" type="text/javascript"></script>
+	<script src="./js/classes/units/infantry.js" type="text/javascript"></script>
+	<script src="./js/classes/units/infantry.js" type="text/javascript"></script>
 	<script src="./js/classes/units/infantry.js" type="text/javascript"></script>
 	<script src="./js/classes/units/msl_tank.js" type="text/javascript"></script>
     <script src="./js/army.js" type="text/javascript"></script>
@@ -53,6 +57,7 @@
         assert(iu.getAttack(), 1, "Infantry disable test 4");
         assert(iu.disable(), true, "Inf disable test 5");
         assert(iu.dead, true, "Inf disable test 6");
+        assert(iu.selectForAttack().length, 1, "Inf select for attack test");
 
         //unit tests w/ missile tank 
         //movement
@@ -65,7 +70,19 @@
         assert(mt.moveToTile({i:7, j:5}), false, "moved unit test 4");
         assert(mt.getTile().i, 5, "moved unit test 5");
 
+
+        //multipart
+        p10 = new UnitPart({name : "part 1", type : "gun"});
+        p11 = new UnitPart({name : "part 1", type : "gun"});
+        p20 = new UnitPart({name : "part 2", type : "missile"});
+        mpu = new MultiPart({i:10, j:12}, [p10, p11, p20], 
+                            {name : "multipart", type : "ORGE"});
+
+        assert(mpu.selectForAttack().length, 2, "multipart creation test 1");
+
+        
         //unit tests, attack
+        
         //build attacker (in range)
         mt2 = new MissileTank({i:5, j:6});
         mt3 = new MissileTank({i:5, j:4});

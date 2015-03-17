@@ -1,7 +1,6 @@
 /*
- *
+ * Basic Infantry
  */
-
 ;(function(exports){
 
     exports.Infantry = function(tile, strength) {
@@ -36,6 +35,4 @@
         }
         return false;
     }
-
-
 })(window);
