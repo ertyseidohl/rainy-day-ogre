@@ -47,22 +47,32 @@
         this.defense = options.defense || 0;
         this.premove = options.premove || 0;
         this.postmove = options.postmove || 0;
-
+        this.type = options.type || "";
+        this.passThruWalls = options.passThruWalls || false;
+        this.name = options.name || "";
 		this.tile = options.tile || {i : -1, j : -1};
 		this.dead = false;
 		this.isDisabled = false;
-	    this.hasMoved = false;
+	    this.hasMoved = 0;
         this.hasAttacked = false;
     };
 
 	exports.PUnit.prototype.nextTurnReset = function() {
-		this.hasMoved = false;
+		this.hasMoved = 0;
 		this.hasAttacked = false;
 	};
 
 	exports.PUnit.prototype.noEffect = function() {};
-	exports.PUnit.prototype.disable = function() {};
-	exports.PUnit.prototype.kill = function() {};
+	
+    //returns false to indicate the unit did not die
+    exports.PUnit.prototype.disable = function() {
+        return false;
+    };
+
+	exports.PUnit.prototype.kill = function() {
+        this.dead = true;
+        return true;
+    };
     
     exports.PUnit.prototype.getAttack = function() {
         return this.attack; 
@@ -96,9 +106,9 @@
 	};
 
 	exports.PUnit.prototype.isValidMoveTarget = function(tile) {
-		if (this.hasMoved) {
+		if (this.hasMoved == 1) {
             return this.isValidPostMoveTarget(tile);
-		} else {
+		} else if (this.hasMoved == 0) {
 			return this.isValidPreMoveTarget(tile);
 		}
 	};
@@ -122,7 +132,7 @@
     exports.PUnit.prototype.moveToTile = function(tile) {
         if (this.isValidMoveTarget(tile)){
             this.tile = tile;
-            this.hasMoved = true;
+            this.hasMoved += 1;
             return true;
         }
         return false;
