@@ -4,19 +4,18 @@
 ;(function(exports){
     
     //  parts is an array of part units
-    exports.MultiPart = function(tile, parts, options){
-
+    exports.MultiPart = function(parts, options){
         this.parts = {}
-        
-        for (i in parts){ 
-            elem = parts[i] 
+        for (i in parts){
+            elem = parts[i]
             try {
                 this.parts[elem.type] = this.parts[elem.type].concat(elem);
             } catch(e) {
                 this.parts[elem.type] = [elem];
             }
+            parts[i].assignToOwner(this);
         }
-
+        
         exports.PUnit.call(this, options); 
     }
 

@@ -65,7 +65,7 @@
 
 
     //Attack logic: 
-    //   choose a target (can't be whose turn)
+    //   choose a target (can't be in the current turn's army)
     //   build an attack force
     //   check to see ratio against targets
     //   commit to a target or cancel
