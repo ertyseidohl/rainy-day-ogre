@@ -35,10 +35,15 @@
         ]; */
 
         
-        parts = [new OrgeMissile(), 
-                 new OrgeMissile(),
+        parts = [new OrgeTreads(30, 10),
+                 new OrgeMissile(), 
                  new OrgePrimaryBattery(),
-                 new OrgeMissile()];
+                 
+                 new OrgeSecondaryBattery(),
+                 new OrgeSecondaryBattery(),
+                 new OrgeSecondaryBattery(),
+                 new OrgeSecondaryBattery()
+                 ];
        
         exports.MultiPart.call(this, parts, options);
     };

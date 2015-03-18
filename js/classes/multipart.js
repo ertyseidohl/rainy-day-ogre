@@ -13,7 +13,7 @@
             } catch(e) {
                 this.parts[elem.type] = [elem];
             }
-            parts[i].assignToOwner(this);
+            elem.assignToOwner(this);
         }
         
         exports.PUnit.call(this, options); 
