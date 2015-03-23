@@ -3,6 +3,17 @@
 <head>
 	<meta charset="UTF-8">
 	<title>OGRE</title>
+	<style type="text/css">
+		html, body {
+			width : 100%;
+			height : 100%;
+			margin : 0;
+			padding : 0;
+		}
+	</style>
+
+	<script type="text/javascript" src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
+
 	<script src="./js/lib/priority-queue.min.js" type="text/javascript"></script>
 	<script src="./js/game.js" type="text/javascript"></script>
 	<script src="./js/renderer.js" type="text/javascript"></script>
@@ -16,8 +27,9 @@
 	<script src="./js/classes/units/msl_tank.js" type="text/javascript"></script>
 	<script src="./js/classes/parts/orgetreads.js" type="text/javascript"></script>
 	<script src="./js/classes/parts/orgesecondarybattery.js" type="text/javascript"></script>
-    <script src="./js/army.js" type="text/javascript"></script>
-    <script type="text/javascript">
+	<script src="./js/army.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
 	;(function() {
 		function assert(thisthing, thatthing, message) {
 			if (thisthing != thatthing) {
@@ -62,9 +74,9 @@
         assert(iu.dead, true, "Inf disable test 6");
         assert(iu.selectForAttack().length, 1, "Inf select for attack test");
 
-        //unit tests w/ missile tank 
+        //unit tests w/ missile tank
         //movement
-        mt = new MissileTank({i:3, j:5}); 
+        mt = new MissileTank({i:3, j:5});
         assert(mt.moveToTile({i:5, j:5}), true, "moved unit test 1");
         assert(mt.getTile().i, {i:5, j:5}.i, "moved unit test 2.i");
         assert(mt.getTile().j, {i:5, j:5}.j, "moved unit test 2.j");
@@ -78,15 +90,15 @@
         p10 = new UnitPart({name : "part 1", type : "gun"});
         p11 = new UnitPart({name : "part 1", type : "gun"});
         p20 = new UnitPart({name : "part 2", type : "missile"});
-        mpu = new MultiPart([p10, p11, p20], 
+        mpu = new MultiPart([p10, p11, p20],
                      {tile:{i:10, j:12}, name : "multipart", type : "MPU"});
         assert(mpu.selectForAttack().length, 2, "multipart creation test 1");
-        
+
         orge = new Orge({i:7, j:1});
 
-        
+
         //unit tests, attack
-        
+
         //build attacker (in range)
         mt2 = new MissileTank({i:5, j:6});
         mt3 = new MissileTank({i:5, j:4});
@@ -95,13 +107,13 @@
         assert(mt.getDamageRatio([mt2]), 1, "damage ratio test 2");
         assert(mt.getDamageRatio([mt2, mt2]), 3, "damage ratio test 3");
         //kill
-        mt.takeDamage([mt2, mt2, mt2, mt2], 
+        mt.takeDamage([mt2, mt2, mt2, mt2],
                 function(str){
                     assert(str == "X", true, "attack callback test")
-                });  
+                });
 
         console.log("all tests passed");
-        
+
         //army building
         assert(whoseTurn(), null, "turn test 0");
         a1 = addArmy("bob");
@@ -121,7 +133,7 @@
         //can't attack with a unit that's not yours
         assert(attackSetTarget(mt2), false, "attack test 1");
         assert(attackSetTarget(mt), true, "attack test 2");
-        
+
         assert(attackGetRatio(), 0, "attack test 3");
         assert(attackWith(mt), false, "attack test 4");
         assert(attackWith(mt2), true, "attack test 5");
@@ -130,7 +142,7 @@
 
         assert(mt2.hasAttacked, false, "attack test 7");
         attackCommit();
-        assert(mt2.hasAttacked, true, "attack test 8"); 
+        assert(mt2.hasAttacked, true, "attack test 8");
         assert(attackGetAttackers().length, 0, "attack test 9");
 
         assert(attackSetTarget(mt), true, "attack test 10");
@@ -144,7 +156,7 @@
         assert(attackGetAttackers().length, 1, "attack test 15");
         attackCancel();
         assert(attackGetAttackers().length, 0, "attack test 16");
-        assert(mt3.hasAttacked, false, "attack test 17");      
+        assert(mt3.hasAttacked, false, "attack test 17");
 
         //turn progression
         endTurn();
@@ -155,7 +167,12 @@
 	</script>
 </head>
 <body>
-	<canvas id="canvas"></canvas>
+	<div id="canvas"></div>
+
+	<script type="text/javascript">
+		var ren = new Renderer({container : document.getElementById('canvas')});
+		ren.run();
+	</script>
 </body>
 </html>
 
