@@ -1,11 +1,12 @@
+/** 
+ * Contains the base unit javascript class prototype PUnit 
+ * @author mcverry
+ */
 
 // IIFE
 // immediately invoked function expression
-//
-// things bound to exports are global (bound to window),
+// things bound to the "exports" variable are global (bound to window),
 // everything else is scoped private
-//
-// appends
 ;(function(exports){
 
 	var damageTable = [
@@ -17,9 +18,20 @@
         ["X", "X", "X", "X", "X", "X"]
 	];
 
-	/* Applies damage to a unit,
-	 * cb is ux callback function
-	 */
+
+	/**
+     * @function Apply a damage roll to a unit
+	 * @member of PUnit
+     * @static 
+     *
+     * @desc  this method rolls a 6 sided die to determine the which damage method
+     * to be applied to the supplied unit using dmaageTable 
+     *
+     * @param {PUnit} - the unit to apply the damage roll too
+     * @param {int} ratio - the pre-calculated attack to defense ratio
+     * @param {function} cb - the ux callback function
+     * @returns true
+     */
 	var doDamage = function(unit, ratio, cb){
 		roll = Math.floor((Math.random() * 6));
 		switch(damageTable[ratio][roll]) {
@@ -40,6 +52,10 @@
 		return true;
 	};
 
+    /** 
+     *  Creates a base PUnit
+     *  @class PUnit
+     */
     exports.PUnit = function(options) {
         if (options == null) { options = {};}
         this.attack = options.attack || 0;
@@ -57,6 +73,9 @@
         this.hasAttacked = false;
     };
 
+    /**
+     *
+     */
 	exports.PUnit.prototype.nextTurnReset = function() {
 		this.hasMoved = 0;
 		this.hasAttacked = false;
