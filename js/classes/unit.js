@@ -58,27 +58,72 @@
      */
     exports.PUnit = function(options) {
         if (options == null) { options = {};}
+        /** @member {int} unit's base attack points,
+         * access with getAttack() */
         this.attack = options.attack || 0;
+        /** @member {int} unit's base range distance,
+         * access with getRange() */
         this.range = options.range || 0;
+        /** @member {int} unit's base defense points,
+         * access with getDefense() */
         this.defense = options.defense || 0;
+        /** @member {int} unit's base preattack move distance,
+         * access with getPremove() */
         this.premove = options.premove || 0;
+        /** @member {int} unit's base postattack move distance,
+         * access with getPostmove() */
         this.postmove = options.postmove || 0;
-        this.type = options.type || "";
+
+        /** @member {boolean} can the unit pass through walls */ 
         this.passThruWalls = options.passThruWalls || false;
+        
+        /** @member {String} the unit's name */
         this.name = options.name || "";
+
+        /** the unit's type (THESE ARE NOT WELL DEFINED) 
+         * @member {String} 
+         * @see getType */
+        this.type = options.type || "";
+
+        /** the unit's position, 
+         * @member {Tile}
+         * @see getTil
+         * note that the position object, Tile, can be further abstracted :) */
 		this.tile = options.tile || {i : -1, j : -1};
+
+        /** stores if the unit dead (and should be removed)  
+         * @member {boolean} 
+         * @see isDead */
 		this.dead = false;
-		this.isDisabled = false;
-	    this.hasMoved = 0;
-        this.hasAttacked = false;
+
+        /** stores how many turns the unit is disabled for  
+         * @member {int} 
+         * @see isDisabled */
+		this.disabledTurns = 0;
+        
+        /** how many times hs the unit moved this turn?
+         * @member {int} 
+         * @see hasMoved
+         * @see timesMoved
+         * */
+	    this.moved = 0;
+        
+        /** stores if the unit attacked
+         * @member {boolean} 
+         * @see hasAttacked */
+          this.attacked = false;
     };
 
     /**
      *
      */
 	exports.PUnit.prototype.nextTurnReset = function() {
-		this.hasMoved = 0;
-		this.hasAttacked = false;
+		this.moved = 0;
+		this.attacked = false;
+        
+        if (this.disabledTurns > 0) {
+            this.disabledTurns -= 1;
+        }
 	};
 
     /*
@@ -86,10 +131,8 @@
      */
 	exports.PUnit.prototype.noEffect = function() {};
 	
-    /* disable()
-     * accepts: 
-     * returns: boolean 
-     * returns false to indicate the unit did not die
+    /* @function disable
+     * @returns {boolean} - false to indicate the unit did not die
      */
     exports.PUnit.prototype.disable = function() {
         return false;
@@ -119,6 +162,37 @@
         return this.postmove; 
     };
 
+    /** @function isDead
+     *  @returns {boolean} returns if the unit is dead
+     */
+    exports.PUnit.prototype.isDead = function() {
+        return this.dead;
+    }
+
+    /** @function isDisabled
+     * @returns {boolean} if the unit is disabled this turn
+     */
+    exports.PUnit.prototype.isDisabled = function() {
+        return (this.disabledTurns > 0);
+    }
+
+    /** @function hasAttacked 
+     *  @returns {boolean} if the unit has attacked this turn
+     */
+    exports.PUnit.prototype.hasAttacked = function() {
+        return this.attacked;
+    }
+
+    /** @function hasMoved 
+     *  @returns {int} the number of times it moved this turn 
+     */
+    exports.PUnit.prototype.hasMoved = function() {
+        return this.moved;
+    }   
+
+    /** @function getTile
+     *  @returns {Tile} the unit's position
+     */
 	exports.PUnit.prototype.getTile = function() { 
         return this.tile;
     };
@@ -139,15 +213,15 @@
 	};
 
 	exports.PUnit.prototype.isValidMoveTarget = function(tile) {
-		if (this.hasMoved == 1) {
+		if (this.moved == 1) {
             return this.isValidPostMoveTarget(tile);
-		} else if (this.hasMoved == 0) {
+		} else if (this.moved == 0) {
 			return this.isValidPreMoveTarget(tile);
 		}
 	};
 
     exports.PUnit.prototype.canAttack = function(unit){
-        return !this.hasAttacked && this.isValidAttackTarget(unit);
+        return !this.hasAttacked() && this.isValidAttackTarget(unit);
     };
 	exports.PUnit.prototype.isValidAttackTarget = function(unitOrTile) {
         var tile = null;
@@ -165,7 +239,7 @@
     exports.PUnit.prototype.moveToTile = function(tile) {
         if (this.isValidMoveTarget(tile)){
             this.tile = tile;
-            this.hasMoved += 1;
+            this.moved += 1;
             return true;
         }
         return false;
