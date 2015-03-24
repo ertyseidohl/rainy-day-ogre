@@ -10,9 +10,16 @@
 			margin : 0;
 			padding : 0;
 		}
+		#hints {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			color: white;
+		}
 	</style>
 
 	<script type="text/javascript" src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
+	<script type="text/javascript" src="./js/lib/controls/OrbitControls.js"></script>
 
 	<script src="./js/lib/priority-queue.min.js" type="text/javascript"></script>
 	<script src="./js/game.js" type="text/javascript"></script>
@@ -168,7 +175,7 @@
 </head>
 <body>
 	<div id="canvas"></div>
-
+	<div id="hints">Press "a" to toggle axes.</div>
 	<script type="text/javascript">
 		var ren = new Renderer({container : document.getElementById('canvas')});
 		ren.run();
