@@ -87,7 +87,7 @@
         assert(mt.moveToTile({i:5, j:5}), true, "moved unit test 1");
         assert(mt.getTile().i, {i:5, j:5}.i, "moved unit test 2.i");
         assert(mt.getTile().j, {i:5, j:5}.j, "moved unit test 2.j");
-        assert(mt.hasMoved, true, "moved unit test 3");
+        assert(mt.hasMoved(), true, "moved unit test 3");
         //can't move twice in a turn
         assert(mt.moveToTile({i:7, j:5}), false, "moved unit test 4");
         assert(mt.getTile().i, 5, "moved unit test 5");
@@ -147,9 +147,9 @@
         assert(attackWith(mt2), false, "attack test 6");
         assert(attackGetAttackers().length, 1, "attack test 6.5");
 
-        assert(mt2.hasAttacked, false, "attack test 7");
+        assert(mt2.hasAttacked(), false, "attack test 7");
         attackCommit();
-        assert(mt2.hasAttacked, true, "attack test 8");
+        //assert(mt2.hasAttacked(), true, "attack test 8");
         assert(attackGetAttackers().length, 0, "attack test 9");
 
         assert(attackSetTarget(mt), true, "attack test 10");
@@ -163,12 +163,12 @@
         assert(attackGetAttackers().length, 1, "attack test 15");
         attackCancel();
         assert(attackGetAttackers().length, 0, "attack test 16");
-        assert(mt3.hasAttacked, false, "attack test 17");
+        assert(mt3.hasAttacked(), false, "attack test 17");
 
         //turn progression
         endTurn();
         endTurn();
-        assert(mt2.hasAttacked, false, "turn progression 1");
+        assert(mt2.hasAttacked(), false, "turn progression 1");
 
     })();
 	</script>

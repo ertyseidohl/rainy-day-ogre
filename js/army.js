@@ -131,7 +131,7 @@
     exports.attackCommit = function() {
         attackTarget.takeDamage(attackForce, function(str){});
         attackForce.forEach(function(elem, ind, array){
-            elem.hasAttacked = true;
+            elem.attacked = true;
         });
         attackCleanup();
         return true;
