@@ -28,11 +28,42 @@
 	var material3 = new THREE.MeshLambertMaterial( { color: 0x666666, shading: THREE.SmoothShading } );
 	var material4 = new THREE.MeshLambertMaterial( { color: 0x222222, shading: THREE.SmoothShading } );
 
+	function buildAxis( src, dst, colorHex, dashed ) {
+		var geom = new THREE.Geometry(),
+			mat;
+		if(dashed) {
+			mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
+		} else {
+			mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
+		}
+		geom.vertices.push( src.clone() );
+		geom.vertices.push( dst.clone() );
+		geom.computeLineDistances(); // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
+		var axis = new THREE.Line( geom, mat, THREE.LinePieces );
+		return axis;
+	}
+
+	function buildAxes( length ) {
+		var axes = new THREE.Object3D();
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
+		axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
+		return axes;
+	}
+
 	exports.Renderer = function(options) {
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 		this.renderer = new THREE.WebGLRenderer();
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
+
+		this.shouldShowAxes = false;
+		this.currentShouldShowAxes = false;
+		this.axes = null;
+
 		options.container.appendChild(this.renderer.domElement);
 
 		var self = this;
@@ -53,11 +84,16 @@
 			geometry.vertices = hexPoints.slice(0);
 			geometry.faces = triangles.slice(0);
 
-			var offset = Math.sqrt(3);
+			var hexOffset = Math.sqrt(3);
+
+			var iOffset = -5;
+			var jOffset = -5;
 
 			for (var i = 0; i < 10; i ++) {
 				for (var j = 0; j < 10; j++) {
-					var m;
+					var _i = i + iOffset,
+						_j = j + jOffset,
+						m;
 
 					if (i % 2 === 0) {
 						if (j % 2 === 0) {
@@ -74,24 +110,49 @@
 					}
 
 					var h = new THREE.Mesh( geometry, m);
-					if (i % 2 === 0) {
-						h.position.set(i * 1.5,0, (j + 0.5) * offset);
+					if (_i % 2 === 0) {
+						h.position.set(-_i * 1.5,0, -(_j + 0.5) * hexOffset);
 					} else {
-						h.position.set(i * 1.5,0,j * offset);
+						h.position.set(-_i * 1.5,0,-_j * hexOffset);
 					}
 					this.scene.add(h);
 				}
 			}
 
-			this.camera.position.set(0,20,0);
+			this.camera.position.set(0,20,-10);
 			this.camera.up = new THREE.Vector3(0,0,1);
 			this.camera.lookAt(new THREE.Vector3(0,0,0));
+
+			controls = new THREE.OrbitControls( this.camera );
+			controls.minPolarAngle = Math.PI * 1/2; // radians
+			controls.maxPolarAngle = Math.PI * (7/8); // radians
+			controls.minAzimuthAngle = Math.PI; // radians
+			controls.maxAzimuthAngle = Math.PI; // radians
+			controls.mouseButtons = {
+				ORBIT: THREE.MOUSE.RIGHT,
+				ZOOM: THREE.MOUSE.MIDDLE,
+				PAN: THREE.MOUSE.LEFT
+			};
+
+			this.axes = buildAxes(10);
+			window.addEventListener('keydown', function(e) {
+				if (e.keyCode == 65) { //a
+					this.shouldShowAxes = !this.shouldShowAxes;
+				}
+			}.bind(this), false);
 
 			this.loop();
 		},
 
 		update: function() {
-
+			if(this.currentShouldShowAxes !== this.shouldShowAxes) {
+				this.currentShouldShowAxes = this.shouldShowAxes;
+				if (this.shouldShowAxes) {
+					this.scene.add(this.axes);
+				} else {
+					this.scene.remove(this.axes);
+				}
+			}
 		},
 
 		render : function() {
