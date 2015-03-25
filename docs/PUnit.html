@@ -32,6 +32,10 @@
         PUnit
         </h2>
         
+            <div class="class-description">The PUnit is the base class of all units.
+ units should subclass PUnit and override its public methods
+ to produce desired functionality</div>
+        
     
 </header>
 
@@ -41,6 +45,8 @@
         
 
     
+    <h2>Constructor</h2>
+    
 
     <h4 class="name" id="PUnit"><span class="type-signature"></span>new PUnit<span class="signature">()</span><span class="type-signature"></span></h4>
 
@@ -49,7 +55,7 @@
 
 
 <div class="description">
-    Creates a base PUnit
+    Creates a base PUnit by passing in an options object
 </div>
 
 
@@ -132,559 +138,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id=".this.dead"><span class="type-signature">(static) </span>this.dead<span class="type-signature"> :boolean</span></h4>
-
-
-
-
-<div class="description">
-    stores if the unit dead (and should be removed)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">boolean</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line125">line 125</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>isDead</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".this.disabledTurns"><span class="type-signature">(static) </span>this.disabledTurns<span class="type-signature"> :int</span></h4>
-
-
-
-
-<div class="description">
-    stores how many turns the unit is disabled for
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">int</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line131">line 131</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>isDisabled</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".this.moved"><span class="type-signature">(static) </span>this.moved<span class="type-signature"> :int</span></h4>
-
-
-
-
-<div class="description">
-    how many times hs the unit moved this turn?
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">int</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line139">line 139</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>hasMoved</li>
-        
-            <li>timesMoved</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".this.name"><span class="type-signature">(static) </span>this.name<span class="type-signature"> :String</span></h4>
-
-
-
-
-<div class="description">
-    the unit's name
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">String</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line106">line 106</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".this.passThruWalls"><span class="type-signature">(static) </span>this.passThruWalls<span class="type-signature"> :boolean</span></h4>
-
-
-
-
-<div class="description">
-    can the unit pass through walls
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">boolean</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line101">line 101</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>getPassThruWalls</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".this.tile"><span class="type-signature">(static) </span>this.tile<span class="type-signature"> :Tile</span></h4>
-
-
-
-
-<div class="description">
-    the unit's position,
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Tile</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line119">line 119</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>getTil
-note that the position object, Tile, can be further abstracted :)</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id=".this.type"><span class="type-signature">(static) </span>this.type<span class="type-signature"> :String</span></h4>
-
-
-
-
-<div class="description">
-    the unit's type (THESE ARE NOT WELL DEFINED)
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">String</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line112">line 112</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>getType</li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
     
 
     
@@ -895,6 +348,161 @@ to be applied to the supplied unit using dmaageTable
 
     
 
+    <h4 class="name" id="canAttack"><span class="type-signature"></span>canAttack<span class="signature">(unit)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    can this unit attack the target unit?
+ this method takes into account whether or not the unit has 
+ already attacked this turn
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>unit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Unit</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the target unit</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line277">line 277</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    true if we can attack the unit, false otherwise
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="disable"><span class="type-signature"></span>disable<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
@@ -902,7 +510,10 @@ to be applied to the supplied unit using dmaageTable
 
 
 <div class="description">
-    this method should be overrided by subclasses to modify
+    The default behavior of a disable is to the disabledTurns to 2
+which means the unit will be active again after 2 start of the
+army's turns. 
+this method should be overrided by subclasses to modify
 the behavior of a disable attack result.
 </div>
 
@@ -947,7 +558,7 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line176">line 176</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -975,6 +586,7 @@ the behavior of a disable attack result.
         
 <div class="param-desc">
     - false to indicate the unit did not die
+                     true if the unit did die
 </div>
 
 
@@ -1000,11 +612,15 @@ the behavior of a disable attack result.
 
     
 
-    <h4 class="name" id="getPostMovement"><span class="type-signature"></span>getPostMovement<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
+    <h4 class="name" id="getAttack"><span class="type-signature"></span>getAttack<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
 
     
 
 
+
+<div class="description">
+    Get the attack strength of the unit
+</div>
 
 
 
@@ -1047,7 +663,368 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line207">line 207</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line138">line 138</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - the attack points for this unit
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getDamageRatio"><span class="type-signature"></span>getDamageRatio<span class="signature">(attackerlist)</span><span class="type-signature"> &rarr; {int}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Get the ratio from an array of attacking units against this unit
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attackerlist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Unit></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a list of attackers</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line305">line 305</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    the ratio
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getDefense"><span class="type-signature"></span>getDefense<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Get the defense strength of the unit
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line146">line 146</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - the defense points for this unit
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getPostMovement"><span class="type-signature"></span>getPostMovement<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Get the move distance after the unit attack's
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line170">line 170</a>
     </li></ul></dd>
     
 
@@ -1106,6 +1083,10 @@ the behavior of a disable attack result.
 
 
 
+<div class="description">
+    Get the move distance prior to an attack
+</div>
+
 
 
 
@@ -1147,7 +1128,7 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line200">line 200</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -1200,11 +1181,15 @@ the behavior of a disable attack result.
 
     
 
-    <h4 class="name" id="getTile"><span class="type-signature"></span>getTile<span class="signature">()</span><span class="type-signature"> &rarr; {Tile}</span></h4>
+    <h4 class="name" id="getRange"><span class="type-signature"></span>getRange<span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></h4>
 
     
 
 
+
+<div class="description">
+    Get the range for this unit
+</div>
 
 
 
@@ -1247,7 +1232,111 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line242">line 242</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line154">line 154</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - number of tiles unit can attack
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">int</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getTile"><span class="type-signature"></span>getTile<span class="signature">()</span><span class="type-signature"> &rarr; {Tile}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Get the unit's position
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line210">line 210</a>
     </li></ul></dd>
     
 
@@ -1306,6 +1395,10 @@ the behavior of a disable attack result.
 
 
 
+<div class="description">
+    Get whether or not the unit has attacked this turn.
+</div>
+
 
 
 
@@ -1347,7 +1440,7 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line228">line 228</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line202">line 202</a>
     </li></ul></dd>
     
 
@@ -1374,7 +1467,7 @@ the behavior of a disable attack result.
 
         
 <div class="param-desc">
-    if the unit has attacked this turn
+    ture if the unit has attacked this turn
 </div>
 
 
@@ -1406,6 +1499,10 @@ the behavior of a disable attack result.
 
 
 
+<div class="description">
+    Get how many times the unit has moved this turn
+</div>
+
 
 
 
@@ -1447,7 +1544,7 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line235">line 235</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line178">line 178</a>
     </li></ul></dd>
     
 
@@ -1506,6 +1603,10 @@ the behavior of a disable attack result.
 
 
 
+<div class="description">
+    Get whether or not the unit is dead
+</div>
+
 
 
 
@@ -1547,7 +1648,7 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line214">line 214</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line186">line 186</a>
     </li></ul></dd>
     
 
@@ -1574,7 +1675,7 @@ the behavior of a disable attack result.
 
         
 <div class="param-desc">
-    returns if the unit is dead
+    true if the unit is dead
 </div>
 
 
@@ -1606,6 +1707,10 @@ the behavior of a disable attack result.
 
 
 
+<div class="description">
+    Get whether of not the unit is disabled
+</div>
+
 
 
 
@@ -1647,7 +1752,7 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line221">line 221</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line194">line 194</a>
     </li></ul></dd>
     
 
@@ -1674,7 +1779,7 @@ the behavior of a disable attack result.
 
         
 <div class="param-desc">
-    if the unit is disabled this turn
+    true if the unit is disabled
 </div>
 
 
@@ -1686,6 +1791,887 @@ the behavior of a disable attack result.
     <dd>
         
 <span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="isValidAttackTarget"><span class="type-signature"></span>isValidAttackTarget<span class="signature">(unitOrTile)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    is the target unit or tile within this unit's attack range?
+ this method does not take into account whether this unit has attacked
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>unitOrTile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Unit</span>
+|
+
+<span class="param-type">Tile</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a target unit or tile.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line287">line 287</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - true if the unit or tile is within range
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="isValidMoveTarget"><span class="type-signature"></span>isValidMoveTarget<span class="signature">(tile)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Is the tile a valid move target, given the number of times the unit
+has moved this turn. For PUnits, this method will return False after
+the unit has moved once
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Tile</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">target tile to test</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line247">line 247</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - true if the the tile is within range
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="isValidPostMoveTarget"><span class="type-signature"></span>isValidPostMoveTarget<span class="signature">(tile)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Is the the tile within the range of the unit's postmove distance.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Tile</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">target tile to test</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line236">line 236</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - true if the tile is within range, false otherwise
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="isValidPreMoveTarget"><span class="type-signature"></span>isValidPreMoveTarget<span class="signature">(tile)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Is the the tile within the range of the unit's premove distance.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Tile</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">target tile to test</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line227">line 227</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - true if the tile is within range, false otherwise
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="kill"><span class="type-signature"></span>kill<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    The default behavior of a kill attack effect is to mark
+the unit as dead to be removed from the army at the end 
+of the turn
+this method should be overrided by subclasses to modify
+the behavior of a kill attack result.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line129">line 129</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - true to indicate the unit did die, 
+                     false otherwise
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="moveToTile"><span class="type-signature"></span>moveToTile<span class="signature">(tile)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Move the unit to a new position, if the tile is within range
+This method mutates the state of the unit
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Tile</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the tile to move to</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line261">line 261</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - was the move successful?
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
 
 
     </dd>
@@ -1752,7 +2738,7 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line152">line 152</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -1835,7 +2821,7 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line169">line 169</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -1917,7 +2903,7 @@ the behavior of a disable attack result.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line250">line 250</a>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line218">line 218</a>
     </li></ul></dd>
     
 
@@ -1966,6 +2952,183 @@ the behavior of a disable attack result.
 
 
         
+            
+
+    
+
+    <h4 class="name" id="takeDamage"><span class="type-signature"></span>takeDamage<span class="signature">(attackerlist, a)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Attack with a list of attacking units and then apply the resulting damage ratio 
+ and resulting attack effect to the unit
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attackerlist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Unit></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the list of attackers</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>a</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ux callback function</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="unit.js.html">unit.js</a>, <a href="unit.js.html#line322">line 322</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    if the attack was successfully applied to this unit
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
     
 
     
@@ -1987,7 +3150,7 @@ the behavior of a disable attack result.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Wed Mar 25 2015 10:06:43 GMT-0400 (EDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Wed Mar 25 2015 13:58:35 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>

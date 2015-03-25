@@ -80,96 +80,32 @@
 	};
 
     /** 
-     *  Creates a base PUnit
+     *  Creates a base PUnit by passing in an options object
      *  @class PUnit
+     *  @classdesc  The PUnit is the base class of all units.
+     *  units should subclass PUnit and override its public methods
+     *  to produce desired functionality
      */
     exports.PUnit = function(options) {
         if (options == null) { options = {};}
         
-        /** unit's base attack points,
-         * @member {int} 
-         * @memberOf PUnit
-         * access with getAttack() 
-         * @see getAttack */
         this.attack = options.attack || 0;
-        
-        /** unit's base range distance,
-         * @member {int}
-         * @memberOf PUnit
-         * access with getRange() 
-         * @see getRange*/
         this.range = options.range || 0;
-        
-        /** unit's base defense points  
-         * @member {int} 
-         * @memberOf PUnit
-         * access with getDefense() 
-         * @see getDefense */
         this.defense = options.defense || 0;
-        
-        /**  unit's base preattack move distance,
-         * @member {int} 
-         * @memberOf PUnit
-         * access with getPreMovement 
-         * @see getPreMovement */
         this.premove = options.premove || 0;
-        
-        /** unit's base postattack move distance,
-         * @member {int} 
-         * @memberOf PUnit
-         * access with getPostMovement() 
-         * @see getPostMovement*/
         this.postmove = options.postmove || 0;
-
-        /** can the unit pass through walls 
-         * @member {boolean} 
-         * @memberOf PUnit 
-         * @see getPassThruWalls
-         */
         this.passThruWalls = options.passThruWalls || false;
         
-        /** the unit's name
-         * @member {String}
-         * @memberOf PUnit */
         this.name = options.name || "";
-
-        /** the unit's type (THESE ARE NOT WELL DEFINED) 
-         * @member {String} 
-         * @memberOf PUnit
-         * @see getType */
         this.type = options.type || "";
+    	this.tile = options.tile || {i : -1, j : -1};
 
-        /** the unit's position, 
-         * @member {Tile}
-         * @memberOf PUnit
-         * @see getTil
-         * note that the position object, Tile, can be further abstracted :) */
-		this.tile = options.tile || {i : -1, j : -1};
-
-        /** stores if the unit dead (and should be removed)  
-         * @member {boolean} 
-         * @memberOf PUnit
-         * @see isDead */
-		this.dead = false;
-
-        /** stores how many turns the unit is disabled for  
-         * @member {int} 
-         * @memberOf PUnit
-         * @see isDisabled */
-		this.disabledTurns = 0;
-        
-        /** how many times hs the unit moved this turn?
-         * @member {int} 
-         * @memberOf PUnit
-         * @see hasMoved
-         * @see timesMoved
-         * */
-	    this.moved = 0;
-        
-        /** stores if the unit attacked
-         * @member {boolean} 
-         * @memberOf PUnit.prototype
-         * @see hasAttacked */
+    	this.dead = false;
+        // how many turn starts the unit is disabled for  
+    	this.disabledTurns = 0;
+        // how many times hs the unit moved this turn?
+        this.moved = 0;
+        // has the unit attacked? 
         this.attacked = false;
     };
 
@@ -187,7 +123,7 @@
 	};
 
     /*
-     * Attack Results
+     * Attack Effects
      */
 	
     /**
@@ -197,32 +133,58 @@
     exports.PUnit.prototype.noEffect = function() {};
 	
     /**
+     * The default behavior of a disable is to the disabledTurns to 2
+     * which means the unit will be active again after 2 start of the
+     * army's turns. 
      * this method should be overrided by subclasses to modify
      * the behavior of a disable attack result.
      * @returns {boolean} - false to indicate the unit did not die
+     *                      true if the unit did die
      */
     exports.PUnit.prototype.disable = function() {
         return false;
     };
 
+    /**
+     * The default behavior of a kill attack effect is to mark
+     * the unit as dead to be removed from the army at the end 
+     * of the turn
+     * this method should be overrided by subclasses to modify
+     * the behavior of a kill attack result. 
+     * @returns {boolean} - true to indicate the unit did die, 
+     *                      false otherwise
+     */
 	exports.PUnit.prototype.kill = function() {
         this.dead = true;
         return true;
     };
-    
+   
+    /**
+     *  Get the attack strength of the unit
+     *  @returns {int} - the attack points for this unit
+     */
     exports.PUnit.prototype.getAttack = function() {
         return this.attack; 
     };
 
+    /**
+     * Get the defense strength of the unit
+     * @returns {int} - the defense points for this unit
+     */
     exports.PUnit.prototype.getDefense = function() {
         return this.defense; 
     };
 	
+    /**
+     * Get the range for this unit
+     * @returns {int} - number of tiles unit can attack 
+     */
     exports.PUnit.prototype.getRange = function() { 
         return this.range; 
     };
 
     /**
+     * Get the move distance prior to an attack
      * @returns {int} spaces to move before an attack
      */
 	exports.PUnit.prototype.getPreMovement = function() { 
@@ -230,34 +192,15 @@
     };
 
     /**
+     * Get the move distance after the unit attack's
      * @returns {int} spaces to move after an attack
      */
 	exports.PUnit.prototype.getPostMovement = function() { 
         return this.postmove; 
     };
 
-    /**
-     *  @returns {boolean} returns if the unit is dead
-     */
-    exports.PUnit.prototype.isDead = function() {
-        return this.dead;
-    }
-
-    /**
-     * @returns {boolean} if the unit is disabled this turn
-     */
-    exports.PUnit.prototype.isDisabled = function() {
-        return (this.disabledTurns > 0);
-    }
-
-    /**
-     *  @returns {boolean} if the unit has attacked this turn
-     */
-    exports.PUnit.prototype.hasAttacked = function() {
-        return this.attacked;
-    }
-
     /** 
+     *  Get how many times the unit has moved this turn 
      *  @returns {int} the number of times it moved this turn 
      */
     exports.PUnit.prototype.hasMoved = function() {
@@ -265,6 +208,31 @@
     }   
 
     /**
+     *  Get whether or not the unit is dead
+     *  @returns {boolean} true if the unit is dead
+     */
+    exports.PUnit.prototype.isDead = function() {
+        return this.dead;
+    }
+
+    /**
+     * Get whether of not the unit is disabled
+     * @returns {boolean} true if the unit is disabled
+     */
+    exports.PUnit.prototype.isDisabled = function() {
+        return (this.disabledTurns > 0);
+    }
+
+    /**
+     *  Get whether or not the unit has attacked this turn. 
+     *  @returns {boolean} ture if the unit has attacked this turn
+     */
+    exports.PUnit.prototype.hasAttacked = function() {
+        return this.attacked;
+    }
+
+    /**
+     *  Get the unit's position
      *  @returns {Tile} the unit's position
      */
 	exports.PUnit.prototype.getTile = function() { 
@@ -279,14 +247,31 @@
         return [this];
     }
 
+    /**
+     *  Is the the tile within the range of the unit's premove distance. 
+     *  @param {Tile} tile - target tile to test
+     *  @returns {boolean} - true if the tile is within range, false otherwise
+     */
 	exports.PUnit.prototype.isValidPreMoveTarget = function(tile) {
         return Util.getDistance(this.getTile(), tile) &lt;= this.getPreMovement();
 	};
 
-	exports.PUnit.prototype.isValidPostMoveTarget = function(tile) {
+    /**
+     *  Is the the tile within the range of the unit's postmove distance. 
+     *  @param {Tile} tile - target tile to test
+     *  @returns {boolean} - true if the tile is within range, false otherwise
+     */
+    exports.PUnit.prototype.isValidPostMoveTarget = function(tile) {
 		return Util.getDistance(this.getTile(), tile) &lt;= this.getPostMovement();
 	};
 
+    /**
+     * Is the tile a valid move target, given the number of times the unit
+     * has moved this turn. For PUnits, this method will return False after
+     * the unit has moved once
+     * @param {Tile} tile - target tile to test
+     * @returns {boolean} - true if the the tile is within range
+     */
 	exports.PUnit.prototype.isValidMoveTarget = function(tile) {
 		if (this.moved == 1) {
             return this.isValidPostMoveTarget(tile);
@@ -294,10 +279,39 @@
 			return this.isValidPreMoveTarget(tile);
 		}
 	};
+    
+    /**
+     * Move the unit to a new position, if the tile is within range
+     * This method mutates the state of the unit
+     * @param {Tile} tile - the tile to move to
+     * @returns {Boolean} - was the move successful?
+     */
+    exports.PUnit.prototype.moveToTile = function(tile) {
+        if (this.isValidMoveTarget(tile)){
+            this.tile = tile;
+            this.moved += 1;
+            return true;
+        }
+        return false;
+    };
 
+    /**
+     *  can this unit attack the target unit?
+     *  this method takes into account whether or not the unit has 
+     *  already attacked this turn
+     *  @param {Unit} unit - the target unit
+     *  @returns {boolean} true if we can attack the unit, false otherwise
+     */
     exports.PUnit.prototype.canAttack = function(unit){
         return !this.hasAttacked() &amp;&amp; this.isValidAttackTarget(unit);
     };
+
+    /**
+     *  is the target unit or tile within this unit's attack range?
+     *  this method does not take into account whether this unit has attacked
+     *  @param {Unit | Tile} unitOrTile - a target unit or tile. 
+     *  @returns {boolean} - true if the unit or tile is within range
+     */
 	exports.PUnit.prototype.isValidAttackTarget = function(unitOrTile) {
         var tile = null;
         try{
@@ -311,16 +325,11 @@
         return Util.getDistance(this.getTile(), tile) &lt;= this.getRange();
     };
 
-    exports.PUnit.prototype.moveToTile = function(tile) {
-        if (this.isValidMoveTarget(tile)){
-            this.tile = tile;
-            this.moved += 1;
-            return true;
-        }
-        return false;
-    };
-
-    //Get the ratio from an array of attacking units against this unit
+    /**
+     * Get the ratio from an array of attacking units against this unit
+     * @param {Unit[]} attackerlist - a list of attackers
+     * @returns {int} the ratio 
+     */
     exports.PUnit.prototype.getDamageRatio = function(attackerlist) { 
         attackSum = attackerlist.reduce(function(accum, elem, index, array) {
             return accum + elem.getAttack();
@@ -331,7 +340,13 @@
         return ratio; 
     };
 
-    //do damage to unit
+    /**
+     *  Attack with a list of attacking units and then apply the resulting damage ratio 
+     *  and resulting attack effect to the unit
+     *  @param {Unit[]} attackerlist - the list of attackers
+     *  @param {function()} a ux callback function
+     *  @returns {boolean} if the attack was successfully applied to this unit
+     */
     exports.PUnit.prototype.takeDamage = function(attackerlist, cb ) {
         ratio = this.getDamageRatio(attackerlist);
         return doDamage(this, ratio, cb);
@@ -355,7 +370,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Wed Mar 25 2015 10:06:43 GMT-0400 (EDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Wed Mar 25 2015 13:58:35 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>
