@@ -20,17 +20,16 @@
 
 
 	/**
-     * @function Apply a damage roll to a unit
-	 * @member of PUnit
+	 * @memberof PUnit
      * @static 
      *
      * @desc  this method rolls a 6 sided die to determine the which damage method
      * to be applied to the supplied unit using dmaageTable 
      *
-     * @param {PUnit} - the unit to apply the damage roll too
+     * @param {PUnit} unit - the unit to apply the damage roll too
      * @param {int} ratio - the pre-calculated attack to defense ratio
      * @param {function} cb - the ux callback function
-     * @returns true
+     * @returns {boolean}  true
      */
 	var doDamage = function(unit, ratio, cb){
 		roll = Math.floor((Math.random() * 6));
@@ -73,8 +72,11 @@
          * @see getRange*/
         this.range = options.range || 0;
         
-        /** @member {int} unit's base defense points,
-         * access with getDefense() */
+        /** unit's base defense points  
+         * @member {int} 
+         * @memberOf PUnit
+         * access with getDefense() 
+         * @see getDefense */
         this.defense = options.defense || 0;
         
         /**  unit's base preattack move distance,
@@ -138,13 +140,14 @@
         
         /** stores if the unit attacked
          * @member {boolean} 
-         * @memberof PUnit
+         * @memberOf PUnit.prototype
          * @see hasAttacked */
         this.attacked = false;
     };
 
     /**
-     *
+     *  Private method for reseting the unit at the start of
+     *  its owners turn
      */
 	exports.PUnit.prototype.nextTurnReset = function() {
 		this.moved = 0;
@@ -158,9 +161,16 @@
     /*
      * Attack Results
      */
-	exports.PUnit.prototype.noEffect = function() {};
 	
-    /* @function disable
+    /**
+     *  This method should be overrided by subclasses to
+     *  execute a noeffect attack result on this unit
+     */
+    exports.PUnit.prototype.noEffect = function() {};
+	
+    /**
+     * this method should be overrided by subclasses to modify
+     * the behavior of a disable attack result.
      * @returns {boolean} - false to indicate the unit did not die
      */
     exports.PUnit.prototype.disable = function() {
@@ -184,50 +194,58 @@
         return this.range; 
     };
 
+    /**
+     * @returns {int} spaces to move before an attack
+     */
 	exports.PUnit.prototype.getPreMovement = function() { 
         return this.premove; 
     };
+
+    /**
+     * @returns {int} spaces to move after an attack
+     */
 	exports.PUnit.prototype.getPostMovement = function() { 
         return this.postmove; 
     };
 
-    /** @function isDead
+    /**
      *  @returns {boolean} returns if the unit is dead
      */
     exports.PUnit.prototype.isDead = function() {
         return this.dead;
     }
 
-    /** @function isDisabled
+    /**
      * @returns {boolean} if the unit is disabled this turn
      */
     exports.PUnit.prototype.isDisabled = function() {
         return (this.disabledTurns > 0);
     }
 
-    /** @function hasAttacked 
+    /**
      *  @returns {boolean} if the unit has attacked this turn
      */
     exports.PUnit.prototype.hasAttacked = function() {
         return this.attacked;
     }
 
-    /** @function hasMoved 
+    /** 
      *  @returns {int} the number of times it moved this turn 
      */
     exports.PUnit.prototype.hasMoved = function() {
         return this.moved;
     }   
 
-    /** @function getTile
+    /**
      *  @returns {Tile} the unit's position
      */
 	exports.PUnit.prototype.getTile = function() { 
         return this.tile;
     };
 
-    /*
+    /**
      * Generalized unit selection (enables multipart units to work)
+     * @returns {PUnit[]} [this]
      */
     exports.PUnit.prototype.selectForAttack = function() {
         return [this];
