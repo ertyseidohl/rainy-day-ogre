@@ -86,11 +86,11 @@
 
 			var hexOffset = Math.sqrt(3);
 
-			var iOffset = -5;
-			var jOffset = -5;
+			var iOffset = -7;
+			var jOffset = -11;
 
-			for (var i = 0; i < 10; i ++) {
-				for (var j = 0; j < 10; j++) {
+			for (var i = 0; i < 15; i ++) {
+				for (var j = 0; j < 22; j++) {
 					var _i = i + iOffset,
 						_j = j + jOffset,
 						m;
@@ -119,7 +119,7 @@
 				}
 			}
 
-			this.camera.position.set(0,20,-10);
+			this.camera.position.set(0,18,-25);
 			this.camera.up = new THREE.Vector3(0,0,1);
 			this.camera.lookAt(new THREE.Vector3(0,0,0));
 
@@ -148,6 +148,7 @@
 			if(this.currentShouldShowAxes !== this.shouldShowAxes) {
 				this.currentShouldShowAxes = this.shouldShowAxes;
 				if (this.shouldShowAxes) {
+					console.log(this.camera.position);
 					this.scene.add(this.axes);
 				} else {
 					this.scene.remove(this.axes);
