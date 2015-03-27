@@ -141,7 +141,43 @@
 				}
 			}.bind(this), false);
 
+			this.loadGiantMan();
+
 			this.loop();
+		},
+
+		loadGiantMan: function() {
+			var manager = new THREE.LoadingManager();
+			var onProgress = function ( xhr ) {
+				if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log( Math.round(percentComplete, 2) + '% downloaded' );
+				}
+			};
+
+			var onError = function ( xhr ) {
+				console.log("ERROR");
+			};
+
+			var textureLoader = new THREE.ImageLoader( manager );
+			var texture = new THREE.Texture();
+			textureLoader.load( 'textures/UV_Grid_Sm.jpg', function ( image ) {
+				texture.image = image;
+				texture.needsUpdate = true;
+			} );
+			var sc = this.scene;
+
+			var objectLoader = new THREE.OBJLoader( manager );
+			objectLoader.load( 'obj/male02.obj', function ( object ) {
+				object.traverse( function ( child ) {
+					if ( child instanceof THREE.Mesh ) {
+						child.material.map = texture;
+					}
+				});
+				object.position.y = 0;
+				object.scale.set(0.02,0.02,0.02);
+				sc.add( object );
+			}, onProgress, onError );
 		},
 
 		update: function() {
