@@ -1,11 +1,23 @@
 ;(function(exports){
 
+    /**
+     *  @class
+     *  @classdesc A unit weapon or tread (for Ogres!)
+     */
     exports.UnitPart = function(options) {
         this.owner = null;
         exports.PUnit.call(this, options);
     };
 
     exports.UnitPart.prototype = Object.create(exports.PUnit.prototype);
+
+    /**
+    * @param {PUnit} target The target you are trying to attack
+    * @return {boolean} the target is valid
+    */
+    exports.UnitPart.isValidTarget = function(target) {
+        return true;
+    };
 
     exports.UnitPart.prototype.assignToOwner = function(owner) {
         this.owner = owner;
