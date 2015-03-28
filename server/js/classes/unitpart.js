@@ -13,7 +13,7 @@
     };
 
     exports.UnitPart.prototype.getTile = function() {
-        if (this.owner == null) {
+        if (this.owner === null) {
             return {i: -1, j : -1};
         }
         return this.owner.getTile();
@@ -21,6 +21,6 @@
 
     exports.UnitPart.prototype.kill = function() {
         this.owner.partDestroy(this);
-    }
+    };
 
 })(window);
