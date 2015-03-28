@@ -1,42 +1,52 @@
 
 var express = require('express');
-var bodyParser = require('body-parser')
+var bodyparser = require('body-parser')
 
 var app = express();
+app.use(bodyparser.json());
 
-var jsonParser = bodyParser.json()
+var users = {};
+var nextuser = 1;
 
-var users = []
-var games = [{gameid : 0, users : [], gamestate : "LOBBY"}];
+var games = {};
+var nextgame = 2;
+games[1] = {gameid : 1, users : [], gamestate : "LOBBY"};
 
-app.get('/', jsonParser, function(req, res){
+app.get('/', function(req, res){
     res.json({YAY : true});
 });
 
-app.get('/joinserver', jsonParser, function(req, res){
+app.get('/joinserver', function(req, res){
 
-    var userid = users.length;
-    users.push({userid : userid, games : [], gamestate : "LOBBY"});
+    var userid = nextuser++;
+    users[userid] = {userid : userid, games : []};
     res.json(users[userid]);
 
-    games.push({gameid : games.length, users : []});
+    var gameid = nextgame++;
+    games[gameid] = {gameid : gameid, users : [], gamestate : "LOBBY"};
 });
 
-app.post('/listgames', jsonParser, function(req, res){
-   res.json(games);
+app.post('/listgames', function(req, res){
+    res.json(games);
 });
 
-app.post('/joingame', jsonParser, function(req, res){
+app.post('/joingame', function(req, res){
+    
+    var userid = req.body.userid;
+    var gameid = req.body.gameid;
+    if (!userid || !gameid) return res.status(404).end();
+    games[gameid].users.push(userid);
+    users[userid].games.push(gameid);
 
-    console.log(req.body);
+    res.json(games[gameid]);
 });
 
-app.post('/update', jsonParser, function(req, res){
+app.post('/update', function(req, res){
 
 
 });
 
-app.post('/poll', jsonParser, function(req, res){
+app.post('/poll', function(req, res){
 
 });
 
