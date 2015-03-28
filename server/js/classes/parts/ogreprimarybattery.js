@@ -17,6 +17,5 @@
     };
 
     exports.OgrePrimaryBattery.prototype = Object.create(exports.UnitPart.prototype);
-    exports.OgrePrimaryBattery.constructor = exports.OgrePrimaryBattery;
 
 })(window);

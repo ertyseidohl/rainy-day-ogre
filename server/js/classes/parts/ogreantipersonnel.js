@@ -5,17 +5,21 @@
      * @classdesc the long range missile part for Ogre objects
      *  @augments UnitPart
      */
-    exports.OgreMissile = function() {
+    exports.OgreAntipersonnel = function() {
         var options = {
-            type : "ARTILLERY",
-            name : "Ogre Missile",
-            range : 5,
-            attack : 6,
-            defense : 3,
+            type : "ANTIPERSONNEL",
+            name : "Ogre Antipersonnel",
+            range : 1,
+            attack : 1,
+            defense : 1,
         };
         exports.UnitPart.call(this, options);
     };
 
     exports.OgreMissile.prototype = Object.create(exports.UnitPart.prototype);
+
+    exports.OgreAntipersonnel.protoytpe.isValidTarget = function(target) {
+        return target.type === "INFANTRY";
+    };
 
 })(window);

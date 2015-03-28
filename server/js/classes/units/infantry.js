@@ -23,7 +23,6 @@
     };
 
     exports.Infantry.prototype = Object.create(exports.PUnit.prototype);
-    exports.Infantry.constructor = exports.Infantry;
 
     exports.Infantry.prototype.disable = function(){
         this.attack -= 1;

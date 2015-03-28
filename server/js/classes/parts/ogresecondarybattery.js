@@ -17,6 +17,5 @@
     };
 
     exports.OgreSecondaryBattery.prototype = Object.create(exports.UnitPart.prototype);
-    exports.OgreSecondaryBattery.constructor = exports.OgreSecondaryBattery;
 
 })(window);
