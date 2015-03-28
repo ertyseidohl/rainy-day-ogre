@@ -17,6 +17,5 @@
     };
 
     exports.OgreMissile.prototype = Object.create(exports.UnitPart.prototype);
-    exports.OgreMissile.constructor = exports.OgreMissile;
 
 })(window);

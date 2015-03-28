@@ -14,6 +14,5 @@
     };
 
     exports.MissileTank.prototype = Object.create(exports.PUnit.prototype);
-    exports.MissileTank.constructor = exports.MissleTank;
 
 })(window);

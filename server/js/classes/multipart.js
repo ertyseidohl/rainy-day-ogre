@@ -28,7 +28,6 @@
     };
 
     exports.MultiPart.prototype = Object.create(exports.PUnit.prototype);
-    exports.MultiPart.constructor = exports.MultiPart;
 
     /**
      * Removes a part from the MultiPart Unit's part manifest

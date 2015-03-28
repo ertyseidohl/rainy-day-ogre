@@ -19,7 +19,6 @@
     };
 
     exports.OgreTreads.prototype = Object.create(exports.UnitPart.prototype);
-    exports.OgreTreads.constructor = exports.OgreTreads;
 
     /** A treads object has hp that reduce upon being "killed" */
     exports.OgreTreads.kill = function(){
