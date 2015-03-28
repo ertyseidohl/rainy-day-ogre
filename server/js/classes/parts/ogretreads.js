@@ -1,7 +1,7 @@
 ;(function(exports) {
 
     /**
-     * @class 
+     * @class
      * @classdesc the Ogre unit's treads
      * @augments UnitPart
      */
@@ -24,9 +24,9 @@
     /** A treads object has hp that reduce upon being "killed" */
     exports.OgreTreads.kill = function(){
         this.treads -= 1;
-        if (this.treads % this.dec == 0) {
+        if (this.treads % this.dec === 0) {
             this.owner.premovement -= 1;
         }
-    }
+    };
 
 })(window);

@@ -2,7 +2,7 @@
 ;(function(exports) {
 
     var turn = 0;
-    var armies = []
+    var armies = [];
 
     var Army = function(name, color){
         this.name = name;
@@ -11,9 +11,9 @@
     };
 
     Army.prototype.startTurn = function(){
-        
+
         //turns should not be started by an API client...
-        //this guard ensures that an army's can start their turn 
+        //this guard ensures that an army's can start their turn
         //iff the global state says it's their turn
         if (this != whoseTurn()) {
             return false;
@@ -21,7 +21,7 @@
         //reset units
         this.units.forEach(function(elem, ind, array){
             elem.nextTurnReset();
-        }); 
+        });
         return true;
     };
 
@@ -33,7 +33,7 @@
     };
 
     Army.prototype.getStats = function() {
-        return {"units" : this.units.length};  
+        return {"units" : this.units.length};
     };
 
     //API actions
@@ -47,11 +47,11 @@
         if (turn >= armies.length) {
             turn = 0;
         }
-        
+
         armies[turn].startTurn();
-    
+
     };
-    
+
     /*
      * function whoseTurn returns the Army of the current turn
      *
@@ -64,7 +64,7 @@
     };
 
 
-    //Attack logic: 
+    //Attack logic:
     //   choose a target (can't be in the current turn's army)
     //   build an attack force
     //   check to see ratio against targets
@@ -81,12 +81,12 @@
         if (whoseTurn().units.indexOf(unit) >= 0) {
             return false;
         }
-        
+
         attackCleanup();
- 
-        sel = unit.selectForAttack()
+
+        sel = unit.selectForAttack();
         if (sel.length > 1) {
-            if (part == null) {
+            if (part === null) {
                 return sel;
             } else if  (sel.indexOf(part) < 0) {
                 return sel;
@@ -96,18 +96,18 @@
             attackTarget = unit;
         }
         return true;
-    }
+    };
 
     //add a unit to the attacking cohort
     exports.attackWith = function(unit) {
-        if (attackTarget == null) {
+        if (attackTarget === null) {
             return false;
         }
 
         if (whoseTurn().units.indexOf(unit) < 0){
             return false;
         }
-        
+
         if (attackForce.indexOf(unit) >= 0){
             return false;
         }
@@ -121,7 +121,7 @@
 
     //get the current attack:defense ratio
     exports.attackGetRatio = function() {
-        if (attackTarget == null){
+        if (attackTarget === null){
             return -1;
         }
         return attackTarget.getDamageRatio(attackForce);
@@ -136,7 +136,7 @@
         attackCleanup();
         return true;
     };
-    
+
     //returns a list of attackers (useful for ux)
     exports.attackGetAttackers = function(){
         return attackForce;
@@ -149,22 +149,22 @@
 
 
     //inserts a new army with the given name at the turn
-    //position index. 
-    //if index is not provided or less than 0 or greater 
-    //than the number of players, then the index is set to 
+    //position index.
+    //if index is not provided or less than 0 or greater
+    //than the number of players, then the index is set to
     //be the number of players
     exports.addArmy = function(name, index) {
-        
+
         var colors = ["aqua", "black", "blue", "fuchsia",
             "gray", "green", "lime", "maroon", "navy",
             "olive", "orange", "purple", "red",
-            "silver", "teal", "white", "yellow"]
+            "silver", "teal", "white", "yellow"];
 
-        if (index == null || index < 0 || index > armies.length) {
-           index = armies.length; 
+        if (index === undefined || index < 0 || index > armies.length) {
+           index = armies.length;
         }
 
-        x = new Army(name,colors[armies.length]); 
+        x = new Army(name,colors[armies.length]);
         armies.splice(index, 0, x);
         return x;
     };
