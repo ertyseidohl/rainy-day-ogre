@@ -1,12 +1,19 @@
-{"name" : "ogre"
-, "version" : "0.1.2"
-, "dependencies" : { 
-        "grunt" : "~0.4.1",
-        "grunt-contrib-jshint" : "~0.11.1",
-        "jsdoc" : "git+https://github.com/jsdoc3/jsdoc.git",
-        "grunt-jsdoc" : "~0.5.8",
-        "grunt-karma" : "~0.10.1",
-        "express" : "~4.12.3",
-        "body-parser" : "~1.12.2"
-    } 
+{
+  "name": "ogre",
+  "version": "0.1.2",
+  "dependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.11.1",
+    "jsdoc": "git+https://github.com/jsdoc3/jsdoc.git",
+    "grunt-jsdoc": "~0.5.8",
+    "grunt-karma": "~0.10.1",
+    "express": "~4.12.3",
+    "body-parser": "~1.12.2",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.2.1",
+    "blanket": "^1.1.6"
+  },
+  "devDependencies": {
+    "should": "^5.2.0"
+  }
 }
