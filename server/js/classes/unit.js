@@ -130,6 +130,7 @@
      *                      true if the unit did die
      */
     exports.PUnit.prototype.disable = function() {
+        this.disabledTurns = 2;
         return false;
     };
 

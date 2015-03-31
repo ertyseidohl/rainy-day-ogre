@@ -57,4 +57,45 @@ describe('PUnit', function() {
         })
     })
 
+
+    describe('#hasMoved()', function() {
+        it('should return 0 (for moving zero times)', function() {
+            (p.hasMoved()).should.be.exactly(0).and.be.a.Number;
+        })
+    })
+
+    describe('#isDead()', function() {
+        it('should return false', function() {
+            (p.isDead()).should.be.exactly(false).and.be.a.Boolean;
+        })
+    })
+
+    describe('#isDisabled()', function() {
+        it('should return false', function() {
+            (p.isDisabled()).should.be.exactly(false).and.be.a.Boolean;
+        })
+    })
+
+    describe('#hasAttacked()', function() {
+        it('should return false', function() {
+            (p.hasAttacked()).should.be.exactly(false).and.be.a.Boolean;
+        })
+    })
+
+    describe('#getTile()', function() {
+        it('should return false', function() {
+            var t = p.getTile();
+            (t).should.have.property('i', 5);
+            (t).should.have.property('j', 6);
+        })
+    })
+
+    describe('#selectForAttack()', function() {
+        it('should return [p]', function() {
+            var a = p.selectForAttack();
+            (a).should.be.an.instanceof(Array).and.have.lengthOf(1);
+            (a[0]).should.be.an.instanceof(window.PUnit);
+        })
+    })
+
 })
