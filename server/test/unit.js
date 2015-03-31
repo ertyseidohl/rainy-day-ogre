@@ -135,9 +135,8 @@ describe('PUnit', function() {
             (p.isValidPostMoveTarget({i : 4, j : 5})).should.be.exactly(true);
             (p.isValidPostMoveTarget({i : 6, j : 5})).should.be.exactly(true);
             
-            (p.isValidPostMoveTarget({i : 6, j : 7})).should.be.exactly(false);
-            (p.isValidPostMoveTarget({i : 4, j : 7})).should.be.exactly(false);
-            })
+            (p.isValidPostMoveTarget({i : 6, j : 7})).should.be.exactly(true);
+            (p.isValidPostMoveTarget({i : 4, j : 7})).should.be.exactly(true);
         })
         it('should return false', function() {
             (p.isValidPostMoveTarget({i : 6, j : 8})).should.be.exactly(false);
@@ -149,6 +148,4 @@ describe('PUnit', function() {
             (p.isValidPostMoveTarget({i : 6, j : 0})).should.be.exactly(false);
         })
     })
-
-
 })
