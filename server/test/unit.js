@@ -1,4 +1,9 @@
 window = {};
+
+//temporary scoping hack
+require('../js/game.js');
+Util = window.Util;
+
 require('../js/classes/unit.js');
 var should = require('should');
 
@@ -95,7 +100,55 @@ describe('PUnit', function() {
             var a = p.selectForAttack();
             (a).should.be.an.instanceof(Array).and.have.lengthOf(1);
             (a[0]).should.be.an.instanceof(window.PUnit);
+            (a[0]).should.be.exactly(p);
         })
     })
+
+    //premovement of 1
+    describe('#isValidPreMoveTarget()', function() {
+        it('should return true', function() {
+           (p.isValidPreMoveTarget({i : 6, j : 6})).should.be.exactly(true);
+           (p.isValidPreMoveTarget({i : 4, j : 6})).should.be.exactly(true);
+           (p.isValidPreMoveTarget({i : 5, j : 7})).should.be.exactly(true);
+           (p.isValidPreMoveTarget({i : 5, j : 5})).should.be.exactly(true);
+           (p.isValidPreMoveTarget({i : 4, j : 5})).should.be.exactly(true);
+           (p.isValidPreMoveTarget({i : 6, j : 5})).should.be.exactly(true);
+        })
+        it('should return false', function() {
+           (p.isValidPreMoveTarget({i : 6, j : 7})).should.be.exactly(false);
+           (p.isValidPreMoveTarget({i : 4, j : 7})).should.be.exactly(false);
+           
+           (p.isValidPreMoveTarget({i : 50, j : 7})).should.be.exactly(false);
+           (p.isValidPreMoveTarget({i : 5, j : 50})).should.be.exactly(false);
+           (p.isValidPreMoveTarget({i : 0, j : 5})).should.be.exactly(false);
+           (p.isValidPreMoveTarget({i : 6, j : 0})).should.be.exactly(false);
+        })
+    })
+
+    //post movement of 2
+    describe('#isValidPostMoveTarget()', function() {
+        it('should return true', function() {
+            (p.isValidPostMoveTarget({i : 6, j : 6})).should.be.exactly(true);
+            (p.isValidPostMoveTarget({i : 4, j : 6})).should.be.exactly(true);
+            (p.isValidPostMoveTarget({i : 5, j : 7})).should.be.exactly(true);
+            (p.isValidPostMoveTarget({i : 5, j : 5})).should.be.exactly(true);
+            (p.isValidPostMoveTarget({i : 4, j : 5})).should.be.exactly(true);
+            (p.isValidPostMoveTarget({i : 6, j : 5})).should.be.exactly(true);
+            
+            (p.isValidPostMoveTarget({i : 6, j : 7})).should.be.exactly(false);
+            (p.isValidPostMoveTarget({i : 4, j : 7})).should.be.exactly(false);
+            })
+        })
+        it('should return false', function() {
+            (p.isValidPostMoveTarget({i : 6, j : 8})).should.be.exactly(false);
+            (p.isValidPostMoveTarget({i : 4, j : 8})).should.be.exactly(false);
+            
+            (p.isValidPostMoveTarget({i : 50, j : 7})).should.be.exactly(false);
+            (p.isValidPostMoveTarget({i : 5, j : 50})).should.be.exactly(false);
+            (p.isValidPostMoveTarget({i : 0, j : 5})).should.be.exactly(false);
+            (p.isValidPostMoveTarget({i : 6, j : 0})).should.be.exactly(false);
+        })
+    })
+
 
 })
