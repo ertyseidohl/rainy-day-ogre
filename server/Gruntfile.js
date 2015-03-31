@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 grunt.initConfig({
 
     jshint : {
-                all : ['server.js', 'test/**.*.js', 'js/**/*.js', '!js/lib/**'],
+                all : ['server.js', 'test/**/*.js', 'js/**/*.js', '!js/lib/**'],
     },
     jsdoc : {
         dist : {
