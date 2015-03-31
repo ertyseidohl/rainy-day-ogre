@@ -59,7 +59,7 @@
      *  to produce desired functionality
      */
     exports.PUnit = function(options) {
-        if (options === null) { options = {};}
+        if (options === null || options === undefined) { options = {};}
 
         this.attack = options.attack || 0;
         this.range = options.range || 0;
