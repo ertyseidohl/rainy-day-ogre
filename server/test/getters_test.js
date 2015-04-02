@@ -10,10 +10,7 @@ exports.test_getters = function(p, o) {
     //closures save the day
     return function() {
         describe('#getName()', function() {
-            it(shouldreturn(o.name), function() {
-                (p.getName()).should.be.exactly(o.name);
-            });
-        });
+           });
 
         describe('#getType()', function() {
             it(shouldreturn(o.type), function() {

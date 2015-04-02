@@ -13,6 +13,20 @@ gtests = require('./getters_test.js');
 
 exports.PUnit_Test = function(){};
 
+
+function shouldreturn(str){
+    return "should return ".concat(str);
+}
+
+
+exports.PUnit_Test.prototype.getName_test = function(p, e){
+    return function() {
+        it(shouldreturn(o.name), function() {
+            (p.getName()).should.be.exactly(o.name);
+        });
+    };
+};
+
 exports.PUnit_Test.prototype.hasMoved_test = function(p){
     return function() {
         it('should return 0 (for moving zero times)', function() {
@@ -46,6 +60,8 @@ exports.PUnit_Test.prototype.hasAttacked_test = function(p) {
     };
 };
 
+
+
 exports.PUnit_Test.prototype.getTile_test = function(p) {
     
     return function() {
@@ -57,7 +73,10 @@ exports.PUnit_Test.prototype.getTile_test = function(p) {
     };
 };
 
-exports.UnitTestRunner = function(tests, unit ){
+exports.UnitTestRunner = function(tests, unit, expected_stats){
+    
+    describe('#getName()', tests.getName_test(unit, expected_stats));
+
     describe('#hasMoved()', tests.hasMoved_test(unit)); 
     describe('#isDead()', tests.isDead_test(unit)); 
     describe('#isDisabled()', tests.isDisabled_test(unit)); 
@@ -84,7 +103,7 @@ describe('PUnit', function() {
     describe('#getters', gtests.test_getters(p, o));  
 
     t = new exports.PUnit_Test();
-    exports.UnitTestRunner(t, p);
+    exports.UnitTestRunner(t, p, o);
     describe('#selectForAttack()', function() {
         it('should return [p]', function() {
             var a = p.selectForAttack();
