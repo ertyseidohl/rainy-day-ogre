@@ -21,8 +21,8 @@ function shouldreturn(str){
 
 exports.PUnit_Test.prototype.getName_test = function(p, e){
     return function() {
-        it(shouldreturn(o.name), function() {
-            (p.getName()).should.be.exactly(o.name);
+        it(shouldreturn(e.name), function() {
+            (p.getName()).should.be.exactly(e.name);
         });
     };
 };
