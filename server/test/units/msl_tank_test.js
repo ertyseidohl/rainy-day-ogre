@@ -20,5 +20,5 @@ describe('MissleTank', function(){
         name : "Missile Tank",
         type : "ARMORED" };
 
-    //describe('#getters', gtests.test_getters(o));  
+    describe('#getters', gtests.test_getters(m, o));  
 });

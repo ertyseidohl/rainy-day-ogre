@@ -6,9 +6,9 @@ function shouldreturn(str){
     return "should return ".concat(str);
 }
 
-exports.test_getters = function(o) {
-
-    describe(o.cname, function() {            
+exports.test_getters = function(p, o) {
+    //closures save the day
+    return function() {
         describe('#getName()', function() {
             it(shouldreturn(o.name), function() {
                 (p.getName()).should.be.exactly(o.name);
@@ -50,5 +50,5 @@ exports.test_getters = function(o) {
                 (p.getPostMovement()).should.be.exactly(o.postmove).and.be.a.Number;
             });
         });
-    });
+    };
 };
