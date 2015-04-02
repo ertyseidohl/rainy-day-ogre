@@ -4,6 +4,7 @@ grunt.initConfig({
     jshint : {
                 all : ['server.js', 'test/**/*.js', 'js/**/*.js', '!js/lib/**'],
     },
+    
     jsdoc : {
         dist : {
             src : ['js/'],
@@ -13,6 +14,14 @@ grunt.initConfig({
             }
         }
     },
+
+    browserify : {
+       main : {
+            src : ['js/**/*.js, !js/lib/**'],
+            dest : ['scripts/ogre.js']
+       }
+    },
+
     mochaTest : {
         test : {
             options : {
@@ -35,9 +44,11 @@ grunt.initConfig({
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-jsdoc');
+    grunt.loadNpmTasks('grunt-browserify');
 
     grunt.registerTask('default', ['jshint', 'mochaTest',  'jsdoc']);
     grunt.registerTask('test', ['mochaTest']);
     grunt.registerTask('doc', ['jsdoc']);
     grunt.registerTask('lint', ['jshint']);
+    grunt.registerTask('browserify', ['browserify']);
 }

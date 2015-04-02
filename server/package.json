@@ -12,5 +12,10 @@
     "mocha": "^2.2.1",
     "blanket": "^1.1.6",
     "should": "^5.2.0"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.4",
+    "grunt-browserify": "^3.6.0",
+    "underscore": "^1.8.2"
   }
 }

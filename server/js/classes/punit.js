@@ -340,6 +340,4 @@
         ratio = this.getDamageRatio(attackerlist);
         return doDamage(this, ratio, cb);
     };
-
-
-})(window);
+})(typeof exports === "undefined" ? this.PUnit = {} : exports);
