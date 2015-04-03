@@ -4,20 +4,15 @@ window = {};
 require('../js/game.js');
 Util = window.Util;
 
-units = require('../js/classes/');
-
+var units = require('../js/classes/');
 var should = require('should');
 
-//common tests
-gtests = require('./getters_test.js');
-
+//base PUnit Object
 exports.PUnit_Test = function(){};
-
 
 function shouldreturn(str){
     return "should return ".concat(str);
 }
-
 
 exports.PUnit_Test.prototype.getName_test = function(p, e){
     return function() {
@@ -96,10 +91,10 @@ exports.PUnit_Test.prototype.isDead_test = function(p) {
     };
 };
 
-exports.PUnit_Test.prototype.isDisabled_test = function(p) {
+exports.PUnit_Test.prototype.isDisabled_test = function(p, e) {
     return function() {
-        it('should return false', function() {
-            (p.isDisabled()).should.be.exactly(false).and.be.a.Boolean;
+        it(shouldreturn(e.disabled), function() {
+            (p.isDisabled()).should.be.exactly(e.disabled).and.be.a.Boolean;
         });
     };
 };
@@ -114,7 +109,6 @@ exports.PUnit_Test.prototype.hasAttacked_test = function(p) {
 };
 
 exports.PUnit_Test.prototype.getTile_test = function(p, e) {
-    
     return function() {
         it('should return false', function() {
             var t = p.getTile();
@@ -124,7 +118,28 @@ exports.PUnit_Test.prototype.getTile_test = function(p, e) {
     };
 };
 
-exports.UnitTestRunner = function(tests, unit, expected_stats){
+exports.PUnit_Test.prototype.disable_test = function(t, p, e) {
+   return function() {
+        e.disabled = true;
+        exports.GetsTest(t, p, e);
+        p.nextTurnReset();
+        e.disabled = false;
+        exports.GetsTest(t, p, e);
+   };
+};
+
+exports.UnitTestRunner = function(tests, unit, expected_stats){ 
+    //normal
+    exports.GetsTest(tests, unit, expected_stats);
+
+    //Disable hm... are these run async?
+    //unit.disable();
+    //describe('#disable', tests.disable_test(tests, unit, expected_stats));
+};
+
+exports.GetsTest = function(tests, unit, expected_stats){
+    
+    expected_stats.disabled = (expected_stats.disabled === undefined) ? false : expected_stats.disabled; 
     
     describe('#getName()', tests.getName_test(unit, expected_stats));
     describe('#getType()', tests.getType_test(unit, expected_stats));
@@ -137,11 +152,13 @@ exports.UnitTestRunner = function(tests, unit, expected_stats){
     describe('#getPostMovement()', tests.getPostMovement_test(unit, expected_stats));
 
     describe('#hasMoved()', tests.hasMoved_test(unit)); 
-    describe('#isDead()', tests.isDead_test(unit)); 
-    describe('#isDisabled()', tests.isDisabled_test(unit)); 
+    describe('#isDead()', tests.isDead_test(unit));
+
+    describe('#isDisabled()', tests.isDisabled_test(unit, expected_stats)); 
     describe('#hasAttacked()', tests.hasAttacked_test(unit));
     describe('#getTile()', tests.getTile_test(unit, expected_stats));
 };
+
 
 describe('PUnit', function() {
     var o = {
@@ -157,9 +174,6 @@ describe('PUnit', function() {
     };
 
     var p = new PUnit(o);
-
-    //run tests on getters
-    describe('#getters', gtests.test_getters(p, o));  
 
     t = new exports.PUnit_Test();
     exports.UnitTestRunner(t, p, o);

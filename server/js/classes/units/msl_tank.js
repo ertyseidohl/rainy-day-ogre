@@ -1,6 +1,5 @@
 // The Missile Tank!
 //
-
 PUnit = require('../punit.js').PUnit;
 
 exports.MissileTank = function(tile) {
