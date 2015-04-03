@@ -1,9 +1,16 @@
 /*jshint expr: true*/
 
 units = require('../../js/classes/');
-gtests = require('../getters_test.js');
+
+ptests = require('../punit_test.js');
 
 var should = require('should');
+
+exports.MissileTank_Test = function(){
+    ptests.PUnit_Test.call();
+};
+
+exports.MissileTank_Test.prototype = Object.create(ptests.PUnit_Test.prototype);
 
 
 describe('MissleTank', function(){
@@ -20,5 +27,7 @@ describe('MissleTank', function(){
         name : "Missile Tank",
         type : "ARMORED" };
 
-    describe('#getters', gtests.test_getters(m, o));  
+    t = new exports.MissileTank_Test();
+    ptests.UnitTestRunner(t, m, o); 
+
 });

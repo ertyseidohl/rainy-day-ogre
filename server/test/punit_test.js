@@ -27,6 +27,59 @@ exports.PUnit_Test.prototype.getName_test = function(p, e){
     };
 };
 
+exports.PUnit_Test.prototype.getType_test = function(p, e) {
+    return function() {
+        it(shouldreturn(e.type), function() {
+            (p.getType()).should.be.exactly(e.type);
+        });
+    };
+};
+
+exports.PUnit_Test.prototype.getAttack_test = function(p, e) {
+    return function() {
+        it(shouldreturn(e.attack), function() {
+            (p.getAttack()).should.be.exactly(e.attack).and.be.a.Number;
+        });
+    };
+};
+
+
+exports.PUnit_Test.prototype.getRange_test = function(p, e) {
+    return function() {
+        it(shouldreturn(e.range), function() {
+            (p.getRange()).should.be.exactly(e.range).and.be.a.Number;
+        });
+    };
+};
+
+exports.PUnit_Test.prototype.getDefense_test = function(p, e) {
+    return function() {
+        it(shouldreturn(e.defense), function() {     
+            (p.getDefense()).should.be.exactly(e.defense).and.be.a.Number;
+        });
+    };
+};
+
+exports.PUnit_Test.prototype.getPreMovement_test = function(p,e){
+    return function() {
+        it(shouldreturn(e.premove), function() {
+            (p.getPreMovement()).should.be.exactly(e.premove).and.be.a.Number;
+        });
+    };
+};
+
+exports.PUnit_Test.prototype.getPostMovement_test = function(p,e){
+    return function() {
+        it(shouldreturn(e.postmove), function() {
+            (p.getPostMovement()).should.be.exactly(e.postmove).and.be.a.Number;
+        });
+    };
+};
+
+//
+// Stateful
+//
+
 exports.PUnit_Test.prototype.hasMoved_test = function(p){
     return function() {
         it('should return 0 (for moving zero times)', function() {
@@ -60,15 +113,13 @@ exports.PUnit_Test.prototype.hasAttacked_test = function(p) {
     };
 };
 
-
-
-exports.PUnit_Test.prototype.getTile_test = function(p) {
+exports.PUnit_Test.prototype.getTile_test = function(p, e) {
     
     return function() {
         it('should return false', function() {
             var t = p.getTile();
-            (t).should.have.property('i', 5);
-            (t).should.have.property('j', 6);
+            (t).should.have.property('i', e.tile.i);
+            (t).should.have.property('j', e.tile.j);
         });
     };
 };
@@ -76,12 +127,20 @@ exports.PUnit_Test.prototype.getTile_test = function(p) {
 exports.UnitTestRunner = function(tests, unit, expected_stats){
     
     describe('#getName()', tests.getName_test(unit, expected_stats));
+    describe('#getType()', tests.getType_test(unit, expected_stats));
+
+    describe('#getAttack()', tests.getAttack_test(unit, expected_stats));
+    describe('#getRange()', tests.getRange_test(unit, expected_stats));
+    describe('#getDefense()', tests.getDefense_test(unit, expected_stats));
+   
+    describe('#getPreMovement()', tests.getPreMovement_test(unit, expected_stats));
+    describe('#getPostMovement()', tests.getPostMovement_test(unit, expected_stats));
 
     describe('#hasMoved()', tests.hasMoved_test(unit)); 
     describe('#isDead()', tests.isDead_test(unit)); 
     describe('#isDisabled()', tests.isDisabled_test(unit)); 
     describe('#hasAttacked()', tests.hasAttacked_test(unit));
-    describe('#getTile()', tests.getTile_test(unit));
+    describe('#getTile()', tests.getTile_test(unit, expected_stats));
 };
 
 describe('PUnit', function() {
