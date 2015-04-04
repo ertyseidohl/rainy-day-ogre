@@ -1,4 +1,4 @@
-/*jshint expr: true*/ 
+/*jshint expr: true, loopfunc: true*/ 
 //temporary scoping hack
 window = {};
 require('../js/game.js');
@@ -10,158 +10,113 @@ var should = require('should');
 //base PUnit Object
 exports.PUnit_Test = function(){};
 
-function shouldreturn(str){
-    return "should return ".concat(str);
+function shouldreturn(prefix, str){
+    return prefix + "should return " +str;
 }
 
-exports.PUnit_Test.prototype.getName_test = function(p, e){
-    return function() {
-        it(shouldreturn(e.name), function() {
-            (p.getName()).should.be.exactly(e.name);
-        });
-    };
+
+//Stats
+exports.PUnit_Test.prototype.testStats = function(p, e){
+    it(shouldreturn("name: ", e.name), function() {
+        (p.getName()).should.be.exactly(e.name);
+    });
+    it(shouldreturn("type: ",e.type), function() {
+        (p.getType()).should.be.exactly(e.type);
+    });
+    it(shouldreturn("attack: ",e.attack), function() {
+        (p.getAttack()).should.be.exactly(e.attack).and.be.a.Number;
+    });
+    it(shouldreturn("range: ", e.range), function() {
+        (p.getRange()).should.be.exactly(e.range).and.be.a.Number;
+    });
+    it(shouldreturn("defense: ", e.defense), function() {     
+        (p.getDefense()).should.be.exactly(e.defense).and.be.a.Number;
+    });
+    it(shouldreturn("premove: ", e.premove), function() {
+        (p.getPreMovement()).should.be.exactly(e.premove).and.be.a.Number;
+    });
+    it(shouldreturn("postmove: ", e.postmove), function() {
+        (p.getPostMovement()).should.be.exactly(e.postmove).and.be.a.Number;
+    });
 };
 
-exports.PUnit_Test.prototype.getType_test = function(p, e) {
-    return function() {
-        it(shouldreturn(e.type), function() {
-            (p.getType()).should.be.exactly(e.type);
-        });
-    };
+// State
+exports.PUnit_Test.prototype.testState = function(p, s) {
+    it(shouldreturn('moves: ', s.moves), function() {
+        (p.hasMoved()).should.be.exactly(s.moves).and.be.a.Number;
+    });
+    it(shouldreturn('dead: ', s.dead), function(){
+        (p.isDead()).should.be.exactly(s.dead).and.be.a.Boolean;
+    });
+    it(shouldreturn('disabled: ', s.disabled), function() {
+        (p.isDisabled()).should.be.exactly(s.disabled).and.be.a.Boolean;
+    }); 
+    it(shouldreturn('hasattacked: ', s.attacked), function() {
+        (p.hasAttacked()).should.be.exactly(s.attacked).and.be.a.Boolean;
+    });
 };
 
-exports.PUnit_Test.prototype.getAttack_test = function(p, e) {
-    return function() {
-        it(shouldreturn(e.attack), function() {
-            (p.getAttack()).should.be.exactly(e.attack).and.be.a.Number;
+//Location
+exports.PUnit_Test.prototype.testLocation = function(p, e) {
+    var t = p.getTile();
+    for (var key in e) {
+        it(shouldreturn('tile.' + key +': ', e[key]), function() {
+            (t).should.have.property(key, e[key]);
         });
-    };
+    }
 };
 
-
-exports.PUnit_Test.prototype.getRange_test = function(p, e) {
-    return function() {
-        it(shouldreturn(e.range), function() {
-            (p.getRange()).should.be.exactly(e.range).and.be.a.Number;
-        });
-    };
+exports.PUnit_Test.prototype.disable_test = function(p, e) {
+    p.disable();
 };
 
-exports.PUnit_Test.prototype.getDefense_test = function(p, e) {
-    return function() {
-        it(shouldreturn(e.defense), function() {     
-            (p.getDefense()).should.be.exactly(e.defense).and.be.a.Number;
-        });
-    };
+exports.PUnit_Test.prototype.newUnit = function(p) {
+    return new PUnit(p);
 };
 
-exports.PUnit_Test.prototype.getPreMovement_test = function(p,e){
-    return function() {
-        it(shouldreturn(e.premove), function() {
-            (p.getPreMovement()).should.be.exactly(e.premove).and.be.a.Number;
-        });
-    };
-};
-
-exports.PUnit_Test.prototype.getPostMovement_test = function(p,e){
-    return function() {
-        it(shouldreturn(e.postmove), function() {
-            (p.getPostMovement()).should.be.exactly(e.postmove).and.be.a.Number;
-        });
-    };
-};
-
-//
-// Stateful
-//
-
-exports.PUnit_Test.prototype.hasMoved_test = function(p){
-    return function() {
-        it('should return 0 (for moving zero times)', function() {
-            (p.hasMoved()).should.be.exactly(0).and.be.a.Number;
-        });
-    };
-};
-
-exports.PUnit_Test.prototype.isDead_test = function(p) {
-    return function() {
-        it('should return false', function() {
-            (p.isDead()).should.be.exactly(false).and.be.a.Boolean;
-        });
-    };
-};
-
-exports.PUnit_Test.prototype.isDisabled_test = function(p, e) {
-    return function() {
-        it(shouldreturn(e.disabled), function() {
-            (p.isDisabled()).should.be.exactly(e.disabled).and.be.a.Boolean;
-        });
-    };
-};
-
-exports.PUnit_Test.prototype.hasAttacked_test = function(p) {
+exports.UnitTestRunner = function(tests, expected_stats){ 
     
-    return function() {
-        it('should return false', function() {
-            (p.hasAttacked()).should.be.exactly(false).and.be.a.Boolean;
-        });
+    describe('stats', function(){
+        var unit = tests.newUnit(expected_stats);
+        tests.testStats(unit, expected_stats);
+    });
+    describe('location', function() {
+        var unit = tests.newUnit(expected_stats);
+        tests.testLocation(unit, expected_stats.tile);
+    });
+
+    expected_state = {
+        disabled : false,
+        dead : false,
+        moves : 0,
+        attacked : false
     };
-};
-
-exports.PUnit_Test.prototype.getTile_test = function(p, e) {
-    return function() {
-        it('should return false', function() {
-            var t = p.getTile();
-            (t).should.have.property('i', e.tile.i);
-            (t).should.have.property('j', e.tile.j);
+    describe('state', function() {
+        var unit = tests.newUnit(expected_stats);
+        tests.testState(unit, expected_state);
+    });
+    
+    describe('#disable()', function() {
+        var unit = tests.newUnit(expected_stats);
+        //tests.disable_test(unit, expected_state);
+        unit.disable();
+        it('disabled off turn?', function() {
+            debugger;
+            (unit.isDisabled()).should.be.exactly(true);  
         });
-    };
+        unit.nextTurnReset();
+        it('disabled on next turn?', function() {
+            (unit.isDisabled()).should.be.exactly(true);
+        });
+        unit.nextTurnReset();
+        it('disabled on 2nd turn?', function() {
+            (unit.isDisabled()).should.be.exactly(false);  
+        });
+    });
 };
-
-exports.PUnit_Test.prototype.disable_test = function(t, p, e) {
-   return function() {
-        e.disabled = true;
-        exports.GetsTest(t, p, e);
-        p.nextTurnReset();
-        e.disabled = false;
-        exports.GetsTest(t, p, e);
-   };
-};
-
-exports.UnitTestRunner = function(tests, unit, expected_stats){ 
-    //normal
-    exports.GetsTest(tests, unit, expected_stats);
-
-    //Disable hm... are these run async?
-    //unit.disable();
-    //describe('#disable', tests.disable_test(tests, unit, expected_stats));
-};
-
-exports.GetsTest = function(tests, unit, expected_stats){
-    
-    expected_stats.disabled = (expected_stats.disabled === undefined) ? false : expected_stats.disabled; 
-    
-    describe('#getName()', tests.getName_test(unit, expected_stats));
-    describe('#getType()', tests.getType_test(unit, expected_stats));
-
-    describe('#getAttack()', tests.getAttack_test(unit, expected_stats));
-    describe('#getRange()', tests.getRange_test(unit, expected_stats));
-    describe('#getDefense()', tests.getDefense_test(unit, expected_stats));
-   
-    describe('#getPreMovement()', tests.getPreMovement_test(unit, expected_stats));
-    describe('#getPostMovement()', tests.getPostMovement_test(unit, expected_stats));
-
-    describe('#hasMoved()', tests.hasMoved_test(unit)); 
-    describe('#isDead()', tests.isDead_test(unit));
-
-    describe('#isDisabled()', tests.isDisabled_test(unit, expected_stats)); 
-    describe('#hasAttacked()', tests.hasAttacked_test(unit));
-    describe('#getTile()', tests.getTile_test(unit, expected_stats));
-};
-
 
 describe('PUnit', function() {
-    var o = {
+     var o = {
         attack : 1,
         range : 1,
         defense : 1,
@@ -173,10 +128,9 @@ describe('PUnit', function() {
         tile : {i : 5, j : 6}
     };
 
-    var p = new PUnit(o);
-
     t = new exports.PUnit_Test();
-    exports.UnitTestRunner(t, p, o);
+    exports.UnitTestRunner(t, o);
+/*
     describe('#selectForAttack()', function() {
         it('should return [p]', function() {
             var a = p.selectForAttack();
@@ -248,5 +202,5 @@ describe('PUnit', function() {
             (p.isValidAttackTarget(e2)).should.be.exactly(false);
         });
     });
-
+*/
 });

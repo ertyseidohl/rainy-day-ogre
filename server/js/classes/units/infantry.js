@@ -28,6 +28,7 @@ exports.Infantry.prototype.disable = function(){
     this.attack -= 1;
     this.defense -= 1;
     this.name = "Infantry " + this.attack;
+    this.disabledTurns = 2;
     if (this.attack === 0) {
         this.kill();
         return true;
