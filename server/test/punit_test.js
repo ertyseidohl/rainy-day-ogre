@@ -98,17 +98,16 @@ exports.UnitTestRunner = function(tests, expected_stats){
     
     describe('#disable()', function() {
         var unit = tests.newUnit(expected_stats);
-        //tests.disable_test(unit, expected_state);
-        unit.disable();
+        beforeEach(function() {
+            unit.nextTurnReset();
+        });
         it('disabled off turn?', function() {
-            debugger;
+            unit.disable();
             (unit.isDisabled()).should.be.exactly(true);  
         });
-        unit.nextTurnReset();
         it('disabled on next turn?', function() {
             (unit.isDisabled()).should.be.exactly(true);
         });
-        unit.nextTurnReset();
         it('disabled on 2nd turn?', function() {
             (unit.isDisabled()).should.be.exactly(false);  
         });
