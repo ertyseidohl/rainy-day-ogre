@@ -1,20 +1,5 @@
 ;(function(exports) {
 
-	var walls = [
-		"01020203",
-		"01030203",
-		"04040405",
-		"04040504",
-		"03040405"
-		//todo add more
-	];
-
-	var craters = [
-		"0303",
-		"0107"
-		//todo add more
-	];
-
 	var directions = [
 		[ {i: +1, j: +1}, {i: +1, j:  0}, {i:  0, j: -1},
 		{i: -1, j:  0}, {i: -1, j: +1}, {i:  0, j: +1} ],
