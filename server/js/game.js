@@ -8,9 +8,6 @@
 	];
 
 	var GameMap = function(options) {
-		//Units
-		this.units = [];
-
 		//Walls
 		this.walls = {};
 		for (var w in walls) {

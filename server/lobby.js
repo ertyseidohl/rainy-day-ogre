@@ -75,9 +75,12 @@ app.post('/joinlobby', function(req, res){
 
 app.post('/setlobbystatus', function(req, res){
 
-    var userid = req.body.userid;
-    var lobbyid = req.body.lobbyid;
-    var action = req.body.action;
+    var userid = req.body.userid,
+    lobbyid = req.body.lobbyid,
+    action = req.body.action,
+    i,
+    s,
+    lobby;
 
     console.log('/setlobbystatus ' + action + ' ' +  userid + ' ', + lobbyid + ' ' + JSON.stringify(req.body));
 
@@ -85,7 +88,11 @@ app.post('/setlobbystatus', function(req, res){
         return res.status(402).send({ error : "user has not joined this lobby" });
     }
 
-    var lobby = lobbies[lobbyid];
+    if (lobbies[lobbyid] === undefined) {
+        return res.status(418).send({error : "no such lobby"});
+    }
+
+    lobby = lobbies[lobbyid];
 
     //so not quite thread safe
     if (lobby.state != "LOBBY") {
@@ -105,7 +112,7 @@ app.post('/setlobbystatus', function(req, res){
             }
             break;
         case "unready":
-            var i = lobby.usersready.indexOf(userid);
+            i = lobby.usersready.indexOf(userid);
             if (i >= 0) {
                 lobby.usersready.splice(i, 1);
             }
@@ -114,7 +121,7 @@ app.post('/setlobbystatus', function(req, res){
             //better unset the everyone's ready status
             lobby.usersready = [];
             //which scenario?
-            var s = req.body.scenario;
+            s = req.body.scenario;
             s = s.trim();
             s = s.toLowerCase();
             //is it an avaiable scenario?
@@ -127,7 +134,7 @@ app.post('/setlobbystatus', function(req, res){
             break;
         case "leave":
             delete lobbies[lobbyid].users[userid];
-            var i = lobby.usersready.indexOf(userid);
+            i = lobby.usersready.indexOf(userid);
             if (i >= 0) {
                 lobby.usersready.splice(i, 1);
             }
