@@ -6,6 +6,8 @@ var argv = require('minimist')(process.argv.slice(2));
 
 	var Client = function () {
 		this.userid = false;
+		this.lobbyid = false;
+		this.poll = setInterval(this.checkLobbyStatus.bind(this), 1000);
 	};
 
 	Client.prototype = {
@@ -64,7 +66,7 @@ var argv = require('minimist')(process.argv.slice(2));
 			stdin.once('data', function(data) {
 				data = data.toString().trim();
 				setTimeout(function(){
-					if(!callback.call(self, [data])){
+					if(!callback.call(self, data)){
 						self.nextLine(prompt, callback);
 					}
 				}, 0);
@@ -97,44 +99,113 @@ var argv = require('minimist')(process.argv.slice(2));
 				}
 			});
 		},
-		apiListGames : function() {
+		apiListLobbies : function() {
 			var self = this;
-			console.log("apiListGames");
+			console.log("apiListLobbies");
 			self.request({
-				endpoint : "listgames",
+				endpoint : "listlobbies",
 				method : "POST"
 			}, function(response) {
-				console.log('listgames: ' + JSON.stringify(response));
+				console.log('list lobbies: ' + JSON.stringify(response));
 				self.waitForInput();
 			});
 		},
-		apiJoinGame : function() {
-			console.log("apiJoinGame");
+		apiJoinLobby : function() {
+			console.log("apiJoinLobby");
 			var self = this;
-			self.nextLine("Which game id?", function(data) {
-				var gameid = parseInt(data, 10);
-				if (!gameid) {
+			self.nextLine("Which lobby id?", function(data) {
+				var lobbyid = parseInt(data, 10);
+				if (!lobbyid) {
 					return false;
 				}
 				self.request({
-					endpoint : "joingame",
+					endpoint : "joinlobby",
 					method : "POST",
 					form : {
 						userid : self.userid,
-						gameid : gameid
+						lobbyid : lobbyid
 					}
 				}, function(response) {
 					console.log('response ' + JSON.stringify(response));
+					if (! response.lobbyid) {
+						console.log("could not join lobby");
+					}
+					self.lobbyid = response.lobbyid;
 					self.waitForInput();
 				});
 				return true;
 			});
 		},
-		apiUpdate : function() {
-			console.log("apiUpdate");
+		apiSetLobbyStatus : function() {
+			console.log("apiSetLobbyStatus");
+			var self = this;
+			if (!self.lobbyid) {
+				console.log("You need to join a lobby first");
+				self.waitForInput();
+				return;
+			}
+			self.nextLine("What command?", function(command) {
+				if (command == "setscenario") {
+					self.nextLine("What scenario?", function(scenarioChoice) {
+						self.request({
+							endpoint : "setlobbystatus",
+							method : "POST",
+							form : {
+								userid : self.userid,
+								lobbyid : self.lobbyid,
+								action : command,
+								scenario : scenarioChoice
+							}
+						}, function(response) {
+							console.log('response ' + JSON.stringify(response));
+							self.waitForInput();
+						});
+						return true;
+					});
+					return true;
+				} else {
+					switch (command) {
+						case "ready" :
+						case "unready":
+						case "leave" :
+							self.request({
+								endpoint : "setlobbystatus",
+								method : "POST",
+								form : {
+									userid : self.userid,
+									lobbyid : self.lobbyid,
+									action : command,
+								}
+							}, function(response) {
+								console.log('response ' + JSON.stringify(response));
+								self.waitForInput();
+							});
+							return true;
+						default :
+							console.log("Illegal Command");
+							console.log("You're under arrest!");
+					}
+				}
+				return false;
+			});
 		},
-		apiPoll : function() {
-			console.log("apiCall");
+		checkLobbyStatus : function() {
+			var self = this;
+			if (!self.userid || !self.lobbyid) {
+				return;
+			}
+			self.request({
+				endpoint : "checklobbystatus",
+				method : "POST",
+				form : {
+					userid : self.userid,
+					lobbyid : self.lobbyid,
+				}
+			}, function(response) {
+				if (response.lobbystate == "GAME") {
+
+				}
+			});
 		}
 	};
 
