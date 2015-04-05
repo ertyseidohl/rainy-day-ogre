@@ -19,9 +19,6 @@ lobbies[1] = newlobby(1);
 
 function loadScenario(file) {
     var data = JSON.parse(fs.readFileSync(file, {encoding : "utf8"}));
-    if (typeof data.map == "string") {
-        data.map = fs.readFileSync(data.map, {encoding : "utf8"});
-    }
     return data;
 }
 
