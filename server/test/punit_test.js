@@ -66,8 +66,20 @@ exports.PUnit_Test.prototype.testLocation = function(p, e) {
     }
 };
 
-exports.PUnit_Test.prototype.disable_test = function(p, e) {
-    p.disable();
+exports.PUnit_Test.prototype.disable_test = function(unit, e) {
+    beforeEach(function() {
+        unit.nextTurnReset();
+    });
+    it('disabled off turn?', function() {
+        unit.disable();
+        (unit.isDisabled()).should.be.exactly(true);  
+    });
+    it('disabled on next turn?', function() {
+        (unit.isDisabled()).should.be.exactly(true);
+    });
+    it('disabled on 2nd turn?', function() {
+        (unit.isDisabled()).should.be.exactly(false);  
+    });
 };
 
 exports.PUnit_Test.prototype.newUnit = function(p) {
@@ -98,19 +110,7 @@ exports.UnitTestRunner = function(tests, expected_stats){
     
     describe('#disable()', function() {
         var unit = tests.newUnit(expected_stats);
-        beforeEach(function() {
-            unit.nextTurnReset();
-        });
-        it('disabled off turn?', function() {
-            unit.disable();
-            (unit.isDisabled()).should.be.exactly(true);  
-        });
-        it('disabled on next turn?', function() {
-            (unit.isDisabled()).should.be.exactly(true);
-        });
-        it('disabled on 2nd turn?', function() {
-            (unit.isDisabled()).should.be.exactly(false);  
-        });
+        tests.disable_test(unit);
     });
 };
 
