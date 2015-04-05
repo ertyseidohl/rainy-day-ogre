@@ -1,5 +1,6 @@
 {
-	"teams" : [
+	"name" : "Default Scenario",
+	"armies" : [
 		{
 			"name" : "OGRE",
 			"units" : [
@@ -99,5 +100,5 @@
 			]
 		}
 	],
-	"map" : "map_default"
+	"map" : "./map_default.json"
 }
