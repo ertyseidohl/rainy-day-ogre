@@ -30,8 +30,8 @@ function loadScenarioData(file) {
 function newlobby(lobbyid){
     return { lobbyid : lobbyid,
         users : [],
-        usersready : {},
-        lobbystate : "LOBBY",
+        usersready : [],
+        state : "LOBBY",
         scenario : "default",
         scenarios : allScenarios
     };
@@ -97,18 +97,22 @@ app.post('/setlobbystatus', function(req, res){
 
     switch(action){
         case "ready":
-            lobby.usersready[userid] = true;
-
+            if (lobby.usersready.indexOf(userid) < 0) {
+                lobby.usersready.push(userid);
+            }
             if (lobby.usersready.length == lobby.scenarios[lobby.scenario].armies.length) {
                 lobby.state = "START";
             }
             break;
         case "unready":
-            delete lobby.usersready[userid];
+            var i = lobby.usersready.indexOf(userid);
+            if (i >= 0) {
+                lobby.usersready.splice(i, 1);
+            }
             break;
         case "setscenario":
             //better unset the everyone's ready status
-            lobby.usersready = {};
+            lobby.usersready = [];
             //which scenario?
             var s = req.body.scenario;
             s = s.trim();
@@ -123,7 +127,10 @@ app.post('/setlobbystatus', function(req, res){
             break;
         case "leave":
             delete lobbies[lobbyid].users[userid];
-            delete lobbies[lobbyid].usersready[userid];
+            var i = lobby.usersready.indexOf(userid);
+            if (i >= 0) {
+                lobby.usersready.splice(i, 1);
+            }
             delete users[userid].lobbies[lobbyid];
             break;
         default:
