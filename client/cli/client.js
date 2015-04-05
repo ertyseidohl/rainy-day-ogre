@@ -4,13 +4,13 @@ var argv = require('minimist')(process.argv.slice(2));
 ;(function() {
 	var serverAddress = "http://192.168.1.14:8000";
 
-	var Client = function () {
+	var LobbyClient = function () {
 		this.userid = false;
 		this.lobbyid = false;
 		this.poll = setInterval(this.checkLobbyStatus.bind(this), 1000);
 	};
 
-	Client.prototype = {
+	LobbyClient.prototype = {
 		init : function() {
 			//start the cli client
 			console.log("init");
@@ -209,6 +209,6 @@ var argv = require('minimist')(process.argv.slice(2));
 		}
 	};
 
-	var c = new Client();
+	var c = new LobbyClient();
 	var connected = c.init();
 })();
