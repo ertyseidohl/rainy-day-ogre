@@ -9,21 +9,21 @@ app.use(bodyparser.json());
 var users = {};
 var nextuser = 1;
 
+var allScenarios = [
+    loadScenario("./data/scenario_default.json")
+];
+
 var lobbies = {};
 var nextlobby = 2;
 lobbies[1] = newlobby(1);
 
 function loadScenario(file) {
-    var data = JSON.parse(fs.readFileSync(file));
+    var data = JSON.parse(fs.readFileSync(file, {encoding : "utf8"}));
     if (typeof data.map == "string") {
-        data.map = fs.readFileSync(data.map);
+        data.map = fs.readFileSync(data.map, {encoding : "utf8"});
     }
     return data;
 }
-
-var allScenarios = [
-    loadScenario("./data/scenario_default.json")
-];
 
 function newlobby(lobbyid){
     return { lobbyid : lobbyid,
