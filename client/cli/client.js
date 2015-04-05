@@ -2,7 +2,7 @@ var request = require('request');
 var argv = require('minimist')(process.argv.slice(2));
 
 ;(function() {
-	var serverAddress = "http://192.168.1.10:8000";
+	var serverAddress = "http://192.168.1.14:8000";
 
 	var Client = function () {
 		this.userid = false;

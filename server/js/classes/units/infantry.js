@@ -16,6 +16,7 @@ exports.Infantry = function(tile, strength) {
         defense : strength,
         premove: 2,
         name : "Infantry " + strength,
+        id : "infantry" + strength,
         tile : tile,
         type : "INFANTRY",
         passThruWalls : true

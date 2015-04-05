@@ -10,8 +10,9 @@
         var options = {
             tile : tile,
             type : "OGRE",
-            name : "Ogre Mach III",
-            premove : 3
+            name : "Ogre Mk III",
+            premove : 3,
+            id : "ogremk3"
         };
         //missing 8 AntiPersonnel
         parts = [new OgreTreads(30, 10),

@@ -1,0 +1,103 @@
+{
+	"teams" : [
+		{
+			"name" : "OGRE",
+			"units" : [
+				{
+					"id" : "ogremk3",
+					"location" : "0717"
+				}
+			]
+		},
+		{
+			"name" : "Army",
+			"units" : [
+				{
+					"id" : "infantry1",
+					"location" : "0407"
+				},
+				{
+					"id" : "infantry3",
+					"location" : "0705"
+				},
+				{
+					"id" : "infantry3",
+					"location" : "0806"
+				},
+				{
+					"id" : "infantry3",
+					"location" : "1007"
+				},
+				{
+					"id" : "infantry3",
+					"location" : "0802"
+				},
+				{
+					"id" : "infantry3",
+					"location" : "0703"
+				},
+				{
+					"id" : "infantry3",
+					"location" : "1308"
+				},
+				{
+					"id" : "infantry1",
+					"location" : "1208"
+				},
+				{
+					"id" : "cp",
+					"location" : "0602"
+				},
+				{
+					"id" : "heavy",
+					"location" : "0509"
+				},
+				{
+					"id" : "heavy",
+					"location" : "0609"
+				},
+				{
+					"id" : "heavy",
+					"location" : "1206"
+				},
+				{
+					"id" : "heavy",
+					"location" : "1105"
+				},
+				{
+					"id" : "howitzer",
+					"location" : "0603"
+				},
+				{
+					"id" : "howitzer",
+					"location" : "1003"
+				},
+				{
+					"id" : "msltank",
+					"location" : "0506"
+				},
+				{
+					"id" : "msltank",
+					"location" : "0807"
+				},
+				{
+					"id" : "msltank",
+					"location" : "1310"
+				},
+				{
+					"id" : "gev",
+					"location" : "0411"
+				},
+				{
+					"id" : "gev",
+					"location" : "0811"
+				},
+				{
+					"id" : "gev",
+					"location" : "1211"
+				}
+			]
+		}
+	],
+	"map" : "map_default"
+}
