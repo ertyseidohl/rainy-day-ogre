@@ -49,7 +49,7 @@ app.post('/joinlobby', function(req, res){
     if (!userid || !lobbyid) return res.status(404).end();
    
     var lobby = lobbies[lobbyid];
-    if (lobby.users.length >= lobby.scenarios[lobby.scenario].armies){
+    if (lobby.users.length >= lobby.scenarios[lobby.scenario].armies.length){
         return res.status(405).send({error : "too many players in lobby"});
     }
     
@@ -85,7 +85,7 @@ app.post('/setlobbystatus', function(req, res){
         case "ready":
             lobby.usersready[userid] = true; 
             
-            if (lobby.usersready.length == lobby.scenarios[lobby.scenario].armies) {
+            if (lobby.usersready.length == lobby.scenarios[lobby.scenario].armies.length) {
                 lobby.state = "START";
             };
             break;
