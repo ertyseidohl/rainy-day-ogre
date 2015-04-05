@@ -9,20 +9,22 @@ app.use(bodyparser.json());
 var users = {};
 var nextuser = 1;
 
-var allScenarios = [
-    loadScenario("./data/scenario_default.json")
-];
+var allScenarios = {
+    "default" : loadScenarioData("./data/scenario_default.json")
+};
 
 var lobbies = {};
 var nextlobby = 2;
 lobbies[1] = newlobby(1);
 
-function loadScenario(file) {
+function loadScenarioData(file) {
     var data = JSON.parse(fs.readFileSync(file, {encoding : "utf8"}));
-    if (typeof data.map == "string") {
-        data.map = fs.readFileSync(data.map, {encoding : "utf8"});
-    }
-    return data;
+    return {
+        armies : data.armies.map(function(army) {
+            return army.name;
+        }),
+        name : data.name
+    };
 }
 
 function newlobby(lobbyid){
@@ -30,7 +32,7 @@ function newlobby(lobbyid){
         users : [],
         usersready : {},
         lobbystate : "LOBBY",
-        scenario : allScenarios[0],
+        scenario : "default",
         scenarios : allScenarios
     };
 }
@@ -95,8 +97,8 @@ app.post('/setlobbystatus', function(req, res){
 
     switch(action){
         case "ready":
-            lobby.usersready[userid] = true; 
-            
+            lobby.usersready[userid] = true;
+
             if (lobby.usersready.length == lobby.scenarios[lobby.scenario].armies.length) {
                 lobby.state = "START";
             }
