@@ -1,5 +1,5 @@
-;(function(exports) {
 
+    //directions used for hexagonal map
 	var directions = [
 		[ {i: +1, j: +1}, {i: +1, j: 0}, {i: 0, j: -1},
 		{i: -1, j: 0}, {i: -1, j: +1}, {i: 0, j: +1} ],
@@ -7,7 +7,7 @@
 		{i: 0, j: -1}, {i: -1, j: -1}, {i: -1, j: 0} ]
 	];
 
-	var GameMap = function(options) {
+exports.GameMap = function(options) {
 		//Walls
 		this.walls = {};
 		for (var w in walls) {
@@ -92,7 +92,7 @@
 		};
 	};
 
-	var map = new GameMap();
+	var map = new exports.GameMap();
 
 	exports.Util = {
 		axialToCube : function(tile) {
@@ -130,8 +130,8 @@
 		}
 	};
 
-	exports.Game = function(options){
-		this.map = map;
-	};
 
-})(window);
+exports.Game = function(options){
+    this.map = map;
+};
+

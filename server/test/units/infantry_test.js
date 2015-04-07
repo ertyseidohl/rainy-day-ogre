@@ -12,17 +12,11 @@ exports.Infantry_Test = function(){
 };
 exports.Infantry_Test.prototype = Object.create(ptests.PUnit_Test.prototype);
 
-exports.Infantry_Test.prototype.disable_test = function(t, p, e){
-    return function(){
-        e.disabled = true;
-        e.attack = (e.attack > 1) ? e.attack : 1;
-        e.defense = e.attack;
-        e.name = "Infantry " + e.attack;
-        ptests.GetsTest(t,p,e);
-        p.nextTurnReset();
-        e.disabled = false;
-        ptests.GetsTest(t,p,e); 
-    };
+exports.Infantry_Test.prototype.disable_test = function(unit, expected){
+
+    it('should fail', function(){
+        (false).should.be.exactly(true);
+    });
 };
 
 //Test entry point
