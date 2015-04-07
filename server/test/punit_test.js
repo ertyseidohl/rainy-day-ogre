@@ -1,10 +1,9 @@
 /*jshint expr: true, loopfunc: true*/ 
 //temporary scoping hack
-window = {};
-require('../js/game.js');
-Util = window.Util;
+var game = require('../game/game.js');
+Util = game.Util;
 
-var units = require('../js/classes/');
+var units = require('../game/classes/');
 var should = require('should');
 
 //base PUnit Object

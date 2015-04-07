@@ -1,14 +1,18 @@
 
-    //directions used for hexagonal map
-	var directions = [
-		[ {i: +1, j: +1}, {i: +1, j: 0}, {i: 0, j: -1},
-		{i: -1, j: 0}, {i: -1, j: +1}, {i: 0, j: +1} ],
-		[ {i: 0, j: +1}, {i: +1, j: 0}, {i: +1, j: -1},
-		{i: 0, j: -1}, {i: -1, j: -1}, {i: -1, j: 0} ]
-	];
+//directions used for hexagonal map
+var directions = [
+    [ {i: +1, j: +1}, {i: +1, j: 0}, {i: 0, j: -1},
+    {i: -1, j: 0}, {i: -1, j: +1}, {i: 0, j: +1} ],
+    [ {i: 0, j: +1}, {i: +1, j: 0}, {i: +1, j: -1},
+    {i: 0, j: -1}, {i: -1, j: -1}, {i: -1, j: 0} ]
+];
 
 exports.GameMap = function(options) {
-		//Walls
+	
+        var walls = options.map.walls;
+        var craters = options.map.craters;
+
+        //Walls
 		this.walls = {};
 		for (var w in walls) {
 			this.walls[walls[w]] = true;
@@ -92,8 +96,6 @@ exports.GameMap = function(options) {
 		};
 	};
 
-	var map = new exports.GameMap();
-
 	exports.Util = {
 		axialToCube : function(tile) {
 			var coords = {
@@ -132,6 +134,6 @@ exports.GameMap = function(options) {
 
 
 exports.Game = function(options){
-    this.map = map;
+    this.map = exports.GameMap({map : options.map});
 };
 

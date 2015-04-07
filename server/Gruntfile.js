@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 grunt.initConfig({
 
     jshint : {
-                all : ['server.js', 'test/**/*.js', 'js/**/*.js', '!js/lib/**'],
+                all : ['gameserver.js', 'lobbyserver.js',  'test/**/*.js', 'game/**/*.js', '!game/lib/**'],
     },
     
     jsdoc : {
@@ -17,7 +17,7 @@ grunt.initConfig({
 
     browserify : {
        main : {
-            src : ['js/**/*.js, !js/lib/**'],
+            src : ['game/**/*.js, !game/lib/**'],
             dest : ['scripts/ogre.js']
        }
     },

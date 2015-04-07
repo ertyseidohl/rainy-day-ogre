@@ -1,9 +1,9 @@
 /*jshint expr: true*/
 require('should');
 //require the units
-units = require('../../js/classes/');
+var units = require('../../game/classes/');
 //require the parent unit_test
-ptests = require('../punit_test.js');
+var ptests = require('../punit_test.js');
 
 //Create the new test object,
 //note new or overriden tests extend this object's prototype
@@ -13,16 +13,22 @@ exports.Infantry_Test = function(){
 exports.Infantry_Test.prototype = Object.create(ptests.PUnit_Test.prototype);
 
 exports.Infantry_Test.prototype.disable_test = function(unit, expected){
-
-    it('should fail', function(){
-        (false).should.be.exactly(true);
+   
+    it('disabled off turn?', function() {
+        unit.disable();
+        (unit.isDisabled()).should.be.exactly(true);  
+        (unit.getAttack()).should.be.exactly(2).and.be.a.Number;
     });
+};
+
+
+exports.Infantry_Test.prototype.newUnit = function(stats) {
+    return new units.Infantry(stats.tile, stats.attack);
 };
 
 //Test entry point
 describe('Infantry', function(){
     var tile = {i : 3, j : 2}; 
-    var m = new units.Infantry(tile, 3);
     var o = {attack : 3,
         range : 1,
         defense : 3,
@@ -31,10 +37,11 @@ describe('Infantry', function(){
         tile : tile,
         name : "Infantry 3",
         type : "INFANTRY" };
-
+ 
     var t = new exports.Infantry_Test();
-    ptests.UnitTestRunner(t, m, o); 
+    ptests.UnitTestRunner(t, o); 
 
+    var m = new units.Infantry(tile, 3);
     describe('create a too strong unit', function() {
         var m2 = new units.Infantry(tile, 4);
         it('should return 3', function(){
