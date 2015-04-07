@@ -69,6 +69,37 @@ app.get('/action', function(req,res) {
     }
 });
 
+
+function move(game, unit, target){
+
+    var tile = unit.tile;
+    var sunit = null;
+    var result = null;
+
+    if (unit.id === undefined || typeof unit.id != "number") {
+        return [false, "incorrectly formatted unit"];    
+    } else if (! isATile(tile)) {
+        return [false, "incorrectly formatted tile"];
+    }
+
+    sunit = game.getUnit(unit.id);
+
+    if (sunit.tile != tile){
+        return [false, "incorrect square"];
+    }
+
+    result = sunit.moveToTarget(target);
+
+    //todo: return why?
+    if (result === false) {
+        return [false, "unit can't legally move to target square"];
+    }
+
+    return [true, ""];
+}
+
+
+
 app.get('/poll', function(req,res) {
 
 });
