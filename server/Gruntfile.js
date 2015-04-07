@@ -7,7 +7,7 @@ grunt.initConfig({
     
     jsdoc : {
         dist : {
-            src : ['js/'],
+            src : ['game/'],
             options: {
                 destination : 'docs',
                 recurse : true

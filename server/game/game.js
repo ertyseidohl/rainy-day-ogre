@@ -135,5 +135,12 @@ exports.GameMap = function(options) {
 
 exports.Game = function(options){
     this.map = exports.GameMap({map : options.map});
+    this.armies = options.armies;
+    this.users = options.users;   //userid => index for this.armies  
 };
+
+exports.Game.prototype.getUsersArmy = function(userid) {
+    return this.armies[this.users[userid]];
+};
+
 
