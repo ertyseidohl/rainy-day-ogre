@@ -5,8 +5,9 @@
      * @classdesc the secondary battery for Ogre units
      * @augments UnitPart
      */
-    exports.OgreSecondaryBattery = function() {
+    exports.OgreSecondaryBattery = function(instanceId) {
         var options = {
+            instanceId : instanceId,
             type : "SECONDARY",
             name : "Ogre Secondary Battery",
             range : 2,

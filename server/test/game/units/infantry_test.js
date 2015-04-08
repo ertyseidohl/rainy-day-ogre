@@ -23,7 +23,7 @@ exports.Infantry_Test.prototype.disable_test = function(unit, expected){
 
 
 exports.Infantry_Test.prototype.newUnit = function(stats) {
-    return new units.Infantry(stats.tile, stats.attack);
+    return new units.Infantry(10, stats.tile, stats.attack);
 };
 
 //Test entry point
@@ -43,7 +43,7 @@ describe('Infantry', function(){
 
     var m = new units.Infantry(tile, 3);
     describe('create a too strong unit', function() {
-        var m2 = new units.Infantry(tile, 4);
+        var m2 = new units.Infantry(1000,tile, 4);
         it('should return 3', function(){
             (m2.getAttack()).should.be.exactly(3).and.be.a.Number;
             (m2.getDefense()).should.be.exactly(3).and.be.a.Number;
@@ -51,7 +51,7 @@ describe('Infantry', function(){
     });
 
     describe('create a too weak unit', function() {
-        var m2 = new units.Infantry(tile, -1);
+        var m2 = new units.Infantry(100,tile, -1);
         it('should return 1', function(){
             (m2.getAttack()).should.be.exactly(1).and.be.a.Number;
             (m2.getDefense()).should.be.exactly(1).and.be.a.Number;

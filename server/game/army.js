@@ -1,10 +1,8 @@
 //first "API" functions for army control
-;(function(exports) {
-
     var turn = 0;
     var armies = [];
 
-    var Army = function(name, color){
+    exports.Army = Army = function(name, color){
         this.name = name;
         this.color = color;
         this.units = [];
@@ -168,4 +166,3 @@
         armies.splice(index, 0, x);
         return x;
     };
-})(window);

@@ -13,7 +13,7 @@ exports.MissileTank_Test = function(){
 exports.MissileTank_Test.prototype = Object.create(ptests.PUnit_Test.prototype);
 
 exports.MissileTank_Test.prototype.newUnit = function(stats){
-    return new units.MissileTank(stats.tile);
+    return new units.MissileTank(10, stats.tile);
 };
 
 //Test entry point

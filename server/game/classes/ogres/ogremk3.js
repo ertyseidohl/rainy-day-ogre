@@ -5,9 +5,10 @@
      * @classdesc the lowly Ogre
      * @augments MultiPart
      */
-    exports.OgreMk3 = function(tile) {
+    exports.OgreMk3 = function(instanceId, tile) {
 
         var options = {
+            instanceId : instanceId,
             tile : tile,
             type : "OGRE",
             name : "Ogre Mk III",

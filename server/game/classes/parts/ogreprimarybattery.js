@@ -5,8 +5,9 @@
      *  @classdesc the primary battery for Ogre's
      *  @augments UnitPart
      */
-    exports.OgrePrimaryBattery = function() {
+    exports.OgrePrimaryBattery = function(instanceId) {
         var options = {
+            instanceId : instanceId,
             type : "PRIMARY",
             name : "Ogre Primary Battery",
             range : 4,

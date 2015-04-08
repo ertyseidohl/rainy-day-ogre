@@ -3,7 +3,7 @@
  */
 PUnit = require('../punit.js').PUnit;
 
-exports.Infantry = function(tile, strength) {
+exports.Infantry = function(instanceId, tile, strength) {
     if (strength > 3) {
         strength = 3;
     } else if (strength < 1) {
@@ -15,6 +15,7 @@ exports.Infantry = function(tile, strength) {
         range : 1,
         defense : strength,
         premove: 2,
+        instanceId : instanceId,
         name : "Infantry " + strength,
         id : "infantry" + strength,
         tile : tile,

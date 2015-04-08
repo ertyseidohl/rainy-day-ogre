@@ -1,3 +1,19 @@
+var army = require('./army');
+var units = require('./classes');
+var allUnits = {
+    "infantry1" : function(id, tile) {
+        return new units.Infantry(id, tile, 1);
+    },
+    "infantry2" : function(id, tile) {
+        return new units.Infantry(id, tile, 2);
+    },
+    "infantry3" : function(id, tile) {
+        return new units.Infantry(id, tile, 3);
+    },
+    "msltank" : function(id, tile) {
+        return new units.MissileTank(id, tile);
+    }
+};
 
 //directions used for hexagonal map
 var directions = [
@@ -133,13 +149,31 @@ exports.GameMap = function(options) {
 	};
 
 exports.Game = function(options){
+    var i = 0,
+        j = 0,
+        a = null,
+        ar = null,
+        x = null;
+        k = 1;
     this.map = exports.GameMap({map : options.map});
-    this.armies = options.armies;
     this.users = options.users;   //userid => index for this.armies  
+    this.armies = []; 
+     
+    for (i = 0; i < options.armies.length; i++){
+        ar = options.armies[i];
+        a = new army.Army(ar.name, i);
+        for (j = 0; j < ar.units.length; j++){
+            x = allUnits[ar.units[j].id];
+            if (x === undefined){
+                // console.log("no " + ar.units[j].id + ", oh well");
+            } else {
+                a.addUnit(x(k++));
+            }
+        }
+        this.armies = this.armies.concat(a);
+    }
 };
 
 exports.Game.prototype.getUsersArmy = function(userid) {
     return this.armies[this.users[userid]];
 };
-
-

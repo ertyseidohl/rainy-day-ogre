@@ -54,6 +54,8 @@ var doDamage = function(unit, ratio, cb){
 exports.PUnit = function(options) {
     if (options === null || options === undefined) { options = {};}
 
+    this.instanceId = options.instanceId || -1;
+
     this.attack = options.attack || 0;
     this.range = options.range || 0;
     this.defense = options.defense || 0;

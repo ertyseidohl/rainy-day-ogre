@@ -5,8 +5,9 @@
      * @classdesc the long range missile part for Ogre objects
      *  @augments UnitPart
      */
-    exports.OgreAntipersonnel = function() {
+    exports.OgreAntipersonnel = function(instanceId) {
         var options = {
+            instanceId : instanceId,
             type : "ANTIPERSONNEL",
             name : "Ogre Antipersonnel",
             range : 1,

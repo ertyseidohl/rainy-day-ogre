@@ -5,8 +5,9 @@
      * @classdesc the Ogre unit's treads
      * @augments UnitPart
      */
-    exports.OgreTreads = function(cnt, dec) {
+    exports.OgreTreads = function(instanceId, cnt, dec) {
         var options = {
+            instanceId : instanceId,
             type : "TREADS",
             name : "Ogre Treads",
             canattack : false,
