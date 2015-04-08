@@ -63,5 +63,17 @@ describe('GameServer', function() {
         });
     });
 
+    describe('#_move', function() {
+        
+        it('should_return a 200', function() {
+            options = {
+                unit : {instanceId : 2, tile : {i : 7, j : 5}},
+                target : {i : 9, j : 5}
+            };
+            (gs._move(gs._getGameById(1), options)[1].code).should.be.exactly("success");
+        });
+
+    });
+
 });
 

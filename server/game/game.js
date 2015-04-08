@@ -154,11 +154,13 @@ exports.Game = function(options){
         a = null,
         ar = null,
         x = null;
+        u = null;
         k = 1;
     this.map = exports.GameMap({map : options.map});
     this.users = options.users;   //userid => index for this.armies  
     this.armies = []; 
-     
+    this.units = {};
+
     for (i = 0; i < options.armies.length; i++){
         ar = options.armies[i];
         a = new army.Army(ar.name, i);
@@ -167,11 +169,19 @@ exports.Game = function(options){
             if (x === undefined){
                 // console.log("no " + ar.units[j].id + ", oh well");
             } else {
-                a.addUnit(x(k++));
+                t = { i : parseInt(ar.units[j].location.substring(0,2)),
+                      j : parseInt(ar.units[j].location.substring(2))};
+                u = x(k++, t);
+                a.addUnit(u);
+                this.units[u.instanceId] = u;
             }
         }
         this.armies = this.armies.concat(a);
     }
+};
+
+exports.Game.prototype.getUnitById = function(unitid) {
+    return this.units[unitid];
 };
 
 exports.Game.prototype.getUsersArmy = function(userid) {

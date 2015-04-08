@@ -70,7 +70,7 @@ exports._actionswitch = function(postobj){
 
     switch (action) {
         case "move":
-            move(options);
+            move(game, options);
             break;
         case "split":
             //split an infantry into multiple infantry units
@@ -112,32 +112,45 @@ exports._startgame = function (scen, users){
     return gameid;
 };
 
-exports._move = function(options){
+exports._getGameById = function(gameid) {
+    return games[gameid];
+};
+
+function isATile(tile) {
+    
+    return (tile.hasOwnProperty('i') && tile.hasOwnProperty('j'));
+}
+
+exports._move = function(game, options){
 
     var tile = options.unit.tile;
     var sunit = null;
     var result = null;
 
-    if (options.unit.id === undefined || typeof options.unit.id != "number") {
-        return [400, {error : "incorrectly formatted unit"}];    
+    if (options.unit.instanceId === undefined || 
+            typeof options.unit.instanceId != "number") {
+        return [400, {error : "incorrectly formatted unit", code : "BadUnit"}];    
     } else if (! isATile(tile)) {
-        return [400, {error : "incorrectly formatted tile"}];
+        return [400, {error : "incorrectly formatted source tile", code : "BadTile"}];
+    } else if (! isATile(options.target)) {
+        return [400, {error : "incoorectly formatted target tile", code : "BadTile"}];
     }
 
-    sunit = game.getUnit(unit.id);
-
-    if (sunit.tile != tile){
-        return [400, {error : "incorrect square"}];
+    sunit = game.getUnitById(options.unit.instanceId);
+    
+    if (sunit.tile.i != tile.i || sunit.tile.j != tile.j){
+        return [400, {error : "incorrect square", code : "Unsync"}];
     }
 
-    result = sunit.moveToTarget(target);
+    result = sunit.moveToTile(options.target);
 
     //todo: return why?
     if (result === false) {
-        return [400, {error : "unit can't legally move to target square"}];
+        return [400, { error : "unit can't legally move to target square", 
+                        code : "illegal" }];
     }
 
-    return [200, ""];
+    return [200, {code : "success"}];
 };
 
 
