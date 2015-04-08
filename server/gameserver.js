@@ -3,27 +3,25 @@ var express = require('express'),
 
 var app = express();
 app.use(bodyparser.json());
+var scenerio = require('./game/scenerio_loader.js');
 
+var game = require('./game/game.js');
+
+var allScenarios = scenerio.allScenarios();
 var games = {};
 var nextgame = 1;
 
-var scenerio = require('./game/scenerio_loader.js');
-var allScenarios = scenerio.allScenarios();
+
 
 app.get('/', function(req, res){
     res.json({YAY : true});
 });
 
 app.get('/startgame', function(req, res){
-    var scenario = allScenarios[req.body.scenario],
+    var scenario = req.body.scenerio; 
         users = req.body.users;
 
-    var g = new game.Game({map : scenario.map, 
-                            armies : scenario.armies, 
-                            users : user
-                          });
-    var gameid = nextgame++;
-    games[gameid] = g;
+    exports._startgame(scenario, users);
 
     res.json({
         server : "http://192.168.1.14:8001",
@@ -31,27 +29,48 @@ app.get('/startgame', function(req, res){
     });
 });
 
-app.get('/action', function(req,res) {
-    var gameid = req.body.gameid,
-        userid = req.body.userid,
-        action = req.body.action,
-        options = req.body.options,
-        game = games[gameid];
-        army = null;
+app.get('/action', function(req, res) {
+    ret = exports._actionswitch(req.body);
+    
+    return res.status(200).send(ret[1]);
+});
 
-    if (game === undefined) {
-        return rees.status(404).send({error : "No such game"});
+exports._actionswitch = function(postobj){
+    var gameid = postobj.gameid,
+        userid = postobj.userid,
+        action = postobj.action,
+        options = postobj.options,
+        game = null,
+        army = null,
+        props = "";
+
+    //friendly required param error message
+    if (gameid === undefined || userid === undefined || 
+            action === undefined || options === undefined ||
+            gameid === null || userid === null || 
+            action === null || options === null) {        
+        props += (gameid === undefined || gameid === null) ? " gameid, " : "";
+        props += (action === undefined || action === null) ? " action, " : "";
+        props += (userid === undefined || userid === null) ? " userid, " : "";
+        props += (options === undefined || options === null) ? " options, " : "";
+        return [400, {error : "Missing properties :" + props}];
     }
-   
+
+    //get game
+    game = games[gameid];
+    if (game === undefined) {
+        return [400, {error : "No such game: " + gameid, code : "NoSuchGame"}];
+    }
+
+    //check to see if user is in this game
     army = game.getUsersArmy(userid);
     if (army === null || army === undefined){
-        return res.status(404).send({error : "No user in game"});
+        return [400, {error : "No such user " + userid + " in game " + gameid, code : "NoSuchUser"}];
     }
 
     switch (action) {
         case "move":
-            //cannot move into a square containing an enemy (use ram instead)
-            //only gevs can move after an attack has been made
+            move(options);
             break;
         case "split":
             //split an infantry into multiple infantry units
@@ -65,43 +84,65 @@ app.get('/action', function(req,res) {
         case "ram":
             //must ram into a square containing an enemy
             break;
-
+        default:
+            return [404, {error : "No such action: " + action, code : "NoSuchAction"}];
     }
-});
 
+    return [200, {success : true}];
 
-function move(game, unit, target){
+};
 
-    var tile = unit.tile;
+exports._startgame = function (scen, users){
+    var s = allScenarios[scen];   
+    var o = {map : s.map, 
+            armies : s.armies
+            };
+    var i = 0;
+    var u = {};
+
+    for (i = 0; i < users.length; i++){
+        u[users[i]] = i;
+    }    
+    o.users = u;
+
+    var g = new game.Game(o);
+
+    var gameid = nextgame++;
+    games[gameid] = g;
+    return gameid;
+};
+
+exports._move = function(options){
+
+    var tile = options.unit.tile;
     var sunit = null;
     var result = null;
 
-    if (unit.id === undefined || typeof unit.id != "number") {
-        return [false, "incorrectly formatted unit"];    
+    if (options.unit.id === undefined || typeof options.unit.id != "number") {
+        return [400, {error : "incorrectly formatted unit"}];    
     } else if (! isATile(tile)) {
-        return [false, "incorrectly formatted tile"];
+        return [400, {error : "incorrectly formatted tile"}];
     }
 
     sunit = game.getUnit(unit.id);
 
     if (sunit.tile != tile){
-        return [false, "incorrect square"];
+        return [400, {error : "incorrect square"}];
     }
 
     result = sunit.moveToTarget(target);
 
     //todo: return why?
     if (result === false) {
-        return [false, "unit can't legally move to target square"];
+        return [400, {error : "unit can't legally move to target square"}];
     }
 
-    return [true, ""];
-}
+    return [200, ""];
+};
 
 
 
 app.get('/poll', function(req,res) {
-
 });
 
 app.listen(8001);

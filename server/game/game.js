@@ -132,7 +132,6 @@ exports.GameMap = function(options) {
 		}
 	};
 
-
 exports.Game = function(options){
     this.map = exports.GameMap({map : options.map});
     this.armies = options.armies;
