@@ -2,6 +2,8 @@
  * Contains the base unit javascript class prototype PUnit
  * @author mcverry
  */
+
+var maps = require('../map.js');
 var damageTable = [
     ["NE", "NE", "NE", "NE", "D", "X"],
     ["NE", "NE", "D", "D", "X", "X"],
@@ -10,7 +12,6 @@ var damageTable = [
     ["D", "X", "X", "X", "X", "X"],
     ["X", "X", "X", "X", "X", "X"]
 ];
-
 
 /**
  * @memberof PUnit
@@ -237,7 +238,7 @@ exports.PUnit.prototype.selectForAttack = function() {
  *  @returns {boolean} - true if the tile is within range, false otherwise
  */
 exports.PUnit.prototype.isValidPreMoveTarget = function(tile) {
-    return Util.getDistance(this.getTile(), tile) <= this.getPreMovement();
+    return maps.Util.getDistance(this.getTile(), tile) <= this.getPreMovement();
 };
 
 /**
@@ -246,7 +247,7 @@ exports.PUnit.prototype.isValidPreMoveTarget = function(tile) {
  *  @returns {boolean} - true if the tile is within range, false otherwise
  */
 exports.PUnit.prototype.isValidPostMoveTarget = function(tile) {
-    return Util.getDistance(this.getTile(), tile) <= this.getPostMovement();
+    return maps.Util.getDistance(this.getTile(), tile) <= this.getPostMovement();
 };
 
 /**
@@ -306,7 +307,7 @@ exports.PUnit.prototype.isValidAttackTarget = function(unitOrTile) {
             tile = unitOrTile;
         }
     }
-    return Util.getDistance(this.getTile(), tile) <= this.getRange();
+    return maps.Util.getDistance(this.getTile(), tile) <= this.getRange();
 };
 
 /**

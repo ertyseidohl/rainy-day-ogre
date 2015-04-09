@@ -1,153 +1,14 @@
+var maps = require('./map');
 var army = require('./army');
 var units = require('./classes');
-var allUnits = {
-    "infantry1" : function(id, tile) {
-        return new units.Infantry(id, tile, 1);
-    },
-    "infantry2" : function(id, tile) {
-        return new units.Infantry(id, tile, 2);
-    },
-    "infantry3" : function(id, tile) {
-        return new units.Infantry(id, tile, 3);
-    },
-    "msltank" : function(id, tile) {
-        return new units.MissileTank(id, tile);
-    }
-};
 
-//directions used for hexagonal map
-var directions = [
-    [ {i: +1, j: +1}, {i: +1, j: 0}, {i: 0, j: -1},
-    {i: -1, j: 0}, {i: -1, j: +1}, {i: 0, j: +1} ],
-    [ {i: 0, j: +1}, {i: +1, j: 0}, {i: +1, j: -1},
-    {i: 0, j: -1}, {i: -1, j: -1}, {i: -1, j: 0} ]
-];
-
-exports.GameMap = function(options) {
-	
-        var walls = options.map.walls;
-        var craters = options.map.craters;
-
-        //Walls
-		this.walls = {};
-		for (var w in walls) {
-			this.walls[walls[w]] = true;
-		}
-
-		//Craters
-		this.craters = {};
-		for (var c in craters) {
-			this.craters[craters[c]] = true;
-		}
-
-		//Methods
-		this.isWall = function(tileA, tileB) {
-			return Util.getTileUniqueId(tileA) + Util.getTileUniqueId(tileB) in this.walls ||
-				Util.getTileUniqueId(tileB) + Util.getTileUniqueId(tileA) in this.walls;
-		};
-		this.isCrater = function(tile) {
-			return Util.getTileUniqueId(tile) in this.craters;
-		};
-		this.getNeighbors = function(tile, canClimbWalls) {
-			var neighbors = [];
-			for (var index = 0; index < 6; index++) {
-				var parity = (tile.i & 1) ? 0 : 1;
-				var dir = directions[parity][index];
-				var newNeighbor = {
-					i : tile.i + dir.i,
-					j: tile.j + dir.j
-				};
-				if (newNeighbor.i > 0 &&
-					newNeighbor.j > 0 &&
-					(canClimbWalls || !map.isWall(tile, newNeighbor)) &&
-					!map.isCrater(newNeighbor)) {
-					neighbors.push(newNeighbor);
-				}
-
-			}
-			return neighbors;
-		};
-		this.performSearch = function(origin, destination, canClimbWalls){
-			var frontier, cameFrom, costSoFar, newCost, current, path, node, nextNeighbors, n, next;
-
-			frontier = new PriorityQueue({
-				comparator: function(a, b) { return a.cost - b.cost; }
-			});
-
-			origin.cost = 0;
-			frontier.queue(origin);
-			cameFrom = {};
-			costSoFar = {};
-			cameFrom[Util.getTileUniqueId(origin)] = null;
-			costSoFar[Util.getTileUniqueId(origin)] = 0;
-
-			while(frontier.length > 0) {
-				if (frontier.length > 100) {
-					return false;
-				}
-				current = frontier.dequeue();
-
-				if (current.i == destination.i && current.j == destination.j) {
-					path = [];
-					node = cameFrom[Util.getTileUniqueId(current)];
-					while(node) {
-						path.push(node);
-						node = cameFrom[Util.getTileUniqueId(node)];
-					}
-					return path;
-				}
-
-				nextNeighbors = this.getNeighbors(current, canClimbWalls);
-				for (n in nextNeighbors){
-					next = nextNeighbors[n];
-					newCost = costSoFar[Util.getTileUniqueId(current)] + 1;
-					if (!(Util.getTileUniqueId(next) in costSoFar) || newCost < costSoFar[Util.getTileUniqueId(next)]){
-						costSoFar[Util.getTileUniqueId(next)] = newCost;
-						next.cost = newCost + Util.getDistance(destination, next);
-						frontier.queue(next);
-						cameFrom[Util.getTileUniqueId(next)] = current;
-					}
-				}
-			}
-		};
-	};
-
-	exports.Util = {
-		axialToCube : function(tile) {
-			var coords = {
-				x : tile.i,
-				z : tile.j - (tile.i + (tile.i&1)) / 2
-			};
-			coords.y = -coords.x - coords.z;
-			return coords;
-		},
-		cubeToAxial : function(tile) {
-			return {
-				i : tile.x,
-				j : tile.z
-			};
-		},
-		getUnitsInTile : function(tile) {
-			var curr, unit;
-			for (unit in this.units) {
-				curr = this.units[unit].getTile();
-				if (curr.x == tile.x && curr.y == tile.y) {
-					return curr;
-				}
-			}
-			return null;
-		},
-		getDistance : function(start, dest) {
-			var startCube = this.axialToCube(start);
-			var destCube = this.axialToCube(dest);
-			return Math.max(Math.abs(startCube.x - destCube.x), Math.abs(startCube.y - destCube.y), Math.abs(startCube.z - destCube.z));
-		},
-		getTileUniqueId : function(tile) {
-			var pad = function(number) {return number < 9 ? "0" + number : number.toString(); };
-			return pad(tile.i) + pad(tile.j);
-		}
-	};
-
+/**
+ *  constructs the Game object
+ *  @class Game
+ *  @param {object} options - a javascript object with the following keys
+ *     "map" , "users" , "armies"
+ *  @classdesc the object that represents a game being played on the gameserver
+ */ 
 exports.Game = function(options){
     var i = 0,
         j = 0,
@@ -156,34 +17,56 @@ exports.Game = function(options){
         x = null;
         u = null;
         k = 1;
-    this.map = exports.GameMap({map : options.map});
+    //instance variables
+    this.map = maps.GameMap({map : options.map});
     this.users = options.users;   //userid => index for this.armies  
     this.armies = []; 
     this.units = {};
+    this.turn = 0;
 
     for (i = 0; i < options.armies.length; i++){
         ar = options.armies[i];
         a = new army.Army(ar.name, i);
         for (j = 0; j < ar.units.length; j++){
-            x = allUnits[ar.units[j].id];
-            if (x === undefined){
-                // console.log("no " + ar.units[j].id + ", oh well");
-            } else {
-                t = { i : parseInt(ar.units[j].location.substring(0,2)),
-                      j : parseInt(ar.units[j].location.substring(2))};
-                u = x(k++, t);
-                a.addUnit(u);
-                this.units[u.instanceId] = u;
+            x = units.unitFactory(ar.units[j].id, k, 
+                 maps.Util.parseTile(ar.units[j].location));
+            if (x !== null){
+                a.addUnit(x);
+                this.units[x.instanceId] = x;
+                k++;
             }
         }
         this.armies = this.armies.concat(a);
     }
 };
 
-exports.Game.prototype.getUnitById = function(unitid) {
-    return this.units[unitid];
-};
-
+/**
+ *   returns the army object associated with the userid for this game
+ *   @param {integer} - the userid 
+ *   @returns {Army|undefined} - undefined if there is not army mapped to to this userid
+ */
 exports.Game.prototype.getUsersArmy = function(userid) {
     return this.armies[this.users[userid]];
+};
+
+/**
+ *  returns the PUnit with the associated instanceid for this game
+ *  @param {integer} - the instanceid
+ *  @returns {PUnit|undefined} - undefined if there is no such unit with with the
+ *      given instanceid
+ */
+exports.Game.prototype.getUnitById = function(instanceid) {
+    return this.units[instanceid];
+};
+
+
+/**
+ * whoseTurn returns the Army of the current turn
+ * @returns {Army} - the Army whose turn it currently is. 
+ * note:
+ *    this could be scoped to private, but we need to decide
+ *    how we want to pass out references to our armies
+ */
+exports.Game.prototype.whoseTurn = function() {
+    return this.armies[this.turn];
 };
