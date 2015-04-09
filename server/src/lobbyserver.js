@@ -10,7 +10,7 @@ var users = {};
 var nextuser = 1;
 
 var allScenarios = {
-    "default" : loadScenarioData("./data/scenario_default.json")
+    "default" : loadScenarioData("./src/data/scenario_default.json")
 };
 
 var lobbies = {};

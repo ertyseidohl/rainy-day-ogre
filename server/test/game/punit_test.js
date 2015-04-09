@@ -1,8 +1,8 @@
 /*jshint expr: true, loopfunc: true*/ 
-var game = require('../../game/game.js');
+var game = require('../../src/game/game.js');
 Util = game.Util;
 
-var units = require('../../game/classes/');
+var units = require('../../src/game/classes/');
 var should = require('should');
 
 //base PUnit Object

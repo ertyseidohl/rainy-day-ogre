@@ -1,7 +1,7 @@
 /*jshint expr: true */
 
 var should = require('should');
-var gs = require('../gameserver.js');
+var gs = require('../src/gameserver.js');
 
 
 describe('GameServer', function() {

@@ -12,7 +12,7 @@ exports.loadScenario = function(file){
 
 exports.allScenarios = function(){
     return {
-        "default" : exports.loadScenario("./data/scenario_default.json")
+        "default" : exports.loadScenario("./src/data/scenario_default.json")
     };
 };
 

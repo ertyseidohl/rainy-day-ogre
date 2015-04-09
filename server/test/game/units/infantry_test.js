@@ -1,7 +1,7 @@
 /*jshint expr: true*/
 require('should');
 //require the units
-var units = require('../../../game/classes/');
+var units = require('../../../src/game/classes/');
 //require the parent unit_test
 var ptests = require('../punit_test.js');
 

@@ -100,5 +100,5 @@
 			]
 		}
 	],
-	"map" : "./data/map_default.json"
+	"map" : "./src/data/map_default.json"
 }
