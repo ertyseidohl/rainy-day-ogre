@@ -7,13 +7,13 @@ exports.unitFactory = function(shortname, id, tile){
 
     switch(shortname){
         case "infantry1" :
-            return new units.Infantry(id, tile, 1);
+            return new exports.Infantry(id, tile, 1);
         case "infantry2" : 
-            return new units.Infantry(id, tile, 2);
+            return new exports.Infantry(id, tile, 2);
         case "infantry3": 
-            return new units.Infantry(id, tile, 3);
+            return new exports.Infantry(id, tile, 3);
         case "msltank": 
-            return new units.MissileTank(id, tile);
+            return new exports.MissileTank(id, tile);
         default: 
             return null;
     }

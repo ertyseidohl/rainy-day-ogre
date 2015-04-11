@@ -10,16 +10,16 @@ var allScenarios = scenerio.allScenarios();
 
 describe('Game Test', function() {
 
-    beforeEach(function(){
-        var s = allScenarios['default'];   
-        var o = {map : s.map, 
-                 armies : s.armies,
-                 users : { 10 : 0, 21 : 1 }
-        };
-        var g = new game.Game(o);
-    });
-
+    var g = null;
+    var s = allScenarios['default'];   
+    var o = {map : s.map, 
+             armies : s.armies,
+             users : { 10 : 0, 21 : 1 }
+    };
+    g = new game.Game(o);
     describe('#whoseTurn', function(){
-        (g.whoseTurn()).should.be.exactly(g.armies[0]);
+        it('should be first persons turn', function() {
+            (g.whoseTurn()).should.be.exactly(g.armies[0]);
+        });
     });
 });
