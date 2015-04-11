@@ -38,6 +38,7 @@ exports.Game = function(options){
         }
         this.armies = this.armies.concat(a);
     }
+    
 };
 
 /**
@@ -56,9 +57,8 @@ exports.Game.prototype.getUsersArmy = function(userid) {
  *      given instanceid
  */
 exports.Game.prototype.getUnitById = function(instanceid) {
-    return this.units[instanceid];
+     return this.units[instanceid];
 };
-
 
 /**
  * whoseTurn returns the Army of the current turn
@@ -69,4 +69,39 @@ exports.Game.prototype.getUnitById = function(instanceid) {
  */
 exports.Game.prototype.whoseTurn = function() {
     return this.armies[this.turn];
+};
+
+/**
+ *  boolean function that determines if it is the army's turn
+ *  @param {Army} army - the army to test
+ *  @returns {boolean} true if it is the army's turn
+ */
+exports.Game.prototype.isItMyTurnByArmy = function(army){
+    return (this.whoseTurn === this.GetUsersArmy(userid));
+};
+
+/**
+ *  boolean function that determines if it is the user's turn
+ *  @param {Integer} userid - the user's id
+ *  @returns {boolean} true if it is the user's turn
+ */
+exports.Game.prototype.isItMyTurn = function (userid){
+    return this.isItMyTurnByArmy(this.GetUsersArmy(userid));
+};
+
+/**
+ *  End the user's turn, if it is currently the user's turn
+ *  @param {Integer} userid - the user's id
+ *  @returns {boolean} true if it was the user's turn, false otherwise
+ *  this is mutable function as it change's the game's state
+ */
+exports.Game.prototype.endTurn = function(userid) {
+    if (this.isItMyTurn(userid)){
+        this.turn++;
+        if (this.turn >= this.armies.length) {
+            this.turn = 0;
+        }
+        return true;
+    }
+    return false;
 };
