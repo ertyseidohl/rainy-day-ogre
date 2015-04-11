@@ -77,7 +77,7 @@ exports.Game.prototype.whoseTurn = function() {
  *  @returns {boolean} true if it is the army's turn
  */
 exports.Game.prototype.isItMyTurnByArmy = function(army){
-    return (this.whoseTurn === this.GetUsersArmy(userid));
+    return (this.whoseTurn() === army);
 };
 
 /**
@@ -85,8 +85,8 @@ exports.Game.prototype.isItMyTurnByArmy = function(army){
  *  @param {Integer} userid - the user's id
  *  @returns {boolean} true if it is the user's turn
  */
-exports.Game.prototype.isItMyTurn = function (userid){
-    return this.isItMyTurnByArmy(this.GetUsersArmy(userid));
+exports.Game.prototype.isItMyTurn = function(userid){
+    return this.isItMyTurnByArmy(this.getUsersArmy(userid));
 };
 
 /**
