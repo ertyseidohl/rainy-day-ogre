@@ -63,6 +63,21 @@ describe('GameServer', function() {
         });
     });
 
+    describe('#_endTurn', function(){
+        it('should return 400',function(){
+            (gs._endTurn(gs._getGameById(1), 2)[0]).should.be.exactly(400);
+        });
+        it('should return 200', function(){
+            (gs._endTurn(gs._getGameById(1), 1)[0]).should.be.exactly(200);
+        });
+        it('should return 400', function(){
+            (gs._endTurn(gs._getGameById(1), 1)[0]).should.be.exactly(400);
+        });
+        it('should return 200', function(){
+            (gs._endTurn(gs._getGameById(1), 2)[0]).should.be.exactly(200);
+        });
+    });
+
     describe('#_move', function() {
         var options = null; 
         beforeEach(function() {

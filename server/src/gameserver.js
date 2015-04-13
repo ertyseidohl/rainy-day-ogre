@@ -141,7 +141,11 @@ exports._move = function(game, userid, options){
 };
 
 exports._endTurn = function(game, userid){
-    return game.endTurn(userid);
+    if (game.endTurn(userid)) {
+        return [200, {code : "success"}];
+    } else {
+        return [400, {error : "It's not your turn", code : "NotUsersTurn"}];
+    }
 };
 
 
