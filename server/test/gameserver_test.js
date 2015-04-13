@@ -64,15 +64,23 @@ describe('GameServer', function() {
     });
 
     describe('#_move', function() {
-        
-        it('should_return a 200', function() {
+        var options = null; 
+        beforeEach(function() {
             options = {
                 unit : {instanceId : 2, tile : {i : 7, j : 5}},
                 target : {i : 9, j : 5}
-            };
-            (gs._move(gs._getGameById(1), options)[1].code).should.be.exactly("success");
+            }; 
         });
-
+        it('should return a 400 - not your unit', function() { 
+            (gs._move(gs._getGameById(1), 1,  options)[1].code).should.be.exactly("NotUsersUnit");
+        });
+        it('should return a 400 - not your turn', function() { 
+            (gs._move(gs._getGameById(1), 2,  options)[1].code).should.be.exactly("NotUsersTurn");
+        });
+        it('should reeturn a 200', function(){
+            gs._endTurn(gs._getGameById(1), 1); 
+            (gs._move(gs._getGameById(1), 2,  options)[1].code).should.be.exactly("success");
+        });
     });
 
 });

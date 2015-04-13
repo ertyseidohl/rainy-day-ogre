@@ -70,7 +70,7 @@ exports._actionswitch = function(postobj){
 
     switch (action) {
         case "move":
-            move(game, options);
+            move(game, userid, options);
             break;
         case "split":
             //split an infantry into multiple infantry units
@@ -116,43 +116,33 @@ exports._getGameById = function(gameid) {
     return games[gameid];
 };
 
-function isATile(tile) {
-    
+function isATile(tile) {    
     return (tile.hasOwnProperty('i') && tile.hasOwnProperty('j'));
 }
 
-exports._move = function(game, options){
-
-    var tile = options.unit.tile;
-    var sunit = null;
+exports._move = function(game, userid, options){
     var result = null;
 
     if (options.unit.instanceId === undefined || 
             typeof options.unit.instanceId != "number") {
         return [400, {error : "incorrectly formatted unit", code : "BadUnit"}];    
-    } else if (! isATile(tile)) {
+    } else if (! isATile(options.unit.tile)) {
         return [400, {error : "incorrectly formatted source tile", code : "BadTile"}];
     } else if (! isATile(options.target)) {
         return [400, {error : "incoorectly formatted target tile", code : "BadTile"}];
     }
 
-    sunit = game.getUnitById(options.unit.instanceId);
-    
-    if (sunit.tile.i != tile.i || sunit.tile.j != tile.j){
-        return [400, {error : "incorrect square", code : "Unsync"}];
-    }
-
-    result = sunit.moveToTile(options.target);
-
-    //todo: return why?
-    if (result === false) {
-        return [400, { error : "unit can't legally move to target square", 
-                        code : "illegal" }];
+    result = game.move(userid, options.unit.instanceId, options.unit.tile, options.target);
+    if (result[0] === false) {
+        return [400, result[1]]; 
     }
 
     return [200, {code : "success"}];
 };
 
+exports._endTurn = function(game, userid){
+    return game.endTurn(userid);
+};
 
 
 app.get('/poll', function(req,res) {

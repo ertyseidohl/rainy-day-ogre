@@ -56,7 +56,7 @@ exports.Game.prototype.getUsersArmy = function(userid) {
  *  @returns {PUnit|undefined} - undefined if there is no such unit with with the
  *      given instanceid
  */
-exports.Game.prototype.getUnitById = function(instanceid) {
+exports.Game.prototype.getUnitByInstanceId = function(instanceid) {
      return this.units[instanceid];
 };
 
@@ -104,4 +104,31 @@ exports.Game.prototype.endTurn = function(userid) {
         return true;
     }
     return false;
+};
+
+exports.Game.prototype.move = function(userid, instanceid, from, target){
+
+    var unit = null;
+    var army = null;
+    var result = null;
+
+    if (! this.isItMyTurn(userid)){
+        return [false, {error : 'it is not your turn', code : 'NotUsersTurn'}];
+    }
+    army = this.getUsersArmy(userid);
+    unit = this.getUnitByInstanceId(instanceid);
+    if (army.units.indexOf(unit) < 0) {
+        return [false, {error : 'can only move your own units', code : 'NotUsersUnit'}];
+    }
+
+    if (unit.tile.i != from.i || unit.tile.j != from.j){
+        return [false, {error : "reference from-square is incorrect", code : "Unsync"}];
+    }
+
+    result = unit.moveToTile(target);
+    if (result === false){
+        return [false, {error : 'target blocked or out of range', code : "TooFar"}]; 
+    }
+    return [true, {code : "success"}];
+
 };
