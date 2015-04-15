@@ -120,6 +120,22 @@ function isATile(tile) {
     return (tile.hasOwnProperty('i') && tile.hasOwnProperty('j'));
 }
 
+exports._attack = function(game, userid, options){
+    var result = null;
+
+    if (options.target === undefined ||
+            options.target.instanceId === undefined || 
+            typeof options.target.instanceId != "number"){
+        return [400, {error : "incorrectly formatted target unit", code:"BadUnit"}];
+    } else if (options.attackers === undefined ||
+            Object.prototype.toString.call( options.attackers ) !== '[object Array]' ||
+            optiosn.attackers.length === 0) {
+        return [400, {error : "inccorectly formatted attacker array", code:"BadInput"}];
+    }
+
+    return [200, {code : "success"}];
+};
+
 exports._move = function(game, userid, options){
     var result = null;
 

@@ -92,9 +92,17 @@ describe('GameServer', function() {
         it('should return a 400 - not your turn', function() { 
             (gs._move(gs._getGameById(1), 2,  options)[1].code).should.be.exactly("NotUsersTurn");
         });
-        it('should reeturn a 200', function(){
+        it('should return a 200', function(){
             gs._endTurn(gs._getGameById(1), 1); 
             (gs._move(gs._getGameById(1), 2,  options)[1].code).should.be.exactly("success");
+        });
+    });
+
+    describe('#_attack', function() {
+
+        it('should return a 400 - bad target', function() {
+            var o = {};
+            (gs._attack(gs._getGameById(1), 1, o)[1].code).should.not.be.equal("success");
         });
     });
 
