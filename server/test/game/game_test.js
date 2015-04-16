@@ -65,7 +65,7 @@ describe('Game Test', function() {
             var t = g.armies[1].units[0].instanceId;
             var u = g.armies[0].units[0].instanceId;
             var x = g.attack(10,t,[u]);
-            (x[1].code).should.be.exactly('UnitAlreadyAttacked');
+            (x[1].code).should.be.exactly('success');
         });
     });
 });
