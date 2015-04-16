@@ -54,7 +54,14 @@ describe('Game Test', function() {
             var u = g.armies[0].units[0].instanceId;
             (g.attack(10,t,[u])[1].code).should.be.exactly('success');
         });
-        it('attack should fail', function(){ 
+        it('unit already attacked! attack should fail', function(){ 
+            var t = g.armies[1].units[0].instanceId;
+            var u = g.armies[0].units[0].instanceId;
+            var x = g.attack(10,t,[u]);
+            (x[1].code).should.be.exactly('UnitAlreadyAttacked');
+        });
+        it('next turn! attack should fail', function(){ 
+            g.endTurn(10); g.endTurn(21);
             var t = g.armies[1].units[0].instanceId;
             var u = g.armies[0].units[0].instanceId;
             var x = g.attack(10,t,[u]);
