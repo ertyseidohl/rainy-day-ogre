@@ -197,5 +197,11 @@ exports.Game.prototype.attack = function(userid, targetInstanceId, attackerIds, 
         }
     }
 
-    return army.attackCommit(forcedRoll);
+    result = army.attackCommit(forcedRoll);
+    if (result[1].effect == "KILL"){
+
+    }
+
+
+    return result;
 };

@@ -71,6 +71,7 @@ exports.PUnit = function(options) {
     this.type = options.type || "";
     this.tile = options.tile || {i : -1, j : -1};
 
+    this.removed = false;
     this.dead = false;
     // how many turn starts the unit is disabled for
     this.disabledTurns = 0;
@@ -196,6 +197,14 @@ exports.PUnit.prototype.hasMoved = function() {
 };
 
 /**
+ *  Has the unit been removed from the game?
+ *  @returns {boolean} the unit has been removed
+ */
+exports.PUnit.prototype.isRemoved = function(){
+    return this.removed;
+};
+
+/**
  *  Get whether or not the unit is dead
  *  @returns {boolean} true if the unit is dead
  */
@@ -291,11 +300,17 @@ exports.PUnit.prototype.moveToTile = function(tile) {
  *  @returns {boolean} true if we can attack the unit, false otherwise
  */
 exports.PUnit.prototype.canAttack = function(unit){
-    return !this.hasAttacked() && this.isValidAttackTarget(unit);
-};
-
-exports.PUnit.prototype.canAttackVerbose = function(unit){
     var result = null;
+
+    if (this.isDead()){
+        return [false, 
+            {error: 'unit ' + this.instanceId + ' is dead', code:"UnitIsDead"}];
+    }
+
+    if (this.isRemoved()){
+        return [false,
+            {error: 'unit ' + this.instanceId + ' was removed from game', code:"UnitRemoved"}];
+    }
 
     if (this.hasAttacked()){
         return [false, {error: 'unit ' + this.instanceId + ' has already attacked', code : "UnitAlreadyAttacked"}];

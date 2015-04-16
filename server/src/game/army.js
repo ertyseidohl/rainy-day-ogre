@@ -52,7 +52,12 @@ Army.prototype._attackCleanup = function() {
     this.attackTarget = null;
 };
 
-//start an attack by setting the target
+/**
+ *  Set the current attack target
+ *  @param {PUnit} the base unit to target
+ *  @param {UnitPart|null} a multipart's specific part
+ *  @retuns {Object}
+ */
 Army.prototype.attackSetTarget = function(unit, part) {
     var sel = null;
     this._attackCleanup();
@@ -71,6 +76,16 @@ Army.prototype.attackSetTarget = function(unit, part) {
     } else {
         this.attackTarget = unit;
     }
+
+    if (this.attackTarget.isDead()) {
+        this._attackCleanup();
+        return [false, {code:"UnitIsDead", error:"Target unit is dead"}];
+    }
+    if (this.attackTarget.isRemoved()) {
+        this._attackCleanup();
+        return [false, {code:"UnitRemoved", error:"Target removed from the game"}];
+    }
+
     return [true, {code: "success"}];
 };
 
@@ -90,7 +105,7 @@ Army.prototype.attackWith = function(unit) {
         return [false, {error: "already attacking with unit", code: "BadOperation"}];
     }
 
-    result = unit.canAttackVerbose(this.attackTarget);
+    result = unit.canAttack(this.attackTarget);
     if (result[0]) {
         this.attackForce.push(unit);
     }
