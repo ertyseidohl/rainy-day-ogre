@@ -1,0 +1,32 @@
+{
+    "name" : "Test Scenario",
+	"map" : "./src/data/map_test.json",
+    "armies" : [
+        {
+            "name" : "Army1", 
+            "units" : [
+                {   
+                    "id" : "msltank",
+                    "location" : "0301"
+                },
+                {
+                    "id" : "msltank",
+                    "location" : "0103"
+                }
+            ]
+        },
+        {
+            "name" : "Army2", 
+            "units" : [
+                {   
+                    "id" : "msltank",
+                    "location" : "0305"
+                },
+                {
+                    "id" : "msltank",
+                    "location" : "0503"
+                }
+            ]
+        }
+    ]
+}
