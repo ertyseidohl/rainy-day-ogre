@@ -90,7 +90,7 @@ Army.prototype.attackWith = function(unit) {
         return [false, {error: "already attacking with unit", code: "BadOperation"}];
     }
 
-    result = this.unit.canAttackVerbose(attackTarget);
+    result = unit.canAttackVerbose(this.attackTarget);
     if (result[0]) {
         this.attackForce.push(unit);
     }

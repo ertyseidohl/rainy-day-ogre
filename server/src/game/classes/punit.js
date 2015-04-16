@@ -2,7 +2,7 @@
  * Contains the base unit javascript class prototype PUnit
  * @author mcverry
  */
-
+require('util');
 var maps = require('../map.js');
 var damageTable = [
     ["NE", "NE", "NE", "NE", "D", "X"],
@@ -292,13 +292,16 @@ exports.PUnit.prototype.canAttack = function(unit){
 };
 
 exports.PUnit.prototype.canAttackVerbose = function(unit){
+    var result = null;
 
     if (this.hasAttacked()){
         return [false, {error: 'unit ' + this.instanceId + ' has already attacked', code : "UnitBadState"}];
     }
 
-    if (this.isValidAttackTarget(unit)){
-        return [false, {error: 'unit ' + this.instanceId + ' may not attack unit ' + unit.instanceId, code : "BadOperation"}];
+    result = this.isValidAttackTarget(unit);
+    if (!result[0]){
+        result[1].causes = {error: 'unit ' + this.instanceId + ' may not attack unit ' + unit.instanceId, code : "BadOperation"};
+        return [false, result[1]];
     }
     
     return [true, {code: 'success'}];
@@ -312,15 +315,27 @@ exports.PUnit.prototype.canAttackVerbose = function(unit){
  */
 exports.PUnit.prototype.isValidAttackTarget = function(unitOrTile) {
     var tile = null;
+    var d = 0;
+    var result = null;
+    
     try{
         tile = unitOrTile.getTile();
-    } catch (e)
-    {
+    } catch (e) {
         if (e instanceof TypeError) {
             tile = unitOrTile;
         }
     }
-    return maps.Util.getDistance(this.getTile(), tile) <= this.getRange();
+
+    d = maps.Util.getDistance(this.getTile(), tile); 
+    result = (d <= this.getRange());
+    if (result) {
+        return [true, {code: 'success'}];
+    } else {
+        e = util.format("unit %d with range %d at %j can not target tile %j. distance %d", 
+                this.instanceId, this.getRange(), this.getTile(), tile, d);
+        return [false, {error: e, code: 'OutOfRange'}];
+    }
+
 };
 
 /**

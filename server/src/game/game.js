@@ -57,7 +57,7 @@ exports.Game.prototype.getUsersArmy = function(userid) {
  *      given instanceid
  */
 exports.Game.prototype.getUnitByInstanceId = function(instanceid) {
-     return this.units[instanceid].unit;
+    return this.units[instanceid].unit;
 };
 
 /**
@@ -159,7 +159,6 @@ exports.Game.prototype.move = function(userid, instanceid, from, target){
  *  attack with an array of units
  */
 exports.Game.prototype.attack = function(userid, targetInstanceId, attackerIds){
-
     var target = null,
         attackers = [],
         army = this.getUsersArmy(userid),
@@ -183,12 +182,12 @@ exports.Game.prototype.attack = function(userid, targetInstanceId, attackerIds){
     }
 
     for (i = 0; i < attackerIds.length; i++) {
-        u = this.getUnitByInstanceId(attackerId[i]);
+        u = this.getUnitByInstanceId(attackerIds[i]);
         if (u === undefined){
             return [false, {error: 'no such attacking unit with id ' + attackerIds[i], code: "NoUnit"}];
         }
 
-        if (this.getUnitsArmyByInstanceId(attackerId[i]) !== army) {
+        if (this.getUnitsArmyByInstanceId(attackerIds[i]) !== army) {
             return [false, {error: 'you can only attack with your own units', code: 'NotUsersUnit'}];
         }
 

@@ -1,5 +1,6 @@
 {
 	"name" : "Default Scenario",
+	"map" : "./src/data/map_default.json",
 	"armies" : [
 		{
 			"name" : "OGRE",
@@ -99,6 +100,5 @@
 				}
 			]
 		}
-	],
-	"map" : "./src/data/map_default.json"
+	]
 }

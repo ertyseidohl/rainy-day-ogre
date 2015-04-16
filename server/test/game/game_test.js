@@ -11,7 +11,7 @@ var allScenarios = scenerio.allScenarios();
 describe('Game Test', function() {
 
     var g = null;
-    var s = allScenarios['default'];   
+    var s = allScenarios.test;
     var o = {map : s.map, 
              armies : s.armies,
              users : { 10 : 0, 21 : 1 }
@@ -48,11 +48,15 @@ describe('Game Test', function() {
         });
     });
     describe('attack', function(){
-       it('should return true',function(){
-            console.log(g.armies);
-            var t = g.armies[1].units[0];
-            var u = g.armies[0].units[0].parts[0];
+        it('attack should succeed',function(){
+            var t = g.armies[1].units[0].instanceId;
+            var u = g.armies[0].units[0].instanceId;
             (g.attack(10,t,[u])[1].code).should.be.exactly('success');
-       });
+        });
+        it('attack should fail', function(){ 
+            var t = g.armies[1].units[0].instanceId;
+            var u = g.armies[0].units[0].instanceId;
+            (g.attack(10,t,[u])[1].code).should.be.exactly('UnitAlreadyAttacked');
+        });
     });
 });
