@@ -32,7 +32,7 @@ exports.Game = function(options){
                  maps.Util.parseTile(ar.units[j].location));
             if (x !== null){
                 a.addUnit(x);
-                this.units[x.instanceId] = x;
+                this.units[x.instanceId] = {"unit" : x, "army" : a};
                 k++;
             }
         }
@@ -57,7 +57,7 @@ exports.Game.prototype.getUsersArmy = function(userid) {
  *      given instanceid
  */
 exports.Game.prototype.getUnitByInstanceId = function(instanceid) {
-     return this.units[instanceid];
+     return this.units[instanceid].unit;
 };
 
 /**
@@ -89,46 +89,115 @@ exports.Game.prototype.isItMyTurn = function(userid){
     return this.isItMyTurnByArmy(this.getUsersArmy(userid));
 };
 
+exports.Game.prototype.getUnitsArmyByInstanceId = function(instanceId){
+    return this.units[instanceId].army;
+};
+
+exports.Game.prototype.getUnitsArmy = function(instance){
+    return this.units[instance.instanceId].army;
+};
+
 /**
  *  End the user's turn, if it is currently the user's turn
  *  @param {Integer} userid - the user's id
  *  @returns {boolean} true if it was the user's turn, false otherwise
- *  this is mutable function as it change's the game's state
+ *  this is mutable function as it alters the game's state
  */
 exports.Game.prototype.endTurn = function(userid) {
     if (this.isItMyTurn(userid)){
+        this.getUsersArmy(userid).endTurn();
         this.turn++;
         if (this.turn >= this.armies.length) {
             this.turn = 0;
         }
+        this.armies[this.turn].startTurn();
         return true;
     }
     return false;
 };
 
+/**
+ *  Move the user's unit, if it is currently the user's turn and the unit
+ *  is in range of its target tile, and the client knows where the unit is
+ *  supposed to be
+ *  @param {Integer} userid - the user's id
+ *  @param {Integer} instanceid - the instanceid of the unit, 
+ *  @param {Tile} from - the tile the client believes the unit is at
+ *  @param {Tile} target - the target tile to move the unit to
+ *  @returns {Array} boolean to indicate success/error, an object at the index[1] 
+ *                  with a status code and an error string if applicable
+ *  this is a mutable function that alters the game's state.
+ */
 exports.Game.prototype.move = function(userid, instanceid, from, target){
 
-    var unit = null;
-    var army = null;
+    var unit = this.getUnitByInstanceId(instanceid);
+    var army = this.getUsersArmy(userid);
     var result = null;
 
+    //must be your turn
     if (! this.isItMyTurn(userid)){
         return [false, {error : 'it is not your turn', code : 'NotUsersTurn'}];
     }
-    army = this.getUsersArmy(userid);
-    unit = this.getUnitByInstanceId(instanceid);
-    if (army.units.indexOf(unit) < 0) {
+    //can only move your own unit
+    if (this.getUnitsArmyByInstanceId(instanceid) !== army) {
         return [false, {error : 'can only move your own units', code : 'NotUsersUnit'}];
     }
-
+    //make sure starting tile is synced (maybe unneeded)
     if (unit.tile.i != from.i || unit.tile.j != from.j){
         return [false, {error : "reference from-square is incorrect", code : "Unsync"}];
     }
-
+    //try to move to the tile and return any errors
     result = unit.moveToTile(target);
     if (result === false){
         return [false, {error : 'target blocked or out of range', code : "TooFar"}]; 
     }
+    //success!
     return [true, {code : "success"}];
+};
 
+/**
+ *  attack with an array of units
+ */
+exports.Game.prototype.attack = function(userid, targetInstanceId, attackerIds){
+
+    var target = null,
+        attackers = [],
+        army = this.getUsersArmy(userid),
+        i = 0,
+        u = null,
+        result = null;
+
+    //make sure target exists
+    target = this.getUnitByInstanceId(targetInstanceId);
+    if (target === undefined){
+        return [false, {error: 'no such target unit with id ' + targetInstanceId, code: "NoUnit"}];
+    }
+    //make sure we are not attacking our own unit
+    if (this.getUnitsArmyByInstanceId(targetInstanceId) === army) {
+        return [false, {error: 'you can not attack your own unit', code: 'BadInput'}];
+    }
+
+    result = army.attackSetTarget(target);
+    if (!result[0]){
+        return result;
+    }
+
+    for (i = 0; i < attackerIds.length; i++) {
+        u = this.getUnitByInstanceId(attackerId[i]);
+        if (u === undefined){
+            return [false, {error: 'no such attacking unit with id ' + attackerIds[i], code: "NoUnit"}];
+        }
+
+        if (this.getUnitsArmyByInstanceId(attackerId[i]) !== army) {
+            return [false, {error: 'you can only attack with your own units', code: 'NotUsersUnit'}];
+        }
+
+        result = army.attackWith(u);
+        if (!result[0]){
+            return result;
+        }
+    }
+
+    army.attackCommit();
+    return [true, {code: 'success'}];
 };

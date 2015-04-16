@@ -291,6 +291,19 @@ exports.PUnit.prototype.canAttack = function(unit){
     return !this.hasAttacked() && this.isValidAttackTarget(unit);
 };
 
+exports.PUnit.prototype.canAttackVerbose = function(unit){
+
+    if (this.hasAttacked()){
+        return [false, {error: 'unit ' + this.instanceId + ' has already attacked', code : "UnitBadState"}];
+    }
+
+    if (this.isValidAttackTarget(unit)){
+        return [false, {error: 'unit ' + this.instanceId + ' may not attack unit ' + unit.instanceId, code : "BadOperation"}];
+    }
+    
+    return [true, {code: 'success'}];
+};
+
 /**
  *  is the target unit or tile within this unit's attack range?
  *  this method does not take into account whether this unit has attacked

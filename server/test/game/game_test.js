@@ -47,4 +47,12 @@ describe('Game Test', function() {
             (g.whoseTurn()).should.be.exactly(g.armies[0]);
         });
     });
+    describe('attack', function(){
+       it('should return true',function(){
+            console.log(g.armies);
+            var t = g.armies[1].units[0];
+            var u = g.armies[0].units[0].parts[0];
+            (g.attack(10,t,[u])[1].code).should.be.exactly('success');
+       });
+    });
 });

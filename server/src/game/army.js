@@ -10,6 +10,8 @@ exports.Army = Army = function(name, color){
     this.name = name;
     this.color = color;
     this.units = [];
+    this.attackForce = [];
+    this.attackTarget = null;
 };
 
 /**
@@ -20,9 +22,6 @@ exports.Army = Army = function(name, color){
  * @retuns {boolean} true if the turn was started, false otherwise  
  */
 Army.prototype.startTurn = function(){
-    if (this != whoseTurn()) {
-        return false;
-    }
     //reset units
     this.units.forEach(function(elem, ind, array){
         elem.nextTurnReset();
@@ -30,7 +29,9 @@ Army.prototype.startTurn = function(){
     return true;
 };
 
-Army.prototype.endTurn = function(){};
+Army.prototype.endTurn = function(){
+    this._attackCleanup();
+};
 
 Army.prototype.addUnit = function(unit){
     this.units = this.units.concat(unit);
@@ -41,103 +42,87 @@ Army.prototype.getStats = function() {
     return {"units" : this.units.length};
 };
 
-//API actions
-exports.endTurn = function() {
-
-    //ensure this state machine is reset
-    attackCleanup();
-
-    armies[turn].endTurn();
-    turn += 1;
-    if (turn >= armies.length) {
-        turn = 0;
-    }
-
-    armies[turn].startTurn();
-
-};
-
 //Attack logic:
 //   choose a target (can't be in the current turn's army)
 //   build an attack force
 //   check to see ratio against targets
 //   commit to a target or cancel
-attackForce = [];
-attackTarget = null;
-var attackCleanup = function() {
+Army.prototype._attackCleanup = function() {
     attackForce = [];
     attackTarget = null;
 };
 
 //start an attack by setting the target
-exports.attackSetTarget = function(unit, part) {
-    if (whoseTurn().units.indexOf(unit) >= 0) {
-        return false;
-    }
-
-    attackCleanup();
+Army.prototype.attackSetTarget = function(unit, part) {
+    var sel = null;
+    this._attackCleanup();
 
     sel = unit.selectForAttack();
     if (sel.length > 1) {
-        if (part === null) {
-            return sel;
-        } else if  (sel.indexOf(part) < 0) {
-            return sel;
+        if (part === null || sel.indexOf(part) < 0) {
+            return [false,  
+                {
+                    error: "must choose a part to attack",
+                    code: "MultipartError",
+                    parts: sel
+                }];
         }
-        attackTarget = part;
+        this.attackTarget = part;
     } else {
-        attackTarget = unit;
+        this.attackTarget = unit;
     }
-    return true;
+    return [true, {code: "success"}];
 };
 
 //add a unit to the attacking cohort
-exports.attackWith = function(unit) {
-    if (attackTarget === null) {
-        return false;
+Army.prototype.attackWith = function(unit) {
+    var result = null;
+
+    if (this.attackTarget === null) {
+        return [false, {error: "you must select an attack target first", code: "BadOperation"}];
     }
 
-    if (whoseTurn().units.indexOf(unit) < 0){
-        return false;
+    if (this.units.indexOf(unit) < 0){
+        return [false, {error: "you can only attack with your own units", code: "NotUsersUnit"}]; 
     }
 
-    if (attackForce.indexOf(unit) >= 0){
-        return false;
+    if (this.attackForce.indexOf(unit) >= 0){
+        return [false, {error: "already attacking with unit", code: "BadOperation"}];
     }
 
-    if (unit.canAttack(attackTarget)){
-        attackForce.push(unit);
-        return true;
+    result = this.unit.canAttackVerbose(attackTarget);
+    if (result[0]) {
+        this.attackForce.push(unit);
     }
-    return false;
+    return result;
 };
 
 //get the current attack:defense ratio
-exports.attackGetRatio = function() {
-    if (attackTarget === null){
+Army.prototype.attackGetRatio = function() {
+    if (this.attackTarget === null){
         return -1;
     }
     return attackTarget.getDamageRatio(attackForce);
 };
 
 //commit to the attack!
-exports.attackCommit = function() {
-    attackTarget.takeDamage(attackForce, function(str){});
-    attackForce.forEach(function(elem, ind, array){
+Army.prototype.attackCommit = function() {
+    this.attackTarget.takeDamage(attackForce, function(str){});
+    this.attackForce.forEach(function(elem, ind, array){
         elem.attacked = true;
     });
-    attackCleanup();
+    this._attackCleanup();
     return true;
 };
 
 //returns a list of attackers (useful for ux)
-exports.attackGetAttackers = function(){
-    return attackForce;
+Army.prototype.attackGetAttackers = function(){
+    return this.attackForce;
 };
 
 //cancel the attack
-exports.attackCancel = function(){
-    attackCleanup();
+Army.prototype.attackCancel = function(){
+    this._attackCleanup();
 };
 
 
