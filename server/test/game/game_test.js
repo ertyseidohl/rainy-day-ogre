@@ -47,6 +47,7 @@ describe('Game Test', function() {
             (g.whoseTurn()).should.be.exactly(g.armies[0]);
         });
     });
+
     describe('attack', function(){
         it('attack should succeed',function(){
             var t = g.armies[1].units[0].instanceId;
@@ -56,7 +57,8 @@ describe('Game Test', function() {
         it('attack should fail', function(){ 
             var t = g.armies[1].units[0].instanceId;
             var u = g.armies[0].units[0].instanceId;
-            (g.attack(10,t,[u])[1].code).should.be.exactly('UnitAlreadyAttacked');
+            var x = g.attack(10,t,[u]);
+            (x[1].code).should.be.exactly('UnitAlreadyAttacked');
         });
     });
 });

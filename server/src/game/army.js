@@ -48,8 +48,8 @@ Army.prototype.getStats = function() {
 //   check to see ratio against targets
 //   commit to a target or cancel
 Army.prototype._attackCleanup = function() {
-    attackForce = [];
-    attackTarget = null;
+    this.attackForce = [];
+    this.attackTarget = null;
 };
 
 //start an attack by setting the target
@@ -107,7 +107,7 @@ Army.prototype.attackGetRatio = function() {
 
 //commit to the attack!
 Army.prototype.attackCommit = function() {
-    this.attackTarget.takeDamage(attackForce, function(str){});
+    this.attackTarget.takeDamage(this.attackForce, function(str){});
     this.attackForce.forEach(function(elem, ind, array){
         elem.attacked = true;
     });
