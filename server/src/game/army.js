@@ -105,14 +105,19 @@ Army.prototype.attackGetRatio = function() {
     return attackTarget.getDamageRatio(attackForce);
 };
 
-//commit to the attack!
-Army.prototype.attackCommit = function() {
-    this.attackTarget.takeDamage(this.attackForce, function(str){});
+/**
+ *  commit the attackForce to attack attackTarget
+ *
+ *  @param(roll) - force a die roll (used for testing only)
+ *  @returns(Object) - {result: X}
+ */
+Army.prototype.attackCommit = function(roll) {
+    var result = this.attackTarget.takeDamage(this.attackForce, roll);
     this.attackForce.forEach(function(elem, ind, array){
         elem.attacked = true;
     });
     this._attackCleanup();
-    return true;
+    return result;
 };
 
 //returns a list of attackers (useful for ux)

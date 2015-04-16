@@ -158,7 +158,7 @@ exports.Game.prototype.move = function(userid, instanceid, from, target){
 /**
  *  attack with an array of units
  */
-exports.Game.prototype.attack = function(userid, targetInstanceId, attackerIds){
+exports.Game.prototype.attack = function(userid, targetInstanceId, attackerIds, forcedRoll){
     var target = null,
         attackers = [],
         army = this.getUsersArmy(userid),
@@ -197,6 +197,5 @@ exports.Game.prototype.attack = function(userid, targetInstanceId, attackerIds){
         }
     }
 
-    army.attackCommit();
-    return [true, {code: 'success'}];
+    return army.attackCommit(forcedRoll);
 };

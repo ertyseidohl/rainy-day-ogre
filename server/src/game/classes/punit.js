@@ -21,28 +21,31 @@ var damageTable = [
  * to be applied to the supplied unit using dmaageTable
  *
  * @param {PUnit} unit - the unit to apply the damage roll too
- * @param {int} ratio - the pre-calculated attack to defense ratio
- * @param {function} cb - the ux callback function
+ * @param {Integer} ratio - the pre-calculated attack to defense ratio
+ * @param {Integer} cb - force the roll to be 0-5, otherwise the roll is random;
  * @returns {boolean}  true
  */
-var doDamage = function(unit, ratio, cb){
-    roll = Math.floor((Math.random() * 6));
+var doDamage = function(unit, ratio, roll){
+    var effect = null;
+    if (roll === undefined || roll < 0 || roll >= 6) {
+        roll = Math.floor((Math.random() * 6));
+    }
     switch(damageTable[ratio][roll]) {
         case "NE":
             unit.noEffect();
-            cb("NE");
+            effect = "NoEffect";
             break;
         case "D":
             unit.disable();
-            cb("D");
+            effect = "Disable";
             break;
         case "X":
             unit.kill();
-            cb("X");
+            effect = "Kill";
             break;
     }
 
-    return true;
+    return [true, {code : 'success', result : {effect : effect, ratio : ratio, roll : roll}}];
 };
 
 /**
@@ -356,10 +359,10 @@ exports.PUnit.prototype.getDamageRatio = function(attackerlist) {
  *  Attack with a list of attacking units and then apply the resulting damage ratio
  *  and resulting attack effect to the unit
  *  @param {Unit[]} attackerlist - the list of attackers
- *  @param {function()} a ux callback function
+ *  @param {Integer} - roll - use 0-5 to force a roll. 
  *  @returns {boolean} if the attack was successfully applied to this unit
  */
-exports.PUnit.prototype.takeDamage = function(attackerlist, cb ) {
+exports.PUnit.prototype.takeDamage = function(attackerlist, roll) {
     ratio = this.getDamageRatio(attackerlist);
-    return doDamage(this, ratio, cb);
+    return doDamage(this, ratio, roll);
 };
