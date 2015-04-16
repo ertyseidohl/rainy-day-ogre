@@ -60,11 +60,19 @@ describe('Game Test', function() {
             var x = g.attack(10,t,[u]);
             (x[1].code).should.be.exactly('UnitAlreadyAttacked');
         });
-        it('next turn! attack should fail', function(){ 
+        it('next turn! attack should succeed', function(){ 
             g.endTurn(10); g.endTurn(21);
             var t = g.armies[1].units[0].instanceId;
             var u = g.armies[0].units[0].instanceId;
             var x = g.attack(10,t,[u]);
+            (x[1].code).should.be.exactly('success');
+        });
+        it('next turn! group attack should succeed', function(){ 
+            g.endTurn(10); g.endTurn(21);
+            var t = g.armies[1].units[0].instanceId;
+            var u1 = g.armies[0].units[0].instanceId;
+            var u2 = g.armies[0].units[1].instanceId;
+            var x = g.attack(10,t,[u1, u2]);
             (x[1].code).should.be.exactly('success');
         });
     });
