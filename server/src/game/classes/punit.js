@@ -295,7 +295,7 @@ exports.PUnit.prototype.canAttackVerbose = function(unit){
     var result = null;
 
     if (this.hasAttacked()){
-        return [false, {error: 'unit ' + this.instanceId + ' has already attacked', code : "UnitBadState"}];
+        return [false, {error: 'unit ' + this.instanceId + ' has already attacked', code : "UnitAlreadyAttacked"}];
     }
 
     result = this.isValidAttackTarget(unit);
@@ -335,7 +335,6 @@ exports.PUnit.prototype.isValidAttackTarget = function(unitOrTile) {
                 this.instanceId, this.getRange(), this.getTile(), tile, d);
         return [false, {error: e, code: 'OutOfRange'}];
     }
-
 };
 
 /**
