@@ -82,16 +82,28 @@ describe('Game Test', function() {
             (t.isDead()).should.be.exactly(false);
             (t.isDisabled()).should.be.exactly(true);
         });
-        it('next turn! group attack should succeed and kill', function(){ 
-            g.endTurn(10); g.endTurn(21);
+        it('opponents turn - no attacking with a disabled unit!', function() {
+            g.endTurn(10);
+            var t = g.armies[0].units[0].instanceId;
+            var u = g.armies[1].units[0].instanceId;
+            (g.attack(21,t,[u],5)[1].code).should.be.exactly('UnitIsDisabled');
+        });
+       it('next turn! group attack should succeed and kill', function(){ 
+            g.endTurn(21);
             var t = g.armies[1].units[0];
             var u1 = g.armies[0].units[0];
             var u2 = g.armies[0].units[1];
-            var x = g.attack(10,t.instanceId,[u1.instanceId, u2.instanceId], 6);
+            var x = g.attack(10,t.instanceId,[u1.instanceId, u2.instanceId], 5);
             (x[1].code).should.be.exactly('success');
             (u1.hasAttacked()).should.be.exactly(true);
             (u2.hasAttacked()).should.be.exactly(true);
             (t.isDead()).should.be.exactly(true);
+        });
+        it('opponents turn - no attacking with dead unit!', function() {
+            g.endTurn(10);
+            var t = g.armies[0].units[0].instanceId;
+            var u = g.armies[1].units[0].instanceId;
+            (g.attack(21,t,[u],5)[1].code).should.be.exactly('UnitIsDead');
         });
     });
 });

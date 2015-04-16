@@ -304,12 +304,17 @@ exports.PUnit.prototype.canAttack = function(unit){
 
     if (this.isDead()){
         return [false, 
-            {error: 'unit ' + this.instanceId + ' is dead', code:"UnitIsDead"}];
+            {error: 'attacking unit ' + this.instanceId + ' is dead', code:"UnitIsDead"}];
     }
 
     if (this.isRemoved()){
         return [false,
-            {error: 'unit ' + this.instanceId + ' was removed from game', code:"UnitRemoved"}];
+            {error: 'attacking unit ' + this.instanceId + ' was removed from game', code:"UnitRemoved"}];
+    }
+
+    if (this.isDisabled()){
+        return [false,
+            {error: 'attacking unit ' + this.instanceId + ' is disabled', code:"UnitIsDisabled"}];
     }
 
     if (this.hasAttacked()){
