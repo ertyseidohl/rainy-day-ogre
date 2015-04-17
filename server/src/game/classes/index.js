@@ -14,8 +14,8 @@ exports.unitFactory = function(shortname, id, tile){
             return new exports.Infantry(id, tile, 3);
         case "msltank": 
             return new exports.MissileTank(id, tile);
-        //case "ogremk3":
-        //   return x;
+        case "ogremk3":
+            return new exports.OgreMk3(id, tile);
         default: 
             return null;
     }

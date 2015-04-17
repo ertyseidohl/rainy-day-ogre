@@ -1,4 +1,5 @@
 MultiPart = require('../multipart').MultiPart;
+Parts = require('../parts');
 /**
  * @class
  * @classdesc the lowly Ogre
@@ -15,14 +16,14 @@ exports.OgreMk3 = function(instanceId, tile) {
         id : "ogremk3"
     };
     //missing 8 AntiPersonnel
-    parts = [new OgreTreads(30, 10),
-             new OgreMissile(),
-             new OgrePrimaryBattery(),
+    parts = [new Parts.OgreTreads(30, 10),
+             new Parts.OgreMissile(),
+             new Parts.OgrePrimaryBattery(),
 
-             new OgreSecondaryBattery(),
-             new OgreSecondaryBattery(),
-             new OgreSecondaryBattery(),
-             new OgreSecondaryBattery()
+             new Parts.OgreSecondaryBattery(),
+             new Parts.OgreSecondaryBattery(),
+             new Parts.OgreSecondaryBattery(),
+             new Parts.OgreSecondaryBattery()
              ];
 
     MultiPart.call(this, parts, options);
