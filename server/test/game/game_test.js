@@ -17,6 +17,17 @@ describe('Game Test', function() {
              users : { 10 : 0, 21 : 1 }
     };
     g = new game.Game(o);
+    describe('test game inventory', function(){
+        it('should have two players', function(){
+            (Object.keys(g.users).length).should.be.exactly(2);            
+        });
+        it('should have two armies', function(){
+            (g.armies.length).should.be.exactly(2);
+        });
+        it('army 1 should have 3 units', function(){
+            (g.armies[0].units.length).should.be.exactly(3);
+        });
+    });
     describe('#whoseTurn', function(){
         it('should be first persons turn', function() {
             (g.whoseTurn()).should.be.exactly(g.armies[0]);

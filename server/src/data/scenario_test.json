@@ -12,6 +12,10 @@
                 {
                     "id" : "msltank",
                     "location" : "0103"
+                },
+                {
+                    "id" : "orgemk3",
+                    "location" : "0101"
                 }
             ]
         },
