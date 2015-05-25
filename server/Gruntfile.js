@@ -4,7 +4,7 @@ grunt.initConfig({
     jshint : {
         all : ['test/**/*.js', 'src/**/*.js', '!src/game/lib/**'],
     },
-    
+
     jsdoc : {
         dist : {
             src : ['src/'],
@@ -87,4 +87,4 @@ grunt.initConfig({
     grunt.registerTask('lint', ['jshint']);
     grunt.registerTask('run', ['concurrent:build']);
     grunt.registerTask('browserify', ['browserify']);
-}
+};

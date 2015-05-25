@@ -10,17 +10,16 @@ var ptests = require('../punit_test.js');
 exports.Infantry_Test = function(){
     ptests.PUnit_Test.call();
 };
+
 exports.Infantry_Test.prototype = Object.create(ptests.PUnit_Test.prototype);
 
 exports.Infantry_Test.prototype.disable_test = function(unit, expected){
-   
     it('disabled off turn?', function() {
         unit.disable();
-        (unit.isDisabled()).should.be.exactly(true);  
+        (unit.isDisabled()).should.be.exactly(true);
         (unit.getAttack()).should.be.exactly(2).and.be.a.Number;
     });
 };
-
 
 exports.Infantry_Test.prototype.newUnit = function(stats) {
     return new units.Infantry(10, stats.tile, stats.attack);
@@ -28,7 +27,7 @@ exports.Infantry_Test.prototype.newUnit = function(stats) {
 
 //Test entry point
 describe('Infantry', function(){
-    var tile = {i : 3, j : 2}; 
+    var tile = {i : 3, j : 2};
     var o = {attack : 3,
         range : 1,
         defense : 3,
@@ -37,9 +36,9 @@ describe('Infantry', function(){
         tile : tile,
         name : "Infantry 3",
         type : "INFANTRY" };
- 
+
     var t = new exports.Infantry_Test();
-    ptests.UnitTestRunner(t, o); 
+    ptests.UnitTestRunner(t, o);
 
     var m = new units.Infantry(tile, 3);
     describe('create a too strong unit', function() {
@@ -57,5 +56,4 @@ describe('Infantry', function(){
             (m2.getDefense()).should.be.exactly(1).and.be.a.Number;
         });
     });
-
 });

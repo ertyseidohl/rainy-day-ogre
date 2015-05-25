@@ -1,4 +1,4 @@
-/*jshint expr: true */ 
+/*jshint expr: true */
 var game = require('../../src/game/game.js');
 
 var gs = require('../../src/gameserver.js');
@@ -12,14 +12,14 @@ describe('Game Test', function() {
 
     var g = null;
     var s = allScenarios.test;
-    var o = {map : s.map, 
+    var o = {map : s.map,
              armies : s.armies,
              users : { 10 : 0, 21 : 1 }
     };
     g = new game.Game(o);
     describe('test game inventory', function(){
         it('should have two players', function(){
-            (Object.keys(g.users).length).should.be.exactly(2);            
+            (Object.keys(g.users).length).should.be.exactly(2);
         });
         it('should have two armies', function(){
             (g.armies.length).should.be.exactly(2);
@@ -28,7 +28,7 @@ describe('Game Test', function() {
             (g.armies[0].units.length).should.be.exactly(3);
         });
     });
-    describe('#whoseTurn', function(){
+    describe('whoseTurn', function(){
         it('should be first persons turn', function() {
             (g.whoseTurn()).should.be.exactly(g.armies[0]);
         });
@@ -68,20 +68,20 @@ describe('Game Test', function() {
             (t.isDead()).should.be.exactly(false);
             (t.isDisabled()).should.be.exactly(false);
         });
-        it('unit already attacked! attack should fail', function(){ 
+        it('unit already attacked! attack should fail', function(){
             var t = g.armies[1].units[0].instanceId;
             var u = g.armies[0].units[0].instanceId;
             var x = g.attack(10,t,[u]);
             (x[1].code).should.be.exactly('UnitAlreadyAttacked');
         });
-        it('next turn! attack should succeed', function(){ 
+        it('next turn! attack should succeed', function(){
             g.endTurn(10); g.endTurn(21);
             var t = g.armies[1].units[0].instanceId;
             var u = g.armies[0].units[0].instanceId;
             var x = g.attack(10,t,[u],0);
             (x[1].code).should.be.exactly('success');
         });
-        it('next turn! group attack should succeed and disable', function(){ 
+        it('next turn! group attack should succeed and disable', function(){
             g.endTurn(10); g.endTurn(21);
             var t = g.armies[1].units[0];
             var u1 = g.armies[0].units[0];
@@ -99,7 +99,7 @@ describe('Game Test', function() {
             var u = g.armies[1].units[0].instanceId;
             (g.attack(21,t,[u],5)[1].code).should.be.exactly('UnitIsDisabled');
         });
-       it('next turn! group attack should succeed and kill', function(){ 
+       it('next turn! group attack should succeed and kill', function(){
             g.endTurn(21);
             var t = g.armies[1].units[0];
             var u1 = g.armies[0].units[0];
