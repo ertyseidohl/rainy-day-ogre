@@ -2,12 +2,12 @@ var request = require('request');
 var argv = require('minimist')(process.argv.slice(2));
 
 ;(function() {
-	var serverAddress = "http://192.168.1.14:8000";
+	var serverAddress = "http://192.168.8.102:8000";
 
 	var LobbyClient = function () {
 		this.userid = false;
 		this.lobbyid = false;
-		this.poll = setInterval(this.checkLobbyStatus.bind(this), 1000);
+		this.checkLobbyStatus();
 	};
 
 	LobbyClient.prototype = {
@@ -31,7 +31,7 @@ var argv = require('minimist')(process.argv.slice(2));
 			var self = this;
 			var response = function (error, response) {
 				if (error || response.statusCode != 200) {
-					console.log("error is " + error + " status code is " + response.statusCode);
+					console.log("error is " + error + " status code is " + response.statusCode + " body is " + response.body);
 					self.waitForInput();
 				} else {
 					if (typeof(response.body) === "string") {
@@ -192,6 +192,7 @@ var argv = require('minimist')(process.argv.slice(2));
 		checkLobbyStatus : function() {
 			var self = this;
 			if (!self.userid || !self.lobbyid) {
+				setTimeout(self.checkLobbyStatus.bind(self), 1000);
 				return;
 			}
 			self.request({
@@ -202,9 +203,44 @@ var argv = require('minimist')(process.argv.slice(2));
 					lobbyid : self.lobbyid,
 				}
 			}, function(response) {
-				if (response.lobbystate == "GAME") {
-
+				if (response.state == "START") {
+					console.log("GET GAME SERVER")
+					self.getGameServer();
+				} else {
+					setTimeout(self.checkLobbyStatus.bind(self), 1000);
 				}
+			});
+		},
+		getGameServer : function () {
+			var self = this;
+			if (!self.userid || !self.lobbyid) {
+				return;
+			}
+			self.request({
+				endpoint : "getgameserver",
+				method : "POST",
+				form : {
+					userid : self.userid,
+					lobbyid : self.lobbyid
+				}
+			}, function(response) {
+				self.joinGameServer(response.ip, response.port, response.gameid);
+			});
+		},
+		joinGameServer : function (ip, port, gameid) {
+			var self = this;
+			if (!self.userid || !self.lobbyid || !ip || !port || !gameid) {
+				return;
+			}
+			request.post({
+				url : "http://" + ip + ":" + port + "/joingame",
+				json : {
+					userid : self.userid,
+					lobbyid : self.lobbyid,
+					gameid : gameid
+				}
+			}, function (error, response) {
+				console.log("error is", error, "response is", response);
 			});
 		}
 	};
