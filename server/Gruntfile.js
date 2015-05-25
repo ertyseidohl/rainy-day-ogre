@@ -56,14 +56,17 @@ grunt.initConfig({
     },
 
     nodemon : {
-        dev : {
+        gameserver : {
             script : 'build/src/gameserver.js'
-        }
+        },
+	lobbyserver : {
+	    script : 'build/src/lobbyserver.js'
+	},
     },
 
     concurrent : {
         build : {
-            tasks: ['watch', 'nodemon'],
+            tasks: ['watch', 'nodemon:gameserver', 'nodemon:lobbyserver'],
             options : {
                 logConcurrentOutput: true
             }

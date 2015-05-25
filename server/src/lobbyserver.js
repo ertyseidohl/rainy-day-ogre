@@ -3,6 +3,8 @@ var express = require('express'),
     bodyparser = require('body-parser'),
     fs = require('fs');
 
+var request = require('request');
+
 var app = express();
 app.use(bodyparser.json());
 
@@ -36,6 +38,35 @@ function newlobby(lobbyid){
         scenarios : allScenarios
     };
 }
+
+function _newgamecb(error, response, body) {
+    if (error){
+        console.log(error);
+    } else if (!error && response.statusCode == 200) {
+        console.log("[LobbyServer] body: ", body);
+        return true; 
+    } else {
+        console.log("response code: " + response.statusCode);
+    }
+    return false;
+}
+
+function _newgame(lobby){
+    console.log("new game starting", lobby);
+    request.post({
+        url : 'http://localhost:8001/startgame',
+        json : lobby }, function(error, response, body) {  
+            if (_newgamecb(error, response, body)){
+                lobby.gameserver = {
+                   ip : body.ip,
+                   port : body.port,
+                   gameid : body.gameid
+                };
+                lobby.state = "START";
+            }
+        });
+}
+
 
 app.get('/', function(req, res){
     res.json({YAY : true});
@@ -73,6 +104,39 @@ app.post('/joinlobby', function(req, res){
     res.json(lobbies[lobbyid]);
 });
 
+app.post('/getgameserver', function(req, res){
+    console.log(req.body); 
+    var userid = req.body.userid,
+    lobbyid = req.body.lobbyid,
+    ret,
+    lobby; 
+    
+    if (lobbyid === undefined || lobbyid === "") {
+        return res.status(418).send({error : "missing param: lobbyid"});
+    }
+
+    if (lobbies[lobbyid] === undefined) {
+        return res.status(418).send({error : "no such lobby"});
+    }
+
+    lobby = lobbies[lobbyid];
+
+    if (lobby.users.indexOf(userid) < 0) {
+        return res.status(402).send({ error : "user has not joined this lobby" });
+    }
+
+    if (lobby.state != "START") {
+        return res.status(415).send({error : "Game Has Not Started"});
+    }
+
+    ret = {
+        ip : "192.168.8.102",
+        port : lobby.gameserver.port,
+        gameid : lobby.gameserver.gameid
+    };
+    res.json(ret);
+});
+
 app.post('/setlobbystatus', function(req, res){
 
     var userid = req.body.userid,
@@ -108,7 +172,9 @@ app.post('/setlobbystatus', function(req, res){
                 lobby.usersready.push(userid);
             }
             if (lobby.usersready.length == lobby.scenarios[lobby.scenario].armies.length) {
-                lobby.state = "START";
+                console.log("ready to start new game" + lobby);
+                lobby.state = "STARTING";
+                _newgame(lobby);
             }
             break;
         case "unready":
@@ -153,7 +219,7 @@ app.post("/checklobbystatus", function(req, res){
     var userid = req.body.userid;
     var lobbyid = req.body.lobbyid;
 
-    console.log('/checklobbystatus ' +  userid + ' ', + lobbyid + ' ' + JSON.stringify(req.body));
+    //console.log('/checklobbystatus ' +  userid + ' ', + lobbyid + ' ' + JSON.stringify(req.body));
 
     if (lobbies[lobbyid].users.indexOf(userid) < 0) {
         return res.status(402).send({ error : "user has not joined this lobby" });
@@ -162,4 +228,5 @@ app.post("/checklobbystatus", function(req, res){
     return res.json(lobbies[lobbyid]);
 });
 
+console.log("lobby server at 8000");
 app.listen(8000);

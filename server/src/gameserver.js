@@ -3,10 +3,9 @@ var express = require('express'),
 
 var app = express();
 app.use(bodyparser.json());
+
 var scenerio = require('./game/scenerio_loader.js');
-
 var game = require('./game/game.js');
-
 var allScenarios = scenerio.allScenarios();
 var games = {};
 var nextgame = 1;
@@ -17,16 +16,51 @@ app.get('/', function(req, res){
     res.json({YAY : true});
 });
 
-app.get('/startgame', function(req, res){
-    var scenario = req.body.scenerio; 
-        users = req.body.users;
+app.post('/startgame', function(req, res){
+    var lobby = req.body,
+    scenario,
+    users,
+    gameid;
 
-    exports._startgame(scenario, users);
+    console.log("[GameServer] : Start a New Game! ", lobby);
+    
+    scenario = lobby.scenario;
+    users = lobby.users;
 
+    gameid = exports._startgame(scenario, users);
+    console.log("[GameServer] : Game Started with id: ", gameid);
     res.json({
-        server : "http://192.168.1.14:8001",
+        ip : "192.168.1.14",
+        port : "8001",
         gameid : gameid
     });
+});
+
+app.post('/joingame', function(req, res){
+    var gameid = req.body.gameid,
+        userid = req.body.userid;
+
+    if (gameid === undefined || userid === undefined){
+        return res.status(400).send({ error : "missing params"});   
+    }
+
+    //get game
+    game = games[gameid];
+    if (game === undefined) {
+        return res.status(400).send(
+            {error : "No such game: " + gameid, code : "NoSuchGame"});
+    }
+
+    //check to see if user is in this game
+    army = game.getUsersArmy(userid);
+    if (army === null || army === undefined){
+        return res.status(400).send(
+            {error : "No such user " + userid + " in game " + gameid, 
+            code : "NoSuchUser"});
+    }
+    
+    return res.status(200).send("hello");
+
 });
 
 app.get('/action', function(req, res) {
@@ -93,6 +127,7 @@ exports._actionswitch = function(postobj){
 };
 
 exports._startgame = function (scen, users){
+    console.log("[GameServer]: Scenerio" + scen + " users " + users);
     var s = allScenarios[scen];   
     var o = {map : s.map, 
             armies : s.armies
@@ -168,4 +203,5 @@ exports._endTurn = function(game, userid){
 app.get('/poll', function(req,res) {
 });
 
+console.log("port: 8001");
 app.listen(8001);
