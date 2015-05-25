@@ -2,26 +2,27 @@
   "name": "ogre",
   "version": "0.1.2",
   "dependencies": {
-    "blanket": "^1.1.6",
     "body-parser": "~1.12.2",
     "express": "~4.12.3",
-    "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.11.1",
-    "grunt-jsdoc": "~0.5.8",
-    "grunt-mocha-test": "^0.12.7",
-    "jsdoc": "git+https://github.com/jsdoc3/jsdoc.git",
-    "jshint": "^2.6.3",
-    "mocha": "^2.2.1",
-    "should": "^5.2.0"
+    "underscore": "^1.8.2"
   },
   "devDependencies": {
+    "blanket": "^1.1.6",
     "browserify": "^9.0.4",
+    "grunt": "~0.4.1",
     "grunt-browserify": "^3.6.0",
     "grunt-concurrent": "^1.0.0",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-jshint": "~0.11.1",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-jsdoc": "~0.5.8",
+    "grunt-mocha-test": "^0.12.7",
     "grunt-nodemon": "^0.4.0",
-    "underscore": "^1.8.2"
+    "jsdoc": "git+https://github.com/jsdoc3/jsdoc.git",
+    "jshint": "^2.6.3",
+    "mocha": "^2.2.1",
+    "request": "^2.55.0",
+    "should": "^5.2.0"
   }
 }
