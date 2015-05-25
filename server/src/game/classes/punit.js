@@ -12,45 +12,10 @@ var damageTable = [
     ["D", "X", "X", "X", "X", "X"],
     ["X", "X", "X", "X", "X", "X"]
 ];
-
-/**
- * @memberof PUnit
- * @static
- *
- * @desc  this method rolls a 6 sided die to determine the which damage method
- * to be applied to the supplied unit using dmaageTable
- *
- * @param {PUnit} unit - the unit to apply the damage roll too
- * @param {Integer} ratio - the pre-calculated attack to defense ratio
- * @param {Integer} cb - force the roll to be 0-5, otherwise the roll is random;
- * @returns {boolean}  true
- */
-var doDamage = function(unit, ratio, roll){
-    var effect = null;
-    if (roll === undefined || roll < 0 || roll >= 6) {
-        roll = Math.floor((Math.random() * 6));
-    }
-    switch(damageTable[ratio][roll]) {
-        case "NE":
-            unit.noEffect();
-            effect = "NoEffect";
-            break;
-        case "D":
-            unit.disable();
-            effect = "Disable";
-            break;
-        case "X":
-            unit.kill();
-            effect = "Kill";
-            break;
-    }
-
-    return [true, {code : 'success', result : {effect : effect, ratio : ratio, roll : roll}}];
-};
-
 /**
  *  Creates a base PUnit by passing in an options object
  *  @class PUnit
+ *  @todo change name to BasicUnit
  *  @classdesc  The PUnit is the base class of all units.
  *  units should subclass PUnit and override its public methods
  *  to produce desired functionality
@@ -80,6 +45,43 @@ exports.PUnit = function(options) {
     // has the unit attacked?
     this.attacked = false;
 };
+
+/**
+ * @memberof PUnit
+ * @static
+ *
+ * @desc  this method rolls a 6 sided die to determine the which damage method
+ * to be applied to the supplied unit using dmaageTable
+ * @todo change this to be part of exports.PUnit.prototype
+ *
+ * @param {PUnit} unit - the unit to apply the damage roll too
+ * @param {Integer} ratio - the pre-calculated attack to defense ratio
+ * @param {Integer} cb - force the roll to be 0-5, otherwise the roll is random;
+ * @returns {boolean}  true
+ */
+var doDamage = function(unit, ratio, roll){
+    var effect = null;
+    if (roll === undefined || roll < 0 || roll >= 6) {
+        roll = Math.floor((Math.random() * 6));
+    }
+    switch(damageTable[ratio][roll]) {
+        case "NE":
+            unit.noEffect();
+            effect = "NoEffect";
+            break;
+        case "D":
+            unit.disable();
+            effect = "Disable";
+            break;
+        case "X":
+            unit.kill();
+            effect = "Kill";
+            break;
+    }
+
+    return [true, {code : 'success', result : {effect : effect, ratio : ratio, roll : roll}}];
+};
+
 
 /**
  *  Private method for reseting the unit at the start of
@@ -303,7 +305,7 @@ exports.PUnit.prototype.canAttack = function(unit){
     var result = null;
 
     if (this.isDead()){
-        return [false, 
+        return [false,
             {error: 'attacking unit ' + this.instanceId + ' is dead', code:"UnitIsDead"}];
     }
 
@@ -326,7 +328,7 @@ exports.PUnit.prototype.canAttack = function(unit){
         result[1].causes = {error: 'unit ' + this.instanceId + ' may not attack unit ' + unit.instanceId, code : "BadOperation"};
         return [false, result[1]];
     }
-    
+
     return [true, {code: 'success'}];
 };
 
@@ -340,7 +342,7 @@ exports.PUnit.prototype.isValidAttackTarget = function(unitOrTile) {
     var tile = null;
     var d = 0;
     var result = null;
-    
+
     try{
         tile = unitOrTile.getTile();
     } catch (e) {
@@ -349,12 +351,12 @@ exports.PUnit.prototype.isValidAttackTarget = function(unitOrTile) {
         }
     }
 
-    d = maps.Util.getDistance(this.getTile(), tile); 
+    d = maps.Util.getDistance(this.getTile(), tile);
     result = (d <= this.getRange());
     if (result) {
         return [true, {code: 'success'}];
     } else {
-        e = util.format("unit %d with range %d at %j can not target tile %j. distance %d", 
+        e = util.format("unit %d with range %d at %j can not target tile %j. distance %d",
                 this.instanceId, this.getRange(), this.getTile(), tile, d);
         return [false, {error: e, code: 'OutOfRange'}];
     }
@@ -379,7 +381,7 @@ exports.PUnit.prototype.getDamageRatio = function(attackerlist) {
  *  Attack with a list of attacking units and then apply the resulting damage ratio
  *  and resulting attack effect to the unit
  *  @param {Unit[]} attackerlist - the list of attackers
- *  @param {Integer} - roll - use 0-5 to force a roll. 
+ *  @param {Integer} - roll - use 0-5 to force a roll.
  *  @returns {boolean} if the attack was successfully applied to this unit
  */
 exports.PUnit.prototype.takeDamage = function(attackerlist, roll) {
