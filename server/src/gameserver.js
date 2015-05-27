@@ -16,6 +16,26 @@ app.get('/', function(req, res){
     res.json({YAY : true});
 });
 
+/**
+ *  GET /createdevgame
+ *
+ *  creates a game with the default scenario with 2 players (users 1 and 2)
+ */
+app.get('/createdevgame', function(req, res){
+    var scenario = "Default",
+        users = [1,2],
+        gameid;
+
+    gameid = exports._startgame(scenario, users);
+    console.log("[GameServer : Started Game in dev mode with gameid, ", gameid); 
+    
+    res.json({ 
+        ip : "192.168.1.14",
+        port : "8001",
+        gameid : gameid
+    });
+});
+
 app.post('/startgame', function(req, res){
     var lobby = req.body,
     scenario,
@@ -36,32 +56,54 @@ app.post('/startgame', function(req, res){
     });
 });
 
+/**
+ *  POST /joingame
+ *  @param gameid,
+ *  @param userid,
+ */ 
 app.post('/joingame', function(req, res){
     var gameid = req.body.gameid,
-        userid = req.body.userid;
+        userid = req.body.userid,
+        ret,
+        game,
+        army;
 
-    if (gameid === undefined || userid === undefined){
-        return res.status(400).send({ error : "missing params"});   
-    }
+    ret = exports._getGameByGameidAndUserid(gameid, userid);
 
-    //get game
-    game = games[gameid];
-    if (game === undefined) {
-        return res.status(400).send(
-            {error : "No such game: " + gameid, code : "NoSuchGame"});
-    }
+    if (isOkay(ret)){
+        game = getGame(ret);
+        army = getArmy(ret);
+    } else {
+        return res.status(ret[0]).json(ret);
+    } 
 
-    //check to see if user is in this game
-    army = game.getUsersArmy(userid);
-    if (army === null || army === undefined){
-        return res.status(400).send(
-            {error : "No such user " + userid + " in game " + gameid, 
-            code : "NoSuchUser"});
-    }
-    
-    return res.status(200).send("hello");
-
+    return res.status(200).json({game : game, army : army});
 });
+
+/**
+ * POST /getgamestaus
+ * @param gameid,
+ * @param userid,
+ */
+app.post('/getgamestatus', function(req, res){
+    var gameid = req.body.gameid,
+        userid = req.body.userid,
+        ret,
+        game,
+        army;
+
+    ret = exports._getGameByGameidAndUserid(gameid, userid);
+
+    if (isOkay(ret)){
+        game = getGame(ret);
+        army = getArmy(ret);
+    } else {
+        return res.status(ret[0]).json(ret);
+    } 
+
+    return res.status(200).json({game : game, army : army});
+});
+
 
 app.get('/action', function(req, res) {
     ret = exports._actionswitch(req.body);
@@ -124,6 +166,60 @@ exports._actionswitch = function(postobj){
 
     return [200, {success : true}];
 
+};
+
+//the return array functions
+isOkay = exports._isOkay = function(ret){
+    if (ret[0] !== 200) {
+        return false;
+    }
+    return true;
+};
+
+getGame = exports._getGame = function(ret){
+    return ret[1].game;
+};
+
+getArmy = exports._getArmy = function(ret){
+    return ret[1].army;
+};
+
+exports._getGameByGameidAndUserid = function(gameid, userid) {
+
+    if (gameid === undefined || userid === undefined || gameid === null || userid === null){
+        props = [];
+        estring = "missing params: ";
+        if (gameid === undefined || gameid === null){
+            props.push("gameid");
+            estring += " gameid, ";
+        }
+        if (userid === undefined || userid === null) {
+            props.push("userid");
+            estring += " userid, ";
+        }
+        
+        return [400, {error : estring, params : props}];   
+    }
+
+    //get game
+    game = games[gameid];
+    if (game === undefined) {
+        return [400, { 
+            error : "No such game: " + gameid, 
+            code : "NoSuchGame"
+        }];
+    }
+
+    //check to see if user is in this game
+    army = game.getUsersArmy(userid);
+    if (army === null || army === undefined){
+        return [400, { 
+            error : "No such user " + userid + " in game " + gameid, 
+            code : "NoSuchUser"
+        }];
+    }
+ 
+    return [200, {game : game, army : army}];
 };
 
 exports._startgame = function (scen, users){
